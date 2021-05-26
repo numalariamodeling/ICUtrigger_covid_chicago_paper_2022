@@ -1,0 +1,10 @@
+venv
+*.pyc
+.env
+.idea/
+Rfiles/.Rproj.user/
+.Rproj.user
+*.pdf
+.Rhistory
+*.zip
+*.html
