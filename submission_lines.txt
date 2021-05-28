@@ -1,0 +1,34 @@
+
+python runScenarios.py -sr EMS_11 -n 100perc_1daysdelay_pr2 --scenario triggeredrollback_reopen -e 8_reg11_emodl_triggeredMitigation_percred20.emodl --sample_csv sampled_parameters_100perc_trigger_delay1.csv
+python runScenarios.py -sr EMS_11 -n 100perc_7daysdelay_pr2 --scenario triggeredrollback_reopen -e 8_reg11_emodl_triggeredMitigation_percred20.emodl --sample_csv sampled_parameters_100perc_trigger_delay7.csv
+python runScenarios.py -sr EMS_11 -n 100perc_14daysdelay_pr2 --scenario triggeredrollback_reopen -e 8_reg11_emodl_triggeredMitigation_percred20.emodl --sample_csv sampled_parameters_100perc_trigger_delay14.csv
+
+python runScenarios.py -sr EMS_11 -n 100perc_1daysdelay_pr4 --scenario triggeredrollback_reopen -e 8_reg11_emodl_triggeredMitigation_percred40.emodl --sample_csv sampled_parameters_100perc_trigger_delay1.csv
+python runScenarios.py -sr EMS_11 -n 100perc_7daysdelay_pr4 --scenario triggeredrollback_reopen -e 8_reg11_emodl_triggeredMitigation_percred40.emodl --sample_csv sampled_parameters_100perc_trigger_delay7.csv
+python runScenarios.py -sr EMS_11 -n 100perc_14daysdelay_pr4 --scenario triggeredrollback_reopen -e 8_reg11_emodl_triggeredMitigation_percred40.emodl --sample_csv sampled_parameters_100perc_trigger_delay14.csv
+
+python runScenarios.py -sr EMS_11 -n 100perc_1daysdelay_pr6 --scenario triggeredrollback_reopen -e 8_reg11_emodl_triggeredMitigation_percred60.emodl --sample_csv sampled_parameters_100perc_trigger_delay1.csv
+python runScenarios.py -sr EMS_11 -n 100perc_7daysdelay_pr6 --scenario triggeredrollback_reopen -e 8_reg11_emodl_triggeredMitigation_percred60.emodl --sample_csv sampled_parameters_100perc_trigger_delay7.csv
+python runScenarios.py -sr EMS_11 -n 100perc_14daysdelay_pr6 --scenario triggeredrollback_reopen -e 8_reg11_emodl_triggeredMitigation_percred60.emodl --sample_csv sampled_parameters_100perc_trigger_delay14.csv
+
+
+python runScenarios.py -sr EMS_11 -n 100perc_1daysdelay_pr8 --scenario triggeredrollback_reopen -e 8_reg11_emodl_triggeredMitigation_percred80.emodl --sample_csv sampled_parameters_100perc_trigger_delay1.csv
+python runScenarios.py -sr EMS_11 -n 100perc_7daysdelay_pr8 --scenario triggeredrollback_reopen -e 8_reg11_emodl_triggeredMitigation_percred80.emodl --sample_csv sampled_parameters_100perc_trigger_delay7.csv
+python runScenarios.py -sr EMS_11 -n 100perc_14daysdelay_pr8 --scenario triggeredrollback_reopen -e 8_reg11_emodl_triggeredMitigation_percred80.emodl --sample_csv sampled_parameters_100perc_trigger_delay14.csv
+
+
+python runScenarios.py -sr EMS_11 -n 50perc_1daysdelay_pr2 --scenario triggeredrollback_reopen -e 8_reg11_emodl_triggeredMitigation_percred20.emodl --sample_csv sampled_parameters_50perc_trigger_delay1.csv
+python runScenarios.py -sr EMS_11 -n 50perc_7daysdelay_pr2 --scenario triggeredrollback_reopen -e 8_reg11_emodl_triggeredMitigation_percred20.emodl --sample_csv sampled_parameters_50perc_trigger_delay7.csv
+python runScenarios.py -sr EMS_11 -n 50perc_14daysdelay_pr2 --scenario triggeredrollback_reopen -e 8_reg11_emodl_triggeredMitigation_percred20.emodl --sample_csv sampled_parameters_50perc_trigger_delay14.csv
+
+python runScenarios.py -sr EMS_11 -n 50perc_1daysdelay_pr4 --scenario triggeredrollback_reopen -e 8_reg11_emodl_triggeredMitigation_percred40.emodl --sample_csv sampled_parameters_50perc_trigger_delay1.csv
+python runScenarios.py -sr EMS_11 -n 50perc_7daysdelay_pr4 --scenario triggeredrollback_reopen -e 8_reg11_emodl_triggeredMitigation_percred40.emodl --sample_csv sampled_parameters_50perc_trigger_delay7.csv
+python runScenarios.py -sr EMS_11 -n 50perc_14daysdelay_pr4 --scenario triggeredrollback_reopen -e 8_reg11_emodl_triggeredMitigation_percred40.emodl --sample_csv sampled_parameters_50perc_trigger_delay14.csv
+
+python runScenarios.py -sr EMS_11 -n 50perc_1daysdelay_pr6 --scenario triggeredrollback_reopen -e 8_reg11_emodl_triggeredMitigation_percred60.emodl --sample_csv sampled_parameters_50perc_trigger_delay1.csv
+python runScenarios.py -sr EMS_11 -n 50perc_7daysdelay_pr6 --scenario triggeredrollback_reopen -e 8_reg11_emodl_triggeredMitigation_percred60.emodl --sample_csv sampled_parameters_50perc_trigger_delay7.csv
+python runScenarios.py -sr EMS_11 -n 50perc_14daysdelay_pr6 --scenario triggeredrollback_reopen -e 8_reg11_emodl_triggeredMitigation_percred60.emodl --sample_csv sampled_parameters_50perc_trigger_delay14.csv
+
+python runScenarios.py -sr EMS_11 -n 50perc_1daysdelay_pr8 --scenario triggeredrollback_reopen -e 8_reg11_emodl_triggeredMitigation_percred80.emodl --sample_csv sampled_parameters_50perc_trigger_delay1.csv
+python runScenarios.py -sr EMS_11 -n 50perc_7daysdelay_pr8 --scenario triggeredrollback_reopen -e 8_reg11_emodl_triggeredMitigation_percred80.emodl --sample_csv sampled_parameters_50perc_trigger_delay7.csv
+python runScenarios.py -sr EMS_11 -n 50perc_14daysdelay_pr8 --scenario triggeredrollback_reopen -e 8_reg11_emodl_triggeredMitigation_percred80.emodl --sample_csv sampled_parameters_50perc_trigger_delay14.csv
