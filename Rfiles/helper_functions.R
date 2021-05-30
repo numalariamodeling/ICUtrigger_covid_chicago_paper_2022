@@ -138,6 +138,8 @@ f_getCustomTheme <- function(fontscl=0){
 f_get_scenVars <- function(dat){
   dat$scen_name <- gsub(paste0(simdate, "_IL_localeEMS_11_"), "", dat$exp_name)
   dat$scen_name <- gsub(paste0("20210516", "_IL_localeEMS_11_"), "", dat$scen_name)
+  dat$scen_name <- gsub(paste0("20210527", "_IL_localeEMS_11_"), "", dat$scen_name)
+    dat$scen_name <- gsub(paste0("20210528", "_IL_localeEMS_11_"), "", dat$scen_name)
   dat$scen_name <- gsub("_triggeredrollback_reopen", "", dat$scen_name)
   dat$scen_name <- gsub("_reopen", "", dat$scen_name)
   dat <- dat %>% separate(scen_name, into = c("reopen", "delay", "rollback"), sep = "_")
@@ -432,7 +434,7 @@ f_load_sim_data <- function(exp_name,fname,sim_dir,add_peak_cols=TRUE, add_trigg
   }
 
 
-f_trigger_dat <- function(dat, nselect=50){
+f_trigger_dat <- function(dat){
 
   dat <- dat %>%
   dplyr::group_by(exp_name,rollback,delay,reopen, group_id) %>%
@@ -440,7 +442,7 @@ f_trigger_dat <- function(dat, nselect=50){
   dplyr::group_by(date,capacity_multiplier,rollback,delay,reopen) %>%
   mutate(scen_id = row_number())
 
-  dat <- dat %>% filter(scen_id<=nselect)
+  #dat <- dat %>% filter(scen_id<=50)
 
   return(dat)
 }
@@ -455,7 +457,7 @@ f_sample_trajectories <- function(dat, groupVars=c('rollback','delay', 'capacity
     nsubsample_50 <- dat %>%
       ungroup() %>%
       dplyr::group_by_at(groupVars) %>%
-      sample_n(50, replace = TRUE) %>%
+      sample_n(50, replace = FALSE) %>%
       dplyr::mutate(
         nsamples_sub = n_distinct(sample_num),
         scen_num_sel = scen_num

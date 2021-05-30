@@ -1,0 +1,529 @@
+rollback,delay,reopen,capacity_multiplier,n.val,prob_lower,prob_upper,prob_median,prob
+weak (20%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0,100,0,0,0,0
+weak (20%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.1,100,0,0,0,0
+weak (20%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.2,100,0,0.0285714285714286,0,0.00974008256994047
+weak (20%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.3,100,0,0.0277777777777778,0,0.00927114532545713
+weak (20%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.4,100,0.0303030303030303,0.2,0.111111111111111,0.112737386925092
+weak (20%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.5,100,0.032258064516129,0.242424242424242,0.131578947368421,0.126976573109001
+weak (20%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.6,100,0.0967741935483871,0.366666666666667,0.256410256410256,0.249460943118391
+weak (20%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.7,100,0.323529411764706,0.588235294117647,0.44949494949495,0.445693750981276
+weak (20%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.8,100,0.8,0.972972972972973,0.884033613445378,0.879868394162793
+weak (20%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.9,100,1,1,1,1
+weak (20%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",1,100,1,1,1,1
+moderate (40%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0,100,0,0,0,0
+moderate (40%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.1,100,0,0,0,0
+moderate (40%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.2,100,0,0,0,0
+moderate (40%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.3,100,0,0,0,0
+moderate (40%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.4,100,0,0,0,0
+moderate (40%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.5,100,0,0,0,0
+moderate (40%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.6,100,0,0,0,0
+moderate (40%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.7,100,0.027027027027027,0.176470588235294,0.0869747899159664,0.0891803116858795
+moderate (40%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.8,100,0.451612903225806,0.794117647058824,0.630952380952381,0.632363249224307
+moderate (40%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.9,100,1,1,1,1
+moderate (40%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",1,100,1,1,1,1
+strong (60%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0,100,0,0,0,0
+strong (60%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.1,100,0,0,0,0
+strong (60%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.2,100,0,0,0,0
+strong (60%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.3,100,0,0,0,0
+strong (60%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.4,100,0,0,0,0
+strong (60%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.5,100,0,0,0,0
+strong (60%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.6,100,0,0,0,0
+strong (60%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.7,100,0,0.0666666666666667,0.0294117647058824,0.0305879388215102
+strong (60%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.8,100,0.46875,0.758620689655172,0.580645161290323,0.582797877708048
+strong (60%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.9,100,0.92,1,0.935483870967742,0.947240130427818
+strong (60%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",1,100,1,1,1,1
+very strong (80%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0,100,0,0,0,0
+very strong (80%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.1,100,0,0,0,0
+very strong (80%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.2,100,0,0,0,0
+very strong (80%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.3,100,0,0,0,0
+very strong (80%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.4,100,0,0,0,0
+very strong (80%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.5,100,0,0,0,0
+very strong (80%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.6,100,0,0,0,0
+very strong (80%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.7,100,0,0.0645161290322581,0.0285714285714286,0.0294707686375886
+very strong (80%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.8,100,0.258064516129032,0.576923076923077,0.419354838709677,0.417905425801286
+very strong (80%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.9,100,0.923076923076923,1,0.961538461538461,0.952769406702373
+very strong (80%),"immediate mitigation:
+1 day after threshold reached","Low increase in transmission:
+Rt approx. 1.15",1,100,1,1,1,1
+weak (20%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0,100,0.882352941176471,1,0.948717948717949,0.946183858420519
+weak (20%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.1,100,0.82051282051282,1,0.917792792792793,0.911959206957724
+weak (20%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.2,100,0.894736842105263,1,0.95,0.956231666502912
+weak (20%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.3,100,0.894736842105263,1,0.95,0.954140308509454
+weak (20%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.4,100,0.939393939393939,1,0.974358974358974,0.973176990380794
+weak (20%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.5,100,1,1,1,1
+weak (20%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.6,100,1,1,1,1
+weak (20%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.7,100,1,1,1,1
+weak (20%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.8,100,1,1,1,1
+weak (20%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.9,100,1,1,1,1
+weak (20%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",1,100,1,1,1,1
+moderate (40%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0,100,0,0,0,0
+moderate (40%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.1,100,0,0,0,0
+moderate (40%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.2,100,0,0.0571428571428571,0.0256410256410256,0.0208901694032421
+moderate (40%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.3,100,0,0.216216216216216,0.0987804878048781,0.0978235006971759
+moderate (40%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.4,100,0.24390243902439,0.536585365853659,0.384615384615385,0.383003124921646
+moderate (40%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.5,100,0.578947368421053,0.846153846153846,0.717948717948718,0.718326455360459
+moderate (40%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.6,100,0.794871794871795,0.974358974358974,0.9,0.89977177300248
+moderate (40%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.7,100,0.942857142857143,1,0.975,0.978100947590433
+moderate (40%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.8,100,1,1,1,1
+moderate (40%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.9,100,1,1,1,1
+moderate (40%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",1,100,1,1,1,1
+strong (60%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0,100,0,0,0,0
+strong (60%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.1,100,0,0,0,0
+strong (60%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.2,100,0,0,0,0
+strong (60%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.3,100,0,0,0,0
+strong (60%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.4,100,0,0,0,0
+strong (60%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.5,100,0.075,0.277777777777778,0.175,0.178848454000355
+strong (60%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.6,100,0.578947368421053,0.813953488372093,0.719439475253429,0.720470779618651
+strong (60%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.7,100,0.941176470588235,1,0.975609756097561,0.981669427898063
+strong (60%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.8,100,1,1,1,1
+strong (60%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.9,100,1,1,1,1
+strong (60%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",1,100,1,1,1,1
+very strong (80%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0,100,0,0,0,0
+very strong (80%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.1,100,0,0,0,0
+very strong (80%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.2,100,0,0,0,0
+very strong (80%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.3,100,0,0,0,0
+very strong (80%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.4,100,0,0,0,0
+very strong (80%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.5,100,0,0.0588235294117647,0.0256410256410256,0.0209184406058932
+very strong (80%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.6,100,0.222222222222222,0.525,0.368421052631579,0.368181361610382
+very strong (80%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.7,100,0.794871794871795,1,0.897435897435897,0.896227969454451
+very strong (80%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.8,100,1,1,1,1
+very strong (80%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.9,100,1,1,1,1
+very strong (80%),"immediate mitigation:
+1 day after threshold reached","High increase in transmission:
+Rt approx. 1.25",1,100,1,1,1,1
+weak (20%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0,100,0,0,0,0
+weak (20%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.1,100,0,0.0303030303030303,0,0.0117987340991333
+weak (20%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.2,100,0,0.0285714285714286,0,0.0101304853202859
+weak (20%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.3,100,0,0.0857142857142857,0.0274024024024024,0.0348106502187522
+weak (20%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.4,100,0.075,0.354838709677419,0.205128205128205,0.204045225269101
+weak (20%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.5,100,0.135135135135135,0.382352941176471,0.25952380952381,0.253861401336463
+weak (20%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.6,100,0.371428571428571,0.71875,0.527777777777778,0.525354651347308
+weak (20%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.7,100,0.741935483870968,0.942857142857143,0.827586206896552,0.832690046720052
+weak (20%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.8,100,0.962962962962963,1,0.96875,0.97700527950391
+weak (20%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.9,100,1,1,1,1
+weak (20%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",1,100,1,1,1,1
+moderate (40%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0,100,0,0,0,0
+moderate (40%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.1,100,0,0,0,0
+moderate (40%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.2,100,0,0,0,0
+moderate (40%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.3,100,0,0,0,0
+moderate (40%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.4,100,0,0,0,0
+moderate (40%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.5,100,0,0,0,0
+moderate (40%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.6,100,0.0571428571428571,0.25,0.164414414414414,0.163947798134774
+moderate (40%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.7,100,0.481481481481482,0.689655172413793,0.569047619047619,0.571954597896282
+moderate (40%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.8,100,0.884615384615385,1,0.931034482758621,0.933335622869985
+moderate (40%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.9,100,1,1,1,1
+moderate (40%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",1,100,1,1,1,1
+strong (60%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0,100,0,0,0,0
+strong (60%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.1,100,0,0,0,0
+strong (60%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.2,100,0,0,0,0
+strong (60%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.3,100,0,0,0,0
+strong (60%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.4,100,0,0,0,0
+strong (60%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.5,100,0,0,0,0
+strong (60%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.6,100,0,0.125,0.0571428571428571,0.0593011239522387
+strong (60%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.7,100,0.236842105263158,0.535714285714286,0.382352941176471,0.385793084829699
+strong (60%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.8,100,0.848484848484848,1,0.904737903225806,0.906850002255502
+strong (60%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.9,100,1,1,1,1
+strong (60%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",1,100,1,1,1,1
+very strong (80%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0,100,0,0,0,0
+very strong (80%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.1,100,0,0,0,0
+very strong (80%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.2,100,0,0,0,0
+very strong (80%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.3,100,0,0,0,0
+very strong (80%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.4,100,0,0,0,0
+very strong (80%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.5,100,0,0,0,0
+very strong (80%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.6,100,0,0.0645161290322581,0.0303030303030303,0.0353279475556821
+very strong (80%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.7,100,0.212121212121212,0.448275862068966,0.333333333333333,0.333260951571984
+very strong (80%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.8,100,0.833333333333333,0.96875,0.9,0.898580647277844
+very strong (80%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",0.9,100,1,1,1,1
+very strong (80%),"delayed mitigation:
+7 days after threshold reached","Low increase in transmission:
+Rt approx. 1.15",1,100,1,1,1,1
+weak (20%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0,100,0.833333333333333,0.972222222222222,0.909090909090909,0.909175968394312
+weak (20%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.1,100,0.837837837837838,0.973684210526316,0.911764705882353,0.909111352800951
+weak (20%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.2,100,0.911764705882353,1,0.953968253968254,0.957754879176361
+weak (20%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.3,100,0.966666666666667,1,0.9875,0.985671692441392
+weak (20%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.4,100,0.964285714285714,1,0.974358974358974,0.984901079436433
+weak (20%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.5,100,1,1,1,1
+weak (20%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.6,100,1,1,1,1
+weak (20%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.7,100,1,1,1,1
+weak (20%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.8,100,1,1,1,1
+weak (20%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.9,100,1,1,1,1
+weak (20%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",1,100,1,1,1,1
+moderate (40%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0,100,0,0,0,0
+moderate (40%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.1,100,0,0.0277777777777778,0,0.00924878572572396
+moderate (40%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.2,100,0,0.131578947368421,0.0519568151147099,0.0516211861841252
+moderate (40%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.3,100,0.243243243243243,0.514285714285714,0.390243902439024,0.389668836541877
+moderate (40%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.4,100,0.692307692307692,0.972972972972973,0.855400696864112,0.850368891875063
+moderate (40%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.5,100,0.971428571428571,1,1,0.98979391250834
+moderate (40%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.6,100,1,1,1,1
+moderate (40%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.7,100,1,1,1,1
+moderate (40%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.8,100,1,1,1,1
+moderate (40%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.9,100,1,1,1,1
+moderate (40%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",1,100,1,1,1,1
+strong (60%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0,100,0,0,0,0
+strong (60%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.1,100,0,0,0,0
+strong (60%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.2,100,0,0,0,0
+strong (60%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.3,100,0,0.0588235294117647,0.0246951219512195,0.020828737249346
+strong (60%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.4,100,0.365853658536585,0.717948717948718,0.537523452157599,0.529393128264445
+strong (60%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.5,100,0.861111111111111,1,0.926829268292683,0.931250525754878
+strong (60%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.6,100,1,1,1,1
+strong (60%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.7,100,1,1,1,1
+strong (60%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.8,100,1,1,1,1
+strong (60%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.9,100,1,1,1,1
+strong (60%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",1,100,1,1,1,1
+very strong (80%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0,100,0,0,0,0
+very strong (80%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.1,100,0,0,0,0
+very strong (80%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.2,100,0,0,0,0
+very strong (80%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.3,100,0,0,0,0
+very strong (80%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.4,100,0.166666666666667,0.514285714285714,0.333333333333333,0.330654292350962
+very strong (80%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.5,100,0.775,0.975609756097561,0.88233665559247,0.884608180298585
+very strong (80%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.6,100,0.918918918918919,1,0.973328591749644,0.968144246278631
+very strong (80%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.7,100,1,1,1,1
+very strong (80%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.8,100,1,1,1,1
+very strong (80%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",0.9,100,1,1,1,1
+very strong (80%),"delayed mitigation:
+7 days after threshold reached","High increase in transmission:
+Rt approx. 1.25",1,100,1,1,1,1

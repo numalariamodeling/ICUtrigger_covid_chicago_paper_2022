@@ -8,6 +8,7 @@ customTheme <- f_getCustomTheme()
 
 exp_names <- list.dirs(sim_dir, full.names = FALSE)
 exp_names <- exp_names[grep("triggeredrollback_reopen",exp_names)]
+exp_names <- exp_names[!(grepl("14daysdelay",exp_names))]
 column_names <- c("n_trajectories", "n_trajectories_success", "n_trajectories_trigger", "n_trajectories_peakBeforeDec",
                   "n_traces", "n_traces_trigger", "n_traces_peakBeforeDec")
 scen_table <- matrix(NA, length(exp_names), length(column_names)+1)
@@ -86,6 +87,9 @@ for(exp_name in exp_names){
 
 scen_dat <- scen_table %>% as.data.frame() %>%
   mutate(exp_name = gsub("20210517_IL_localeEMS_11_","", exp_name),
+         exp_name = gsub("20210518_IL_localeEMS_11_","", exp_name),
+         exp_name = gsub("20210527_IL_localeEMS_11_","", exp_name),
+         exp_name = gsub("20210528_IL_localeEMS_11_","", exp_name),
          exp_name = gsub("_triggeredrollback_reopen","", exp_name)) %>%
   separate(exp_name , into= c("reopen", "delay", "mitigation"), sep = "_") %>%
   mutate(n_trajectories_success=as.numeric(n_trajectories_success),

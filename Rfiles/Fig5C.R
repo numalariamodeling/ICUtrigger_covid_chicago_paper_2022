@@ -4,7 +4,7 @@
 source(file.path('Rfiles/settings.R'))
 source(file.path('Rfiles/helper_functions.R'))
 customTheme <- f_getCustomTheme()
-trace_selection <-  FALSE
+trace_selection <-  TRUE
 delay = "1daysdelay"
 
 if(trace_selection) fig_dir = fig_dir_traces
@@ -23,7 +23,8 @@ f_combineData <- function(exp_names, sim_end_date, trace_selection){
     print(exp_name)
     tempdat <- f_load_sim_data(exp_name=exp_name,sim_dir = sim_dir ,
                                fname="trajectoriesDat_region_11_trimfut.csv",
-                               add_peak_cols=TRUE,addRt=FALSE, trace_selection =trace_selection) %>%
+                               add_peak_cols=TRUE,addRt=FALSE,
+                               trace_selection =trace_selection) %>%
       filter(date>=baseline_date &  date <= sim_end_date) %>%
       dplyr::group_by(exp_name, group_id) %>%
       filter(trigger_activated==1 & date==date_peak) %>%

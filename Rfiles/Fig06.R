@@ -8,13 +8,13 @@ trace_selection <-  TRUE
 if(trace_selection) fig_dir = fig_dir_traces
 
 
-f_combineData <- function(exp_names){
+f_combineData <- function(exp_names,trace_selection){
   dat_list <- list()
   for(exp_name in exp_names ){
     print(exp_name)
     tempdat <- f_load_sim_data(exp_name=exp_name,sim_dir = sim_dir ,
                                fname="trajectoriesDat_region_11_trimfut.csv",
-                               add_peak_cols=TRUE,addRt=FALSE) %>%
+                               add_peak_cols=TRUE,addRt=FALSE,trace_selection=trace_selection) %>%
       filter(date>=baseline_date &  date <= sim_end_date) %>%
       dplyr::group_by(exp_name, group_id) %>%
       filter(trigger_activated==1 & capacity_multiplier %in% c(0.2,0.4,0.6,0.8,1)) %>%
@@ -35,7 +35,8 @@ f_combineData <- function(exp_names){
 }
 
 p6dat <- f_combineData(exp_names = c(exp_names_50_delay1,exp_names_100_delay1,
-                                     exp_names_50_delay7,exp_names_100_delay7))
+                                     exp_names_50_delay7,exp_names_100_delay7),
+                       trace_selection=trace_selection)
 
 above_threshold <-  p6dat %>%
   mutate(date=as.Date(date)) %>%
@@ -106,6 +107,7 @@ p6Abar <- ggplot(data=subset(above_thresholdAggr, delay=="1daysdelay")) +
            position = position_dodge2(width = 0.9, preserve = "single"),
            stat="identity") +
   facet_grid(~rollback) +
+  theme_minimal()+ customTheme+
   scale_color_manual(values=c('deepskyblue4','deepskyblue')) +
   scale_fill_manual(values=c('deepskyblue4','deepskyblue')) +
   labs(x="ICU occupancy threshold to trigger mitigation (%)",
@@ -118,11 +120,12 @@ p6Bbar <- ggplot(data=subset(above_thresholdAggr, reopen=="100perc")) +
            position = position_dodge2(width = 0.9, preserve = "single"),
            stat="identity") +
   facet_grid(~rollback) +
-  scale_color_manual(values=c('deepskyblue4','deepskyblue')) +
-  scale_fill_manual(values=c('deepskyblue4','deepskyblue')) +
+  theme_minimal()+ customTheme+
+  scale_color_manual(values=c("#dc362d", "firebrick4")) +
+  scale_fill_manual(values=c("#dc362d", "firebrick4")) +
   labs(x="ICU occupancy threshold to trigger mitigation (%)",
        y="number of trajectories\nabove capacity") +
-  theme(legend.position="none")
+  theme(legend.position="none", panel.grid.major.x = element_blank())
 
 p6bar <- plot_grid(p6Abar,p6Bbar, ncol=1, labels=c("A","B"))
 f_save_plot(
@@ -139,7 +142,8 @@ p6A <-  ggplot(data=subset(above_threshold,delay=="1daysdelay")) +
   theme_minimal()+
   scale_color_manual(values=c('deepskyblue4','deepskyblue')) +
   scale_fill_manual(values=c('deepskyblue4','deepskyblue')) +
-  geom_hline(yintercept=c(nomitigation_50perc,nomitigation_100perc)) +
+  geom_hline(yintercept=c(nomitigation_50perc),color="deepskyblue") +
+  geom_hline(yintercept=c(nomitigation_100perc),color="deepskyblue4") +
   scale_shape_manual(values=c(21,21)) +
   scale_alpha_manual(values=c(0.5,0.5)) +
   scale_y_continuous(breaks=seq(0,110, 30), labels=seq(0,110, 30) ) +
@@ -153,31 +157,49 @@ f_save_plot(
   plot_dir = file.path(fig_dir), width =10, height = 3,scale=0.8
   )
 
-p6B <-  ggplot(data=subset(above_threshold,reopen=="100perc")) +
-  geom_jitter(aes(x=as.factor(capacity_multiplier*100), y=days_above,fill=delay,shape=delay,alpha=delay,
-                  group=interaction(rollback,delay)),position = position_jitterdodge(),col='black',size=0.9)+
-  geom_pointrange(data=subset(above_thresholdAggr, n.val>=10 & reopen=="100perc") ,
-                  aes(x=as.factor(capacity_multiplier*100), y=mean,ymin=mean, ymax=mean, fill=delay,
-                      group=interaction(rollback,delay)),stat='identity',
-                  position=position_dodge(1),shape=21,color="black",size=0.6)+
-  theme_minimal()+
-  scale_color_manual(values=c('deepskyblue4','deepskyblue')) +
-  scale_fill_manual(values=c('deepskyblue4','deepskyblue')) +
-  geom_hline(yintercept=c(nomitigation_50perc,nomitigation_100perc)) +
-  scale_shape_manual(values=c(21,21)) +
-  scale_alpha_manual(values=c(0.5,0.5)) +
-  scale_y_continuous(breaks=seq(0,110, 30), labels=seq(0,110, 30) ) +
-  facet_grid(~rollback)+
-  labs(x="ICU occupancy threshold to trigger mitigation (%)",
-       y="number of days above capacity") +
-  theme(legend.position="none")
+for(reopen_level in c("100perc", "50perc")){
+  p6B <-  ggplot(data=subset(above_threshold,reopen==reopen_level)) +
+    geom_jitter(aes(x=as.factor(capacity_multiplier*100), y=days_above,fill=delay,shape=delay,alpha=delay,
+                    group=interaction(rollback,delay)),position = position_jitterdodge(),col='black',size=0.9)+
+    geom_pointrange(data=subset(above_thresholdAggr, n.val>=10 & reopen==reopen_level) ,
+                    aes(x=as.factor(capacity_multiplier*100), y=mean,ymin=mean, ymax=mean, fill=delay,
+                        group=interaction(rollback,delay)),stat='identity',
+                    position=position_dodge(1),shape=21,color="black",size=0.6)+
+    theme_minimal()+
+    scale_color_manual(values=c("#dc362d", "firebrick4")) +
+    scale_fill_manual(values=c("#dc362d", "firebrick4")) +
+    #geom_hline(yintercept=c(nomitigation_50perc,nomitigation_100perc)) +
+    scale_shape_manual(values=c(21,21)) +
+    scale_alpha_manual(values=c(0.5,0.5)) +
+    scale_y_continuous(breaks=seq(0,110, 30), labels=seq(0,110, 30) ) +
+    facet_grid(~rollback)+
+    labs(x="ICU occupancy threshold to trigger mitigation (%)",
+         y="number of days above capacity") +
+  theme(legend.position="none", panel.grid.major.x = element_blank())
 
+  f_save_plot(
+    plot_name = paste0("Fig6B_",reopen_level), pplot = p6B,
+    plot_dir = file.path(fig_dir), width =10, height = 3,scale=0.8
+    )
+ }
 
-f_save_plot(
-  plot_name = paste0("Fig6B"), pplot = p6B,
-  plot_dir = file.path(fig_dir), width =10, height = 3,scale=0.8
-  )
-
+fwrite(above_threshold_counter, file.path(fig_dir,"csv","p6dat_counter.csv"))
 fwrite(above_threshold, file.path(fig_dir,"csv","p6dat.csv"))
 fwrite(above_thresholdAggr, file.path(fig_dir,"csv","p6dat_aggr.csv"))
 
+
+#### For text
+above_threshold <- fread(file.path(fig_dir,"csv","p6dat.csv"))
+above_thresholdAggr <- fread(file.path(fig_dir,"csv","p6dat_aggr.csv"))
+
+above_thresholdAggr %>% filter(delay=="1daysdelay" ) %>%
+  group_by(reopen,rollback) %>%
+  summarize(mean=mean(mean))
+
+
+above_thresholdAggr %>%
+  select(rollback, capacity_multiplier,reopen, delay, mean) %>%
+  group_by(rollback, reopen , delay) %>%
+  summarize(mean=mean(mean) ) %>%
+  pivot_wider(names_from=delay, values_from=mean) %>%
+  mutate(delay_diff = `1daysdelay`-`7daysdelay`  )

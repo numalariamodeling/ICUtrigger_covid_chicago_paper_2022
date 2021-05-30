@@ -104,21 +104,23 @@ p3A <- ggplot(data=subset(dat,date >=first_plot_date & date <=last_plot_date )) 
   scale_x_date(date_breaks = "1 month", date_labels = "%b") +
   theme_minimal()+customTheme+
   labs(x="",y="ICU occupancy",color="")+
-  theme(legend.position = "none")
+  theme(legend.position = "none",,panel.grid.minor = element_blank())
 
 p3B_dat <- subset(dat,date >=first_plot_date & date <=last_plot_date) %>%
-  select(date, Ki_t,scen_num, reopen)
+  group_by(date,reopen) %>%
+  summarize(Ki_t=mean(Ki_t))
+p3B_dat %>% ungroup() %>% group_by(reopen) %>% filter(date==max(date))
+p3B_dat %>% ungroup() %>% group_by(reopen) %>% filter(date==min(date))
+
 p3B  <- ggplot(p3B_dat) +
-  geom_line(aes(x=date, y=Ki_t, group=interaction(scen_num, reopen),col=reopen),alpha=0.5) +
+  geom_line(aes(x=date, y=Ki_t, group=interaction(reopen),col=reopen),alpha=0.5) +
   scale_color_manual(values=c('deepskyblue4','deepskyblue')) +
   geom_vline(xintercept=c(baseline_date))+
-  geom_vline(xintercept=c(last_plot_date),linetype='dashed')+
   scale_x_date(date_breaks = "1 month", date_labels = "%m") +
   theme_minimal()+customTheme+
   labs(x="",y="Transmission rate",color="")+
-  theme(legend.position = "none")+
-  scale_y_continuous()
-
+  theme(legend.position = "none",panel.grid.minor = element_blank())+
+  scale_y_continuous( lim=c(0, 1.15), breaks=c(0,0.170, 0.225,1.14))
 
 dat$rtlim = 1
 dat$rtlim[dat$rt_median>2] =0
@@ -126,27 +128,30 @@ p3C_dat <- subset(dat,date >=first_plot_date & date <=last_plot_date) %>%
   select(date, rt_median, scen_num, reopen)
 
 p3C <- ggplot(data=p3C_dat) +
-  geom_line(aes(x=date, y=rt_median, group=interaction(scen_num, reopen),col=reopen),alpha=0.5) +
+  #geom_rect(xmin=as.Date("2020-03-22"), xmax=as.Date("2020-06-27"), ymin=-Inf, ymax=Inf, alpha=0.03, col='lightgrey') +
+  geom_line(aes(x=date+14, y=rt_median, group=interaction(scen_num, reopen),col=reopen),alpha=0.5) +
   scale_color_manual(values=c('deepskyblue4','deepskyblue')) +
   geom_vline(xintercept=c(baseline_date))+
   scale_x_date(date_breaks = "1 month", date_labels = "%m") +
   geom_hline(yintercept=1, linetype="dashed")+
-  theme_cowplot()+
-  customTheme+
-  theme(legend.position = "none")+
+  theme_minimal()+ customTheme+
+  theme(legend.position = "none",panel.grid.minor = element_blank())+
   labs(x="",y="Rt",color="")
 
 require(gg.gap)
 p3C_split <- gg.gap(plot=p3C, segments=list(c(1.5,1.6)), ylim=c(0.5,6),rel_heights =c(3,0.2,1.5),
-                tick_width = c(0.25,2), margin = c(top = 2, right = 1, bottom = 1, left = 1))
+                    tick_width = c(0.25,2), margin = c(top = 2, right = 1, bottom = 1, left = 1))
 
-p3BC <- plot_grid(p3B,p3C_split, ncol=1,align="hv", labels=c("B","C"))
-pplot <- plot_grid(p3A,p3BC, rel_widths=c(1,0.4), labels=c("A",""))
-print(pplot)
+p3BC <- plot_grid(p3B,p3C, ncol=2,align="hv", labels=c("B","C"))
+pplot <- plot_grid(p3A,p3BC, rel_heights=c(1,0.5), ncol=1, labels=c("A",""))
 
 f_save_plot(
-    plot_name = paste0("Fig3"), pplot = pplot,
-    plot_dir = file.path(fig_dir), width =15, height = 8
+  plot_name = paste0("Fig3"), pplot = pplot,
+  plot_dir = file.path(fig_dir), width =12, height = 10
+)
+f_save_plot(
+  plot_name = paste0("Fig3C_split"), pplot = p3C_split,
+  plot_dir = file.path(fig_dir), width =10, height = 7,scale=0.7
 )
 
 ## Save csvs
@@ -193,27 +198,22 @@ p3B_dat %>%
 ## reduction in Ki
 p3B_dat %>%
   dplyr::filter(date <= as.Date("2020-05-01"))  %>%
-  dplyr::group_by(reopen,date) %>%
+  dplyr::group_by(date) %>%
   dplyr::summarize(Ki_t=mean(Ki_t)) %>%
-  dplyr::group_by(reopen,Ki_t) %>%
+  dplyr::group_by(Ki_t) %>%
   dplyr::summarize(date=min(date)) %>%
-  arrange(reopen, date)
+  arrange(date)
 
 
 ## reduction in Rt
 p3C_dat %>%
-  dplyr::filter(date <= as.Date("2020-04-25"))  %>%
-  dplyr::group_by(reopen,date) %>%
+  dplyr::filter(!is.na(rt_median))  %>%
+  dplyr::group_by(reopen, scen_num) %>%
+  dplyr::filter(date==min(date) | (date <= as.Date("2020-05-01") & rt_median==min(rt_median) ))  %>%
+  dplyr::group_by(date) %>%
   dplyr::summarize(rt_median_mean=mean(rt_median ,na.rm=TRUE),
                    rt_median_q5 = quantile(rt_median, probs = 0.05, na.rm = TRUE),
-                   rt_median_q95 = quantile(rt_median, probs = 0.95, na.rm = TRUE)) %>%
-  dplyr::group_by() %>%
-  dplyr::summarize(rt_median_mean_max=max(rt_median_mean ,na.rm=TRUE),
-                   rt_median_q5_max=max(rt_median_q5 ,na.rm=TRUE),
-                   rt_median_q95_max=max(rt_median_q95 ,na.rm=TRUE),
-                   rt_median_mean_min=min(rt_median_mean ,na.rm=TRUE),
-                   rt_median_q5_min=min(rt_median_q5 ,na.rm=TRUE),
-                   rt_median_q95_min=min(rt_median_q95 ,na.rm=TRUE))
+                   rt_median_q95 = quantile(rt_median, probs = 0.95, na.rm = TRUE))
 
 #### baseline in Rt before reopening
 p3C_dat %>%

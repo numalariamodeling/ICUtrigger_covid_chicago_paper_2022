@@ -4,7 +4,7 @@
 source(file.path('Rfiles/settings.R'))
 source(file.path('Rfiles/helper_functions.R'))
 customTheme <- f_getCustomTheme()
-trace_selection = FALSE
+trace_selection = TRUE
 if(trace_selection) fig_dir = fig_dir_traces
 
 f_combineData <- function(exp_names, sim_end_date,trace_selection){
@@ -23,12 +23,12 @@ f_combineData <- function(exp_names, sim_end_date,trace_selection){
     groupVars=c('rollback','delay','reopen', 'capacity_multiplier')
     dat_prob_raw   <-  f_sample_trajectories(tempdat,groupVars=groupVars)
     dat_list[[length(dat_list)+1]]  <- dat_prob_raw %>%
-    dplyr::group_by_at(groupVars) %>%
-    dplyr::summarize(n.val 		= n(),
-                     prob_lower= min(perc_above),
-                     prob_upper = max(perc_above),
-                     prob_median=median(perc_above)
-                     prob=mean(perc_above))
+      dplyr::group_by_at(groupVars) %>%
+      dplyr::summarize(n.val 		= n(),
+                       prob_lower= min(perc_above),
+                       prob_upper = max(perc_above),
+                       prob_median=median(perc_above),
+                       prob=mean(perc_above))
 
     rm(tempdat)
   }
@@ -40,7 +40,8 @@ f_combineData <- function(exp_names, sim_end_date,trace_selection){
 
 p5Bdat <- f_combineData(exp_names = c(exp_names_50_delay1,exp_names_100_delay1,
                                       exp_names_50_delay7,exp_names_100_delay7),
-                        sim_end_date=sim_end_date,trace_selection=trace_selection)
+                        sim_end_date=sim_end_date,
+                        trace_selection=trace_selection)
 
 
 p5Bdat$rollback <- factor(p5Bdat$rollback,
@@ -70,9 +71,41 @@ f_save_plot(
   )
 
 ### For text
+ p5Bdat %>%
+   filter(delay=="immediate mitigation:\n1 day after threshold reached") %>%
+   ungroup() %>%
+   select(reopen,delay, rollback, capacity_multiplier,prob) %>%
+   pivot_wider(names_from = reopen, values_from = prob) %>%
+   mutate(prob_diff = `High increase in transmission:\nRt approx. 1.25`-
+     `Low increase in transmission:\nRt approx. 1.15`) %>%
+   group_by(delay) %>%
+   summarize(mean=mean(prob_diff,na.rm = TRUE),
+             q5 = round(quantile(prob_diff, probs = 0.05, na.rm = TRUE),1),
+             q95 = round(quantile(prob_diff, probs = 0.95, na.rm = TRUE),1))
+
+ p5Bdat %>%
+   filter(delay=="immediate mitigation:\n1 day after threshold reached") %>%
+   ungroup() %>%
+   select(reopen,delay, rollback, capacity_multiplier,prob) %>%
+   pivot_wider(names_from = reopen, values_from = prob) %>%
+   mutate(prob_diff = `High increase in transmission:\nRt approx. 1.25`-
+     `Low increase in transmission:\nRt approx. 1.15`) %>%
+   group_by(delay, rollback) %>%
+   summarize(mean=mean(prob_diff,na.rm = TRUE),
+             q5 = round(quantile(prob_diff, probs = 0.05, na.rm = TRUE),1),
+             q95 = round(quantile(prob_diff, probs = 0.95, na.rm = TRUE),1))
+
+ p5Bdat %>%
+   filter(delay=="immediate mitigation:\n1 day after threshold reached") %>%
+   ungroup() %>%
+   select(reopen,delay, rollback, capacity_multiplier,prob) %>%
+   group_by(reopen, rollback) %>%
+   summarize(mean=mean(prob,na.rm = TRUE),
+             q5 = round(quantile(prob, probs = 0.05, na.rm = TRUE),1),
+             q95 = round(quantile(prob, probs = 0.95, na.rm = TRUE),1))
+
 p5Bdat %>%
-  filter(delay=="immediate mitigation:\n1 day after threshold reached" &
-         rollback=="moderate (40%)") %>%
+  filter(delay=="immediate mitigation:\n1 day after threshold reached" ) %>%
   group_by(reopen,delay, rollback) %>%
   summarize(mean=mean(prob),
             prob_lower=mean(prob_lower),
@@ -93,6 +126,6 @@ p5Bdat %>%
   capacity_multiplier==0.8)
 
 p5Bdat %>%
-  filter(reopen=="High level of\ntransmission increase (Rt 1.25)" &
+  filter(reopen=="High increase in transmission:\nRt approx. 1.25" &
          rollback=="very strong (80%)" &
   capacity_multiplier==0.6)

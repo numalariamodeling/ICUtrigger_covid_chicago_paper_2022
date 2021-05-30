@@ -13,7 +13,7 @@ user_path <- Sys.getenv("HOME")
 user_path <- gsub("Documents","", user_path)
 data_path  <-  file.path(user_path,"Box/NU-malaria-team/data")
 project_path  <-  file.path(user_path,"Box/NU-malaria-team/projects/covid_chicago")
-git_dir  <-  file.path(user_path,"gitrepos/ICUtrigger_covid_chicago")
+git_dir  <-  file.path(user_path,"gitrepos/ICUtrigger_covid_chicago_paper_2021")
 simulation_output <- file.path(project_path,'cms_sim','simulation_output')
 fig_dir <- file.path(git_dir,"figures/raw")
 fig_dir_traces <- file.path(git_dir,"figures/raw_traces")
@@ -23,11 +23,12 @@ sim_dir <- file.path(simulation_output, "_overflow_simulations", simdate)
 if(!dir.exists(sim_dir))sim_dir <- simulation_output
 
 startdate  <- as.Date("2020-01-01")
+sim_end_date  <- as.Date("2021-05-01")
 first_plot_date  <- as.Date("2020-03-01")
 baseline_date  <- as.Date("2020-09-01")
 trigger_min_date  <- as.Date("2020-10-01")
-last_plot_date  <- as.Date("2020-12-31")
-sim_end_date  <- as.Date("2021-05-01")
+last_plot_date  <- sim_end_date # as.Date("2020-12-31")
+
 
 simcolor <- "#F6921E"
 capacitycolor  = "#be1e2d"
@@ -67,12 +68,23 @@ exp_names_50_delay1 <- c('20210517_IL_localeEMS_11_50perc_1daysdelay_pr2_trigger
                           '20210517_IL_localeEMS_11_50perc_1daysdelay_pr6_triggeredrollback_reopen',
                           '20210517_IL_localeEMS_11_50perc_1daysdelay_pr8_triggeredrollback_reopen')
 
-exp_names_100_delay7 <- c('20210517_IL_localeEMS_11_100perc_7daysdelay_pr2_triggeredrollback_reopen',
-                          '20210517_IL_localeEMS_11_100perc_7daysdelay_pr4_triggeredrollback_reopen',
-                          '20210517_IL_localeEMS_11_100perc_7daysdelay_pr6_triggeredrollback_reopen',
-                          '20210517_IL_localeEMS_11_100perc_7daysdelay_pr8_triggeredrollback_reopen')
+exp_names_100_delay7 <- c('20210527_IL_localeEMS_11_100perc_7daysdelay_pr2_triggeredrollback_reopen',
+                          '20210527_IL_localeEMS_11_100perc_7daysdelay_pr4_triggeredrollback_reopen',
+                          '20210528_IL_localeEMS_11_100perc_7daysdelay_pr6_triggeredrollback_reopen',
+                          '20210528_IL_localeEMS_11_100perc_7daysdelay_pr8_triggeredrollback_reopen')
 
-exp_names_50_delay7 <- c('20210517_IL_localeEMS_11_50perc_7daysdelay_pr2_triggeredrollback_reopen',
-                          '20210517_IL_localeEMS_11_50perc_7daysdelay_pr4_triggeredrollback_reopen',
-                          '20210517_IL_localeEMS_11_50perc_7daysdelay_pr6_triggeredrollback_reopen',
-                          '20210517_IL_localeEMS_11_50perc_7daysdelay_pr8_triggeredrollback_reopen')
+exp_names_50_delay7 <- c('20210528_IL_localeEMS_11_50perc_7daysdelay_pr2_triggeredrollback_reopen',
+                          '20210528_IL_localeEMS_11_50perc_7daysdelay_pr4_triggeredrollback_reopen',
+                          '20210528_IL_localeEMS_11_50perc_7daysdelay_pr6_triggeredrollback_reopen',
+                          '20210528_IL_localeEMS_11_50perc_7daysdelay_pr8_triggeredrollback_reopen')
+
+
+exp_names_100_delay14 <- c('20210527_IL_localeEMS_11_100perc_14daysdelay_pr2_triggeredrollback_reopen',
+                          '20210527_IL_localeEMS_11_100perc_14daysdelay_pr4_triggeredrollback_reopen',
+                          '20210528_IL_localeEMS_11_100perc_14daysdelay_pr6_triggeredrollback_reopen',
+                          '20210528_IL_localeEMS_11_100perc_14daysdelay_pr8_triggeredrollback_reopen')
+
+exp_names_50_delay14 <- c('20210528_IL_localeEMS_11_50perc_14daysdelay_pr2_triggeredrollback_reopen',
+                          '20210528_IL_localeEMS_11_50perc_14daysdelay_pr4_triggeredrollback_reopen',
+                          '20210528_IL_localeEMS_11_50perc_14daysdelay_pr6_triggeredrollback_reopen',
+                          '20210528_IL_localeEMS_11_50perc_14daysdelay_pr8_triggeredrollback_reopen')
