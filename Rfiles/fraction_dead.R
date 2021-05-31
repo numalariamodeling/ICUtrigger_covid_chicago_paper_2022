@@ -9,7 +9,7 @@ theme_set(theme_cowplot())
 
 source(file.path('Rfiles/settings.R'))
 source(file.path('Rfiles/helper_functions.R'))
-
+customTheme <- f_getCustomTheme(fontscl=0.75)
 PrevMed_dir <- "R:/PrevMed/Covid-19-Modeling/IDPH line list/"
 dat <- fread(file.path(PrevMed_dir, "LL_210111_JGcleaned_no_race.csv"))
 
@@ -61,19 +61,19 @@ p1 <- ggplot(data=datAggr) +
   geom_line( aes(x=specimen_collection, y =fraction_dead ),col="grey",size=0.3)+
   geom_line( aes(x=specimen_collection, y =fraction_dead_avrg ),col="black")+
   geom_line( aes(x=specimen_collection, y =fraction_dead_avrgmth ),col="dodgerblue4")+
-  background_grid()+
   scale_y_continuous(breaks=seq(0,1,0.1), minor_breaks = seq(0,1,0.05),lim=c(0,0.5)) +
   scale_x_date(date_breaks="1 month", date_labels="%b")+
-  labs(title="", x="Specimen collection", y="Dead / hospital admissions")
+  labs(title="", x="Specimen collection", y="Dead / hospital admissions")+
+  theme_minimal() + customTheme
 
 p2 <- ggplot(data=datAggr) +
   #geom_line( aes(x=specimen_collection, y =fraction_dead_avrgmth ),col="dodgerblue4")+
   geom_rect(xmin=as.Date("2020-05-15"), xmax=as.Date("2020-07-15"), ymin=-Inf, ymax=Inf,alpha=0.002) +
   geom_ribbon(data=param, aes(x=dates,ymin=cfr_lo, ymax=cfr_up),alpha=1, fill="dodgerblue4") +
-  background_grid()+
   scale_y_continuous(breaks=seq(0,0.1,0.01), minor_breaks = seq(0,0.1,0.01),lim=c(0,0.05)) +
   scale_x_date(date_breaks="1 month", date_labels="%b")+
-  labs(title="", x="Specimen collection", y="Case fatality rate")
+  labs(title="", x="Specimen collection", y="Case fatality rate")+
+  theme_minimal() + customTheme
 
 pSI6 <- plot_grid(p1,p2, nrow=1, labels=c("A","B"))
 pSI6

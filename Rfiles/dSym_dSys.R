@@ -5,11 +5,10 @@ library(tidyverse)
 library(data.table)
 library(cowplot)
 library(zoo)
-theme_set(theme_cowplot())
 
 source(file.path('Rfiles/settings.R'))
 source(file.path('Rfiles/helper_functions.R'))
-
+customTheme <- f_getCustomTheme(fontscl=0.75)
 project_path  <-  file.path(user_path,"Box","NU-malaria-team","projects","covid_chicago")
 filedir <- file.path(project_path,"Plots + Graphs","detection_estimation")
 
@@ -17,11 +16,12 @@ filedir <- file.path(project_path,"Plots + Graphs","detection_estimation")
 ### dSys
 dat_dSys <- fread(file.path(filedir, "underreporting_skellam_20201123.csv"))
 dat_dSys$date <- as.Date(dat_dSys$date)
-dat_dSys <- dat_dSys %>% mutate(p975=ifelse(p975>1,1,p975),
-                      med=ifelse(med>1,1,med),
-                      month=month(date)) %>%
-                      filter(date <= as.Date("2020-09-01")) %>%
-    group_by(month) %>%
+dat_dSys <- dat_dSys %>%
+  mutate(p975=ifelse(p975>1,1,p975),
+         med=ifelse(med>1,1,med),
+         month=month(date)) %>%
+  filter(date <= as.Date("2020-09-01")) %>%
+  group_by(month) %>%
   mutate(med_avrgmth = mean(med))
 
 ### Parameters used in yaml
@@ -51,10 +51,10 @@ p1 <- ggplot(data=dat_dSys)+
   #geom_line(aes(x=date , y= med_avrgmth), col="dodgerblue4")+
   scale_x_date(date_breaks = "1 months", date_labels = "%b")+
   scale_y_continuous(breaks=seq(0,1,0.1),lim=c(0,1))+
-  labs(title="dSys",subtitle="",
+  labs(title="",
        y="fraction of COVID-19 deaths detected\nall ages",
        x="")+
-  background_grid()
+  theme_minimal() + customTheme
 
 p2 <- ggplot(data=param) +
   geom_ribbon(aes(x=dates , ymin= dSys_lo,  ymax= dSys_up), fill="dodgerblue4")+
@@ -63,7 +63,7 @@ p2 <- ggplot(data=param) +
   labs(title="",
        y="fraction severe detected",
        x="")+
-  background_grid()
+  theme_minimal() + customTheme
 
 
 pSI7 <- plot_grid(p1,p2, nrow=1, labels=c("A","B"))
@@ -113,7 +113,7 @@ p1 <- ggplot(data=dat_Sym)+
   labs(title="",
        y="fraction of infections detected\naccounting for nonst.IFR and unreported deaths\n",
        x="")+
-  background_grid()
+  theme_minimal() + customTheme
 
 p2 <- ggplot(data=param) +
   geom_ribbon(aes(x=dates , ymin= dSym_lo,  ymax= dSym_up), fill="dodgerblue4")+
@@ -122,14 +122,14 @@ p2 <- ggplot(data=param) +
   labs(title="",
        y="fraction mild symptomatic detected",
        x="")+
-  background_grid()
+  theme_minimal() + customTheme
 
 pSI8 <- plot_grid(p1,p2, nrow=1, labels=c("A","B"))
 
 f_save_plot(
-    plot_name = paste0("FigSI8"), pplot = pSI8,
-    plot_dir = file.path(fig_dir), width =12, height = 6,scale=0.8
-  )
+  plot_name = paste0("FigSI8"), pplot = pSI8,
+  plot_dir = file.path(fig_dir), width =12, height = 6,scale=0.8
+)
 
 
 
