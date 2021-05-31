@@ -8,3 +8,5 @@ Rfiles/.Rproj.user/
 .Rhistory
 *.zip
 *.html
+figures/*
+out/*
