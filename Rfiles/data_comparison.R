@@ -1,6 +1,6 @@
 # Title     : COVID-19 ICU overflow analysis
 # Objective : Figure  comparison to data
-
+require(Metrics)
 source(file.path('Rfiles/settings.R'))
 source(file.path('Rfiles/helper_functions.R'))
 customTheme <- f_getCustomTheme()
@@ -10,6 +10,7 @@ customTheme <- f_getCustomTheme()
 exp_name_counterfactual_1 <- "20201212_IL_regreopen50perc_counterfactual"
 exp_name_counterfactual_2 <- "20201212_IL_regreopen100perc_counterfactual"
 exp_name_baseline <- "20201212_IL_fit_to_Sep_baseline"
+channels <- c('admissions','med_surg_census', 'ICU_census','deaths')
 
 f_combineData <- function(exp_name){
   dat_list <- list()
@@ -98,7 +99,7 @@ fitdat <- ref_dat %>%
 ref_dat$date <- as.Date(ref_dat$date )
 datAggr$date <- as.Date(datAggr$date )
 
-channels <- c('admissions','med_surg_census', 'ICU_census','deaths')
+
 pplot <- ggplot() +
   geom_line(data=subset(datAggr, outcome %in% channels & trace_selection =='TRUE'), aes(x=date, y=median),col="#d76127")+
   geom_ribbon(data=subset(datAggr, outcome %in% channels & trace_selection =='FALSE'),
@@ -148,7 +149,6 @@ f_save_plot(
 
 
 ### MAE
-require(Metrics)
 MAEdat <- fitdat %>% group_by(outcome)%>% summarize(MAE_avrg=mean(mae_dt))
 
 pplot1 <- ggplot(data=subset(fitdat_median, !is.na(trace_selection))) +
@@ -187,4 +187,14 @@ f_save_plot(
     plot_name = paste0("MAE_trace_selection"), pplot = pplot,
     plot_dir = file.path(fig_dir_traces), width =14, height = 8
   )
+
+### For text
+head(fitdat)
+summary(fitdat$date)
+table(fitdat$trace_selection)
+fitdat %>% filter(outcome=="ICU_census" & trace_selection ==TRUE) %>%
+  ungroup() %>%
+  dplyr::summarize(mean=mean(mae ,na.rm=TRUE),
+                   lower = quantile(mae, probs = 0.05, na.rm = TRUE),
+                   upper = quantile(mae, probs = 0.95, na.rm = TRUE))
 

@@ -233,3 +233,9 @@ p3C_dat %>%
   dplyr::summarize(rt_median_mean=mean(rt_median ,na.rm=TRUE),
                    rt_median_q5 = quantile(rt_median, probs = 0.05, na.rm = TRUE),
                    rt_median_q95 = quantile(rt_median, probs = 0.95, na.rm = TRUE))
+
+ccdat <- as.data.frame(ccdat)
+summary(ccdat[ccdat$date <= as.Date("2020-12-31"), "icu_availforcovid"])
+summary(ccdat[ccdat$date <= as.Date("2020-12-31"), "icu_availforcovid_7avrg"])
+summary(ccdat$date)
+ccdat %>% filter(date <= as.Date("2020-12-31")) %>% arrange(icu_availforcovid) %>% head()

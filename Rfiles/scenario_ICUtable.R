@@ -25,9 +25,9 @@ for(exp_name in exp_names){
     dplyr::group_by(exp_name, group_id) %>%
     dplyr::mutate(rel_occupancy = crit_det/516,
                   rel_occupancy_peak = crit_det_peak/516,
-                  time_since_reopen = as.numeric(date - as.Date("2020-09-01")),
-                  time_to_peak_after_reopen = as.numeric( date_peak - as.Date("2020-09-01")),
-                  time_to_trigger_after_reopen = as.numeric( triggerDate - as.Date("2020-09-01")),
+                  time_since_reopen = as.numeric(date - baseline_date),
+                  time_to_peak_after_reopen = as.numeric( date_peak - baseline_date),
+                  time_to_trigger_after_reopen = as.numeric( triggerDate - baseline_date),
                   time_since_trigger = round(as.numeric(date - triggerDate),0),
                   time_to_peak_after_trigger = round( as.numeric( date_peak - triggerDate),0)) %>%
     dplyr::filter(trigger_activated==1) %>%
@@ -44,25 +44,29 @@ for(exp_name in exp_names){
 
 dat <- dat_list %>% bind_rows() %>%
   filter(outcome!="group_id") %>%
-    mutate(exp_name = gsub("20210517_IL_localeEMS_11_","", exp_name),
+  mutate(exp_name = gsub("20210517_IL_localeEMS_11_","", exp_name),
+         exp_name = gsub("20210518_IL_localeEMS_11_","", exp_name),
+         exp_name = gsub("20210527_IL_localeEMS_11_","", exp_name),
+         exp_name = gsub("20210528_IL_localeEMS_11_","", exp_name),
          exp_name = gsub("_triggeredrollback_reopen","", exp_name)) %>%
   separate(exp_name , into= c("reopen", "delay", "mitigation"), sep = "_")
 
 dat$mitigation <- factor(dat$mitigation,
-                              levels=c("pr2","pr4","pr6","pr8"),
-                              labels=c("weak (20%)","moderate (40%)","strong (60%)","very strong (80%)"))
+                         levels=c("pr2","pr4","pr6","pr8"),
+                         labels=c("weak (20%)","moderate (40%)","strong (60%)","very strong (80%)"))
+
 dat$delay <- factor(dat$delay,
-                              levels=c("1daysdelay","7daysdelay"),
-                              labels=c("1 day","7 days"))
+                    levels=c("1daysdelay","7daysdelay"),
+                    labels=c("1 day","7 days"))
+
 dat$reopen <- factor(dat$reopen,
-                              levels=c("100perc","50perc"),
-                              labels=c("High","Low"))
+                     levels=c("100perc","50perc"),
+                     labels=c("High","Low"))
 
 dat <- dat %>% pivot_wider(names_from=outcome,
-                    values_from = c('median' , 'lower',   'upper'),
-                    names_glue = "{outcome}_{.value}") %>%
+                           values_from = c('median' , 'lower',   'upper'),
+                           names_glue = "{outcome}_{.value}") %>%
   select(order(colnames(.))) %>%
   select(reopen, mitigation, delay, capacity_multiplier, everything())
 
 fwrite(dat, file.path(git_dir,"out", "scenario_ICUtable.csv"))
-
