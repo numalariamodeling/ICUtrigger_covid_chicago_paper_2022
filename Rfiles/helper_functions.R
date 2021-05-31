@@ -457,7 +457,7 @@ f_sample_trajectories <- function(dat, groupVars=c('rollback','delay', 'capacity
     nsubsample_50 <- dat %>%
       ungroup() %>%
       dplyr::group_by_at(groupVars) %>%
-      sample_n(50, replace = FALSE) %>%
+      sample_n(50, replace = TRUE) %>%
       dplyr::mutate(
         nsamples_sub = n_distinct(sample_num),
         scen_num_sel = scen_num
