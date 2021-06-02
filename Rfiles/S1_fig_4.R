@@ -85,6 +85,6 @@ p2 <- ggplot(data=datAggr) +
 
 pSI5 <- plot_grid(p1,p2, nrow=1, labels=c("A","B"))
 f_save_plot(
-    plot_name = paste0("FigSI5"), pplot = pSI5,
+    plot_name = paste0("S1_fig_4"), pplot = pSI5,
     plot_dir = file.path(fig_dir), width =12, height = 6,scale=0.8
   )

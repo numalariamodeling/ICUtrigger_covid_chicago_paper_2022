@@ -216,11 +216,12 @@ f_get_triggerDat <- function(dat){
               ungroup() %>%
               filter(date>=as.Date("2020-09-30") & date<=as.Date("2020-12-31")) %>%
               dplyr::group_by(exp_name,group_id) %>%
-              dplyr::mutate(Ki_t_min=min(Ki_t),Ki_t_max=max(Ki_t)) %>%
+              dplyr::mutate(Ki_t_min=min(Ki_t),Ki_t_max=max(Ki_t),
+                            delay_days = as.numeric(gsub("daysdelay","",delay))) %>%
               filter(Ki_t_min!=Ki_t_max) %>%
               filter(Ki_t == Ki_t_min) %>%
               filter(date == min(date)) %>%
-              dplyr::mutate(triggerDate = as.Date(date)-2)%>%
+              dplyr::mutate(triggerDate = as.Date(date)-delay_days)%>%
               dplyr::select(exp_name,group_id,triggerDate)
 
   return(dat_trigger)

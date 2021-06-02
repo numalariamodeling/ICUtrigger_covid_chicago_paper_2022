@@ -1,5 +1,5 @@
 # Title     : COVID-19 ICU overflow analysis
-# Objective : Detection rate
+# Objective : Detection rate for mild and severe symptomatic
 
 library(tidyverse)
 library(data.table)
@@ -66,10 +66,10 @@ p2 <- ggplot(data=param) +
   theme_minimal() + customTheme
 
 
-pSI7 <- plot_grid(p1,p2, nrow=1, labels=c("A","B"))
+pplot <- plot_grid(p1,p2, nrow=1, labels=c("A","B"))
 
 f_save_plot(
-    plot_name = paste0("FigSI7"), pplot = pSI7,
+    plot_name = paste0("S1_fig_3"), pplot = pplot,
     plot_dir = file.path(fig_dir), width =12, height = 6,scale=0.8
   )
 
@@ -124,10 +124,10 @@ p2 <- ggplot(data=param) +
        x="")+
   theme_minimal() + customTheme
 
-pSI8 <- plot_grid(p1,p2, nrow=1, labels=c("A","B"))
+pplot <- plot_grid(p1,p2, nrow=1, labels=c("A","B"))
 
 f_save_plot(
-  plot_name = paste0("FigSI8"), pplot = pSI8,
+  plot_name = paste0("S1_fig_2"), pplot = pplot,
   plot_dir = file.path(fig_dir), width =12, height = 6,scale=0.8
 )
 

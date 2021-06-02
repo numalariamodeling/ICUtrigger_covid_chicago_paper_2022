@@ -116,7 +116,7 @@ scen_dat$reopen <- factor(scen_dat$reopen,
                               levels=c("100perc","50perc"),
                               labels=c("High","Low"))
 
-fwrite(scen_dat, file.path(git_dir,"out", "scenario_completeness.csv"))
+fwrite(scen_dat, file.path(git_dir,"out", "S1_table_5.csv"))
 
 
 

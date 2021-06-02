@@ -31,9 +31,9 @@ dat <- dat %>%
 
 
 dat_det <- fread(file.path(sim_dir,exp_name,'trajectoriesDat.csv'),
-             select = c("symptomatic_mild_det_EMS-11","symptomatic_severe_det_EMS-11",
-"presymptomatic_detEMS-11","asymptomatic_det_EMS-11","crit_det_EMS-11","hosp_det_EMS-11","deaths_det_EMS-11","recovered_det_EMS-11",
-                        "sample_num","scen_num","time")) %>%
+                 select = c("symptomatic_mild_det_EMS-11","symptomatic_severe_det_EMS-11",
+                            "presymptomatic_detEMS-11","asymptomatic_det_EMS-11","crit_det_EMS-11","hosp_det_EMS-11",
+                            "deaths_det_EMS-11","recovered_det_EMS-11", "sample_num","scen_num","time")) %>%
   mutate(date = as.Date("2020-01-01") + time) %>%
   filter(date >= as.Date("2020-03-01") & date <= baseline_date) %>%
   select(-time)
@@ -83,7 +83,7 @@ pplot <- ggplot(data=dat) +
 
 
 f_save_plot(
-    plot_name = paste0("outcome_channels_baseline"), pplot = pplot,
+    plot_name = paste0("S1_fig_8"), pplot = pplot,
     plot_dir = file.path(fig_dir), width =12, height = 8
   )
 

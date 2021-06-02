@@ -1,5 +1,5 @@
 # Title     : COVID-19 ICU overflow analysis
-# Objective : Figure  comparison to data
+# Objective : Figure comparison to data, MAE
 
 require(Metrics)
 source(file.path('Rfiles/settings.R'))
@@ -125,7 +125,7 @@ pplot <- ggplot() +
   scale_fill_manual(values=c("#d76127","#d76127"))
 
 f_save_plot(
-  plot_name = paste0("data_comparison"), pplot = pplot,
+  plot_name = paste0("S1_fig_6"), pplot = pplot,
   plot_dir = file.path(fig_dir), width =14, height = 3.5
 )
 
@@ -138,10 +138,10 @@ pplot <- ggplot() +
   scale_color_brewer(palette="Dark2")+
   scale_fill_brewer(palette="Dark2")
 
-f_save_plot(
-  plot_name = paste0("data_comparison_scatter"), pplot = pplot,
-  plot_dir = file.path(fig_dir), width =14, height = 4
-)
+#f_save_plot(
+#  plot_name = paste0("data_comparison_scatter"), pplot = pplot,
+#  plot_dir = file.path(fig_dir), width =14, height = 4
+#)
 
 
 ### MAE
@@ -183,7 +183,7 @@ pC <- ggplot(data=subset(fitdat_avrg, !is.na(trace_selection))) +
 pplot <- plot_grid(pA, pB, pC, labels=c("A","B","C"),ncol=1)
 
 f_save_plot(
-    plot_name = paste0("MAE_trace_selection"), pplot = pplot,
+    plot_name = paste0("S1_fig_7"), pplot = pplot,
     plot_dir = file.path(fig_dir), width =14, height = 8
   )
 

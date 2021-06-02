@@ -35,7 +35,7 @@ pplot <- ggplot(data=ccdat) +
   labs(x="", y="Number of ICU beds")
 
 f_save_plot(
-  plot_name = paste0("Fig_SI_capacity"), pplot = pplot,
+  plot_name = paste0("S1_fig_15"), pplot = pplot,
   plot_dir = file.path(fig_dir), width =10, height = 6
 )
 
@@ -90,4 +90,8 @@ pplot <- ggplot(data = subset(ccdat )) +
   geom_hline(yintercept = c(-Inf, Inf)) +
   geom_vline(xintercept = c(-Inf, Inf)) +
   customTheme + labs( x = "", y = "% of ICU beds available\nfor COVID-19 filled")
-pplot
+
+f_save_plot(
+  plot_name = paste0("S1_fig_15_supp"), pplot = pplot,
+  plot_dir = file.path(fig_dir), width =10, height = 6
+)

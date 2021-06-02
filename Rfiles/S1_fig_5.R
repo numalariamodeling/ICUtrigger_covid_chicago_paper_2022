@@ -75,9 +75,9 @@ p2 <- ggplot(data=datAggr) +
   labs(title="", x="Specimen collection", y="Case fatality rate")+
   theme_minimal() + customTheme
 
-pSI6 <- plot_grid(p1,p2, nrow=1, labels=c("A","B"))
-pSI6
+pplot <- plot_grid(p1,p2, nrow=1, labels=c("A","B"))
+pplot
 f_save_plot(
-    plot_name = paste0("FigSI6"), pplot = pSI6,
+    plot_name = paste0("S1_fig_5"), pplot = pplot,
     plot_dir = file.path(fig_dir), width =12, height = 6,scale=0.8
   )

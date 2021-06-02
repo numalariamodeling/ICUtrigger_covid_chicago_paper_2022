@@ -64,5 +64,5 @@ pplot <- ggplot(data=subset(dat, delay=="1daysdelay")) +
 
 
 f_save_plot(
-  plot_name = paste0("Fig_SI_trigger_barplot"), pplot = pplot,
+  plot_name = paste0("S1_fig_11"), pplot = pplot,
   plot_dir = file.path(fig_dir), width =10, height = 6 ,scale=0.8)

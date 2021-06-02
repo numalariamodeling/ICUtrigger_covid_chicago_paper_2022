@@ -9,6 +9,8 @@ trace_selection <- TRUE
 capacity_multipliers <-  c(0.4, 0.6, 0.8,1)
 exp_names <- list.dirs(sim_dir, full.names = FALSE)
 exp_names <- exp_names[grep("triggeredrollback_reopen",exp_names)]
+exp_names <- exp_names[!grepl("14daysdelay",exp_names)]
+
 column_names <- c("ICU_peak", "ICU_peak_date",  "trigger_to_peak",
                   "ICUoverflow", "ICUoverflow_date", "trigger_to_overflow")
 scen_table <- matrix(NA, length(exp_names)*length(capacity_multipliers), length(column_names)+2)
@@ -69,4 +71,4 @@ dat <- dat %>% pivot_wider(names_from=outcome,
   select(order(colnames(.))) %>%
   select(reopen, mitigation, delay, capacity_multiplier, everything())
 
-fwrite(dat, file.path(git_dir,"out", "scenario_ICUtable.csv"))
+fwrite(dat, file.path(git_dir,"out", "S1_table_6.csv"))

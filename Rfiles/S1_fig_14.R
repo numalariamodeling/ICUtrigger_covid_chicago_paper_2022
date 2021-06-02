@@ -173,10 +173,10 @@ p6B <-  ggplot(data=subset(above_threshold,reopen=="100perc")) +
 
 
 f_save_plot(
-  plot_name = paste0("Fig6_supp"), pplot = p6B,
+  plot_name = paste0("S1_fig_14"), pplot = p6B,
   plot_dir = file.path(fig_dir), width =10, height = 3,scale=0.8
   )
 
-fwrite(above_threshold, file.path(fig_dir,"csv","p6dat_supp.csv"))
-fwrite(above_thresholdAggr, file.path(fig_dir,"csv","p6dat_aggr_supp.csv"))
+fwrite(above_threshold, file.path(fig_dir,"csv","S1_fig_14.csv"))
+fwrite(above_thresholdAggr, file.path(fig_dir,"csv","S1_fig_14.csv"))
 
