@@ -2,11 +2,10 @@ venv
 *.pyc
 .env
 .idea/
-Rfiles/.Rproj.user/
 .Rproj.user
 *.pdf
 .Rhistory
 *.zip
 *.html
-figures/*
 out/*
+simulation_output/*

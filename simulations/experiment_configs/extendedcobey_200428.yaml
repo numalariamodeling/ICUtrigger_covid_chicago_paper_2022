@@ -1,0 +1,661 @@
+experiment_setup_parameters:
+  'number_of_samples': 10
+  'number_of_runs': 1
+  'duration': 560 # until 5th Sep 2021 for startdate 2020-02-13 
+  'monitoring_samples': 560 # needs to be less than or equal to duration
+  'random_seed': 751
+  'initialAs': 10
+fixed_parameters_region_specific:
+  populations:
+    ### Not actively used
+    'NMH_catchment': 327667
+    'Chicago': 2456274
+    ### Used for spatial model, or base model all IL
+    'IL': 12671821
+    ### Used for base and age model    
+    'EMS_1': 660965
+    'EMS_2': 1243906
+    'EMS_3': 556776
+    'EMS_4': 656946
+    'EMS_5': 403659
+    'EMS_6': 739098
+    'EMS_7': 800605
+    'EMS_8': 1455324
+    'EMS_9': 1004309
+    'EMS_10': 2693959
+    'EMS_11': 2456274
+  startdate:
+    # To specify a range of dates instead of a single date:
+    # 'EMS_1': [2020-02-26, 2020-02-28]
+    # This would mean using all dates between 2020-02-26 and 2020-02-28, inclusive.  
+    ### Not actively used
+    'NMH_catchment': 2020-02-28
+    'Chicago': 2020-02-20 
+    ### Used for spatial model, or base model all IL
+    'IL': 2020-02-13 
+    ### Used for base and age model    
+    'EMS_1': 2020-02-26       
+    'EMS_2': 2020-02-25  
+    'EMS_3': 2020-02-16     
+    'EMS_4': 2020-02-20  
+    'EMS_5': 2020-02-24     
+    'EMS_6': 2020-02-29  
+    'EMS_7': 2020-02-22           
+    'EMS_8': 2020-02-25       
+    'EMS_9': 2020-02-25        
+    'EMS_10': 2020-02-18      
+    'EMS_11': 2020-02-22       
+fixed_parameters_global:
+sampled_parameters:
+  ### ---- INFECTION AND DISEASE PROGRESSION TIMES ---------- 
+  'time_to_infectious':
+    np.random: uniform
+    function_kwargs: {'low': 3.4, 'high':4.5}
+  'time_to_symptoms':
+    np.random: uniform
+    function_kwargs: {'low': 2.4, 'high': 3.5}
+  'time_to_hospitalization':
+    np.random: uniform
+    function_kwargs: {'low':3, 'high':6}
+  'time_to_critical':
+    np.random: uniform
+    function_kwargs: {'low':4, 'high':6}
+  'time_to_death':
+    np.random: uniform
+    function_kwargs: {'low':4, 'high':6}
+  ### ---- DETECTION TIMES  ----------------------- 
+  ### Time to detection for all (not used,depending on model specification)
+  'time_to_detection':
+    np.random: uniform
+    function_kwargs: {'low':2.0, 'high':2.0}
+  ### Time to detection for As
+  'time_to_detection_As':
+    np.random: uniform
+    function_kwargs: {'low':1.0, 'high':6.0}
+  ### Time to detection for Sym
+  'time_to_detection_Sym':
+    np.random: uniform
+    function_kwargs: {'low':7.0, 'high':7.0}
+    #function_kwargs: {'low':2.0, 'high':5.0}
+  ### Time to detection for Sys
+  'time_to_detection_Sys':
+    np.random: uniform
+    function_kwargs: {'low':2.0, 'high':2.0}
+  ### ---- RECOVERY TIMES  ----------------------- 
+  'recovery_time_asymp':
+    np.random: uniform
+    function_kwargs: {'low':9, 'high':9}
+  'recovery_time_mild':
+    np.random: uniform
+    function_kwargs: {'low':9, 'high':9}
+  'recovery_time_hosp':
+    np.random: uniform
+    function_kwargs: {'low':4, 'high':6}
+  'recovery_time_crit':
+    np.random: uniform
+    function_kwargs: {'low':8, 'high':10}
+  'recovery_time_postcrit':
+    np.random: uniform
+    function_kwargs: {'low':1, 'high':4}    
+  ### ---- FRACTIONS  ----------------------- 
+  'fraction_symptomatic':
+    np.random: uniform
+    function_kwargs: {'low':0.5, 'high':0.7}
+  'fraction_severe':
+    np.random: uniform
+    function_kwargs: {'low':0.06, 'high':0.1}
+  'fraction_critical':
+    np.random: uniform
+    #function_kwargs: {'low':0.20, 'high':0.35}
+    function_kwargs: {'low':0.455, 'high':0.65}
+  'fraction_dead': 
+    np.random: uniform
+    function_kwargs: {'low':0.133, 'high':0.247}
+  ### ---- INFECTIOUSNESS  ----------------------
+  'reduced_inf_of_det_cases':
+    np.random: uniform
+    function_kwargs: {'low':0, 'high':0.3}
+  'reduced_infectious_As':
+    np.random: uniform
+    function_kwargs: {'low':0.8, 'high':0.8}
+  ### ----DETECTION RATES ----------------------
+  ### In locale model, d_Sym is group specific
+  'd_Sym':
+    np.random: uniform
+    function_kwargs: {'low':0.00, 'high':0.02}
+  'd_Sys':
+    np.random: uniform
+    function_kwargs: {'low':0.00, 'high':0.0185} 
+  'd_As':
+    np.random: uniform
+    function_kwargs: {'low':0, 'high':0}
+  'd_P':
+    np.random: uniform
+    function_kwargs: {'low':0, 'high':0}  
+  ###------------------------------------------------
+  ### TIME_VARYING PARAMETERS  - EFFECT SIZE 
+  ###------------------------------------------------
+  ### Reduce Ki due to stay-at-home policy
+  #'ki_multiplier_3a':
+  #  np.random: uniform
+  #  function_kwargs: {'low':0.7, 'high':0.9}
+  #'ki_multiplier_3b':
+  #  np.random: uniform
+  #  function_kwargs: {'low':0.2, 'high':0.5}
+  #'ki_multiplier_3c':
+  #  np.random: uniform
+  #  function_kwargs: {'low':0.08, 'high':0.08}        
+  ### Increased testing - increased detectioon of severe symptomatic infections
+  'd_Sys_incr1':
+    np.random: uniform
+    function_kwargs: {'low':0.131, 'high':0.177}
+  'd_Sys_incr2':
+    np.random: uniform
+    function_kwargs: {'low':0.433, 'high':0.585}
+  'd_Sys_incr3':
+    np.random: uniform
+    function_kwargs: {'low':0.672, 'high':0.910}
+  'd_Sys_incr4':
+    np.random: uniform
+    function_kwargs: {'low':0.746, 'high':1.000}
+  'd_Sys_incr5':
+    np.random: uniform
+    function_kwargs: {'low':0.478, 'high':0.646}
+  'd_Sys_incr6':
+    np.random: uniform
+    function_kwargs: {'low':0.435 , 'high':0.589}
+  'd_Sys_incr7':
+    np.random: uniform
+    function_kwargs: {'low':0.592, 'high':0.800}
+  'd_Sys_incr8':
+    np.random: uniform
+    function_kwargs: {'low':0.746, 'high':1.000}
+  ###-------- Increase in d_Sym  ---------------
+  ### In locale model, d_Sym  increase is group specific
+  ### However when using this yaml for running single groups or non locale models it would be needed here
+  'd_Sym_change1':
+    np.random: uniform
+    function_kwargs: {'low':0.000, 'high':0.05}
+  'd_Sym_change2':
+    np.random: uniform
+    function_kwargs: {'low':0.062, 'high':0.094}
+  'd_Sym_change3':
+    np.random: uniform
+    function_kwargs: {'low': 0.108, 'high':0.162}
+  'd_Sym_change4':
+    np.random: uniform
+    function_kwargs: {'low':0.13 , 'high':0.194}
+  'd_Sym_change5':
+    np.random: uniform
+    function_kwargs: {'low':0.097, 'high':0.145}
+  'd_Sym_change6':
+    np.random: uniform
+    function_kwargs: {'low':0.139 , 'high':0.209}
+  'd_Sym_change6':
+    np.random: uniform
+    function_kwargs: {'low':0.131 , 'high':0.197}
+  'd_Sym_change7':
+    np.random: uniform
+    function_kwargs: {'low':0.16 , 'high':0.24}
+  'd_Sym_change8':
+    np.random: uniform
+    function_kwargs: {'low':0.376 , 'high':0.564}
+  ### --------- Change in d_P and d_As -------------
+  ### Separate parameter but same value as in practice not distinguishible
+  ###'d_PAs_change1'  - d_PAs_change98 relative to d_Sym
+  ### set dSym_dAsP_ratio to be 2 for half, 3 a third etc, to disable set ratio to very large number i.e. 10000
+  'dSym_dAsP_ratio':
+    np.random: uniform
+    function_kwargs: {'low':6 , 'high':6}  
+  ### ----- fraction_critical ----------
+  'fraction_critical_change1':
+    np.random: uniform
+    function_kwargs: {'low':0.378, 'high':0.702}
+  'fraction_critical_change2':
+    np.random: uniform
+    function_kwargs: {'low':0.217, 'high':0.403}
+  'fraction_critical_change3':
+    np.random: uniform
+    function_kwargs: {'low':0.154, 'high':0.286}
+  'fraction_critical_change4':
+    np.random: uniform
+    function_kwargs: {'low':0.126, 'high':0.234}
+  'fraction_critical_change5':
+    np.random: uniform
+    function_kwargs: {'low':0.119, 'high':0.221}
+  'fraction_critical_change6':
+    np.random: uniform
+    function_kwargs: {'low':0.112, 'high':0.208}
+  'fraction_critical_change7':
+    np.random: uniform
+    function_kwargs: {'low':0.105, 'high':0.195}
+  'fraction_critical_change8':
+    np.random: uniform
+    function_kwargs: {'low':0.091, 'high':0.169}
+  'fraction_critical_change9':
+    np.random: uniform
+    function_kwargs: {'low':0.070, 'high':0.13}
+  'fraction_critical_change10':
+    np.random: uniform
+    function_kwargs: {'low':0.042, 'high':0.078}
+  ### ----- fraction_dead ----------
+  'fraction_dead_change1':
+    np.random: uniform
+    function_kwargs: {'low':0.154, 'high':0.286}
+  'fraction_dead_change2':
+    np.random: uniform
+    function_kwargs: {'low':0.126, 'high':0.234}
+  'fraction_dead_change3':
+    np.random: uniform
+    function_kwargs: {'low':0.0840, 'high':0.156}
+  'fraction_dead_change4':
+    np.random: uniform
+    function_kwargs: {'low':0.063 , 'high':0.117}
+  'fraction_dead_change5':
+    np.random: uniform
+    function_kwargs: {'low':0.0700, 'high':0.13}
+  'fraction_dead_change6':
+    np.random: uniform
+    function_kwargs: {'low':0.105, 'high':0.195}
+  'fraction_dead_change7':
+    np.random: uniform
+    function_kwargs: {'low':0.105, 'high':0.195}
+  'fraction_dead_change8':
+    np.random: uniform
+    function_kwargs: {'low':0.091 , 'high':0.169}
+  'fraction_dead_change9':
+    np.random: uniform
+    function_kwargs: {'low':0.0280, 'high':0.052}
+  ### ---- VACCINE ----------------------
+  #'vacc_daily_cov':
+  #  np: linspace
+  #  function_kwargs: {'start':0.00523, 'stop':0.00523, 'num' : 1} ## not used per default
+  ### if trace selection would allow group by parameter, to keep uncertainity in intervention parameters
+  ### currenly all traces are ranked regardless of groupings
+  'reduced_fraction_Sym':
+    np.random: uniform
+    function_kwargs: { 'low': 0.8, 'high': 0.8 }
+  'reduced_fraction_Sys':
+    np.random: uniform
+    function_kwargs: { 'low': 0.05, 'high': 0.05 }
+  'reduced_infectious_V':
+    np.random: uniform
+    function_kwargs: { 'low': 0.1, 'high': 0.1}
+  'reduced_fraction_Sys_notV':
+    np.random: uniform
+    function_kwargs: { 'low': 0.15, 'high': 0.15}
+intervention_parameters:
+  ###------------------------------------------------
+  ### ---- Parameter scalingfactor ------------------
+  ### parameter scaling factors only used in fitting
+  ### (currenlty only applies to fitting ki_multipliers in locale model)
+  ### i.e. when specifying --fit_params "ki_multiplier_13"
+  'scalingfactor':
+    np: linspace
+    function_kwargs: {'start':1, 'stop':2, 'num' :1}
+    #function_kwargs: {'start':0.95, 'stop':1.1, 'num' : 5}
+  ###------------------------------------------------
+  ### INTERVENTION PARAMETERS  - EFFECT SIZE
+  ### (only used if corresponding emodl is defined)   
+  ###------------------------------------------------  
+  ### ---- B.1.1.7 Variant  ----------------------
+  ### Relative increase in transmission and severity due to COVID-19 B variant
+  ### here i.e. 50% increase = 0.5, not 1.5
+  'bvariant_infectivity':
+    np: linspace
+    function_kwargs: {'start':0.5, 'stop':0.5}
+  ### Fraction of the population infected with COVID-19 B variant  
+  'bvariant_fracinfect':
+    np: linspace
+    function_kwargs: {'start':0.25, 'stop':0.25}
+    #function_kwargs: {'start':0.5, 'stop':0.5}
+    #function_kwargs: {'start':0.75, 'stop':0.75}
+    #function_kwargs: {'start':0.25, 'stop':0.75, 'num' : 3}
+  ### Relative increase in fraction severe due to COVID-19 B variant
+  ### Here 50% increase = 1.5
+  'bvariant_severity':
+    np: linspace
+    function_kwargs: {'start':1.5, 'stop':1.5}
+  ### ---- ROLLBACK OR TRIGGEREDROLLBACK ----------------------
+  ### Decrease Ki due to more intense mitigation measures
+  'rollback_multiplier':
+    np: linspace
+    function_kwargs: {'start':0.1, 'stop':0.20, 'num' : 1}
+  ### ---- REOPENING ----------------------
+  ### Reset Ki to defined proporions of it's initial value using multiple time-events
+  'reopen_multiplier':
+    np: linspace
+    function_kwargs: {'start':0.20, 'stop':0.20, 'num' : 1}
+  ### ---- IMPROVED TESTING/ISOLATION TURNAROUND -----------
+  'change_testDelay_As_1':
+    np: linspace
+    function_kwargs: {'start':2, 'stop':7, 'num' : 1}
+  'change_testDelay_Sym_1':
+    np: linspace
+    function_kwargs: {'start':2, 'stop':7, 'num' : 1}
+    #function_kwargs: {'start':2, 'stop':7, 'num' : 11}
+  ### ---- CONTACT TRACING ----------------------
+  ### increase detection rates of asymptomatic, presymptomatic and mild infections
+  'd_AsP_ct1':
+    np.random: uniform
+    function_kwargs: {'low':0, 'high':0}
+  ### Since d_Sym differs per group, this parameter defines relative increase rather than fraction detected!
+  'd_Sym_ct1':
+    np.random: uniform
+    function_kwargs: {'low':0.170, 'high':0.170}
+  'reduced_inf_of_det_cases_ct1':
+    np.random: uniform
+    function_kwargs: {'low':0, 'high':1}
+  ### ---- TRIGGERED 'LOCKDOWN' ----------------------
+  ### decreases transmission rate at a specific threshold (spatial model only)
+  'capacity_multiplier':
+    np.random: uniform
+    function_kwargs: {'low':0.75, 'high':0.75}
+  'trigger_delay_days':
+    np.random: uniform
+    function_kwargs: {'low':1, 'high':1}  
+  ### ---- AGE MODEL SPECIFIC ----------------------
+  ### Adjusts transmission among elderly during 2nd wave (age model only)
+  'multiplier_elderly':
+    np.random: uniform
+    function_kwargs: {'low': 0.6, 'high':0.6}
+time_parameters:
+  ###------------------------------------------------
+  ### TIME_VARYING PARAMETERS  - DATES
+  ###------------------------------------------------
+  ### Reduce Ki due to stay-at-home policy 
+  'ki_multiplier_time_3a':
+    custom_function: DateToTimestep
+    # To use multiple dates instead of just one date, use an array of dates,
+    # e.g., function_kwargs: {'dates': [2020-03-12, 2020-03-13]}
+    function_kwargs: {'dates': 2020-03-12}
+  'ki_multiplier_time_3b':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-03-17}
+  'ki_multiplier_time_3c':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-03-21}
+  'ki_multiplier_time_4':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-04-21}
+  'ki_multiplier_time_5':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-05-21}
+  'ki_multiplier_time_6':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-06-21}
+  'ki_multiplier_time_7':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-07-25}
+  'ki_multiplier_time_8':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-08-25}
+  'ki_multiplier_time_9':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-09-17}
+  'ki_multiplier_time_10':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-10-07}
+  'ki_multiplier_time_11':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-11-11}
+  'ki_multiplier_time_12':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-12-20}
+  'ki_multiplier_time_13':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2021-01-20}
+  'ki_multiplier_time_14':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2021-02-15}
+  'ki_multiplier_time_15':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2021-03-07}    
+  'ki_multiplier_time_16':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2021-04-07}
+  'ki_multiplier_time_17':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2021-05-07}
+  ### ---- Increased detections ---- 
+  ### Change in d_Sys
+  'd_Sys_change_time_1':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-03-15}
+  'd_Sys_change_time_2':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-04-01}
+  'd_Sys_change_time_3':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-05-01}
+  'd_Sys_change_time_4':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-06-01} 
+  'd_Sys_change_time_5':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-07-01} 
+  'd_Sys_change_time_6':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-08-01}
+  'd_Sys_change_time_7':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-09-01}
+  'd_Sys_change_time_8':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-10-01}
+  ### Change in d_Sym
+  'd_Sym_change_time_1':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-04-01}
+  'd_Sym_change_time_2':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-05-01}
+  'd_Sym_change_time_3':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-06-01}
+  'd_Sym_change_time_4':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-07-01}
+  'd_Sym_change_time_5':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-08-01}
+  'd_Sym_change_time_6':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-09-01}
+  'd_Sym_change_time_7':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-10-01}
+  'd_Sym_change_time_8':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-11-01}
+  ### Change in d_P and d_As
+  ### Same as for d_Sym_change_times                              
+  ### ---- Better case/ decreased mortality ---- 
+  ###  Change in fraction_critical 
+  'crit_time_1':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-04-01} 
+  'crit_time_2':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-04-15} 
+  'crit_time_3':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-05-01} 
+  'crit_time_4':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-06-01}
+  'crit_time_5':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-07-01} 
+  'crit_time_6':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-08-01} 
+  'crit_time_7':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-09-01}
+  'crit_time_8':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-10-01} 
+  'crit_time_9':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-11-01} 
+  'crit_time_10':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-12-20}                                   
+  ### Change in fraction dead
+  'fraction_dead_time_1':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-05-01}   
+  'fraction_dead_time_2':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-06-01}   
+  'fraction_dead_time_3':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-07-01}                     
+  'fraction_dead_time_4':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-08-01}   
+  'fraction_dead_time_5':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-09-01}   
+  'fraction_dead_time_6':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-10-01}   
+  'fraction_dead_time_7':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-11-01} 
+  'fraction_dead_time_8':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-12-01}      
+  'fraction_dead_time_9':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2021-01-01}                                           
+  ###------------------------------------------------
+  ### INTERVENTION PARAMETERS  - DATES
+  ### (only used with corresponding emodl)
+  ###------------------------------------------------
+  ### ---- Bvariant ---
+  'bvariant_start':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2021-04-10}
+    #function_kwargs: {'dates': [2021-01-01, 2021-01-14, 2021-02-01]}
+  'bvariant_scaleupend':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2021-06-01} #if gradual change
+  'bvariant_end':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2099-01-01} #no end
+  ### ---- Reopen---
+  'reopen_start':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2021-02-10}
+  'reopen_scaleupend':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2021-03-01} #if gradual change
+  'reopen_end':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2099-01-01} #no end
+  ### ---- Rollback---
+  'rollback_start':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2021-04-10}
+  'rollback_scaleupend':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2099-01-01} #if gradual change
+  'rollback_end':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2099-01-01} #no end
+  ### ---- TRIGGEREDROLLBACK ----------------------
+  ### Decrease Ki due to more intense mitigation measures
+  ### Start = date after which trigger can be activated
+  ### scaleup dates and end are dummies (end could be useful, not added yet)
+  'triggeredrollback_start':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2021-03-01}
+  'triggeredrollback_scaleupend':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2099-01-01} #dummy
+  'triggeredrollback_end':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2099-01-01} #no end
+  ### ---- Vaccine---
+  'vaccine_start':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-12-15}
+  'vaccine_scaleupend':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2021-06-01} #used if n_gradual_steps >1 in intervention_emodl_config.yaml
+  'vaccine_end':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2099-01-01} #not used
+    ### assume that after Feb most of the high risk populations are vaccinated and remaining population less severe
+    ### simplified date informed by vaccine scale up  (i.e. not time varying age distribution of not vaccinated pop)
+  'fraction_severe_changeV_time':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2021-02-01}
+  ### ---- IMPROVED TEST/ISOLATION TURNAROUND ---
+  'change_testDelay_time1':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2021-02-10}
+    #function_kwargs: {'dates': [2021-01-01, 2021-01-14, 2021-02-01]}
+  ### ---- CONTACT TRACING ---
+  ### Contact tracing - increase detectioon of asymptomatic, presymptomatic and mild infections
+  ### Note detection of asymptomatic and presymptomatic assumed to be the same
+  'contact_tracing_start_1':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-08-30}
+  ### Stop after simulation end to simulate indefinite contact tracing
+  'contact_tracing_stop1':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2022-05-30}
+  ### Specific for age model
+  'start_time_2ndWave':
+    custom_function: DateToTimestep
+    function_kwargs: {'dates': 2020-07-01}
+fitted_parameters:
+  Kis:
+    #### NOT ACTIVELY USED
+    'NMH_catchment':
+      np: linspace
+      function_kwargs: {'start': 1.5e-6, 'stop': 2.0e-6, 'num': 1}
+    'Chicago':
+      np: linspace
+      function_kwargs: {'start': 2.0e-7, 'stop': 3.0e-7, 'num': 1}
+    #### LOCALE/SPATIAL MODEL - PLACEHOLDER (Ki's are in spatial yaml)
+    'IL':
+      np: linspace
+      function_kwargs: {'start': 6.0e-8, 'stop': 9.0e-8, 'num': 1}
+    #### BASE AND AGE MODEL - RUNNING SEPARATE REGIONS
+    'EMS_1':
+      np: linspace
+      function_kwargs: {'start': 0.628, 'stop': 0.628, 'num': 1}
+    'EMS_2':
+      np: linspace
+      function_kwargs: {'start': 0.654, 'stop': 0.654, 'num': 1}
+    'EMS_3':
+      np: linspace
+      function_kwargs: {'start': 0.381, 'stop': 0.381, 'num': 1}
+    'EMS_4':
+      np: linspace
+      function_kwargs: {'start': 0.571, 'stop': 0.571, 'num': 1}
+    'EMS_5':
+      np: linspace
+      function_kwargs: {'start': 0.498, 'stop': 0.498, 'num': 1}
+    'EMS_6':
+      np: linspace
+      function_kwargs: {'start': 0.501, 'stop': 0.501, 'num': 1}
+    'EMS_7':
+      np: linspace
+      function_kwargs: {'start': 0.716, 'stop': 0.716, 'num': 1}
+    'EMS_8':
+      np: linspace
+      function_kwargs: {'start': 0.897, 'stop': 0.897, 'num': 1}
+    'EMS_9':
+      np: linspace
+      function_kwargs: {'start': 0.807, 'stop': 0.807, 'num': 1}
+    'EMS_10':
+      np: linspace
+      function_kwargs: {'start': 0.754, 'stop': 0.754, 'num': 1}
+    'EMS_11':
+      np: linspace
+      function_kwargs: {'start': 1.020, 'stop': 1.020, 'num': 1}
