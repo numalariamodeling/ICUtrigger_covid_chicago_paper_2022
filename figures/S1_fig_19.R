@@ -1,5 +1,5 @@
 # Title     : COVID-19 Chicago: ICU thresholds for action to prevent overflow
-# Objective : S1 Figure 18
+# Objective : S1 Figure 19
 
 source(file.path('setup/settings.R'))
 source(file.path('setup/helper_functions.R'))
@@ -142,7 +142,7 @@ plotdat %>%
 
 
 f_save_plot(
-  plot_name = paste0("S1_Fig_18"), pplot = pplot,
+  plot_name = paste0("S1_Fig_19"), pplot = pplot,
   plot_dir = file.path(fig_dir), width = 10, height = 6
 )
 
