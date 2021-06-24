@@ -14,11 +14,11 @@ library(gg.gap)
 theme_set(theme_minimal())
 
 wdir = getwd()
+data_path <- file.path(wdir, "data")
+simulation_output <- file.path(wdir, 'simulation_output')
 fig_dir <- file.path(wdir, "out", "figures", "raw")
 fig_dir_traces <- file.path(wdir, "out", "figures/raw_traces")
-
-simdate <- "20210517"
-sim_dir <- file.path(simulation_output, simdate)
+sim_dir <- file.path(simulation_output)
 
 startdate <- as.Date("2020-01-01")
 sim_end_date <- as.Date("2021-05-01")
