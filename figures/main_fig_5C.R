@@ -10,10 +10,10 @@ delay = "1daysdelay"
 if (trace_selection) fig_dir = fig_dir_traces
 if (delay == "7daysdelay") {
   exp_names <- c(exp_names_50_delay7, exp_names_100_delay7)
-  subtitle = "immediate mitigation:\n1 day after threshold reached"
+  subtitle = "immediate mitigation:\n7 days after threshold reached"
 }
 if (delay == "1daysdelay") {
-  subtitle = "delayed mitigation:\n7 days after threshold reached"
+  subtitle = "delayed mitigation:\n1 day after threshold reached"
   exp_names <- c(exp_names_50_delay1, exp_names_100_delay1)
 }
 
