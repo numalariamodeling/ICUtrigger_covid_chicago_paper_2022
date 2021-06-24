@@ -55,8 +55,8 @@ pplot <- ggplot(data = subset(dat, delay == "1daysdelay")) +
   facet_grid(reopen_fct ~ rollback_fct) +
   theme_minimal() +
   #customTheme+
-  scale_color_manual(values = c('deepskyblue4', 'deepskyblue')) +
-  scale_fill_manual(values = c('deepskyblue4', 'deepskyblue')) +
+  scale_color_manual(values = transm_scen_cols) +
+  scale_fill_manual(values = transm_scen_cols) +
   labs(x = "ICU occupancy threshold to trigger mitigation (%)",
        y = "number of trajectories\nabove capacity") +
   theme(legend.position = "none", axis.ticks = element_line(), panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank())

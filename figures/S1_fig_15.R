@@ -4,7 +4,7 @@
 source(file.path('setup/settings.R'))
 source(file.path('setup/helper_functions.R'))
 customTheme <- f_getCustomTheme()
-trace_selection <- FALSE
+trace_selection <- TRUE
 if (trace_selection) fig_dir = fig_dir_traces
 
 
@@ -80,8 +80,8 @@ p15Abar <- ggplot(data = subset(above_thresholdAggr, delay == "1daysdelay")) +
            position = position_dodge2(width = 0.9, preserve = "single"),
            stat = "identity") +
   facet_grid(~rollback) +
-  scale_color_manual(values = c('deepskyblue4', 'deepskyblue')) +
-  scale_fill_manual(values = c('deepskyblue4', 'deepskyblue')) +
+  scale_color_manual(values = transm_scen_cols) +
+  scale_fill_manual(values = transm_scen_cols) +
   labs(x = "ICU occupancy threshold to trigger mitigation (%)",
        y = "number of trajectories\nabove capacity") +
   theme(legend.position = "none")
@@ -92,8 +92,8 @@ p15Bbar <- ggplot(data = subset(above_thresholdAggr, reopen == "100perc")) +
            position = position_dodge2(width = 0.9, preserve = "single"),
            stat = "identity") +
   facet_grid(~rollback) +
-  scale_color_manual(values = c('deepskyblue4', 'deepskyblue')) +
-  scale_fill_manual(values = c('deepskyblue4', 'deepskyblue')) +
+  scale_color_manual(values = delay_scen_cols ) +
+  scale_fill_manual(values = delay_scen_cols ) +
   labs(x = "ICU occupancy threshold to trigger mitigation (%)",
        y = "number of trajectories\nabove capacity") +
   theme(legend.position = "none")
@@ -104,6 +104,5 @@ f_save_plot(
   plot_dir = file.path(fig_dir), width = 10, height = 6, scale = 0.8
 )
 
-
 fwrite(above_threshold, file.path(fig_dir, "csv", "S1_fig_15.csv"))
-fwrite(above_thresholdAggr, file.path(fig_dir, "csv", "S1_fig_15.csv"))
+fwrite(above_thresholdAggr, file.path(fig_dir, "csv", "S1_fig_15_aggr.csv"))

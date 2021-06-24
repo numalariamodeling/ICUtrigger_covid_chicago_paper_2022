@@ -507,8 +507,8 @@ f_prob_plot_base <- function(dat) {
       minor_breaks = seq(0, 1, 0.1)
     ) +
     scale_x_continuous(breaks = seq(0, 100, 10), labels = seq(0, 100, 10), lim = c(0, 100)) +
-    scale_color_manual(values = mitigation_colors) +
-    scale_fill_manual(values = mitigation_colors) +
+    scale_color_manual(values = mitigation_cols) +
+    scale_fill_manual(values = mitigation_cols) +
     customTheme +
     theme(
       panel.spacing = unit(1, "lines"),
