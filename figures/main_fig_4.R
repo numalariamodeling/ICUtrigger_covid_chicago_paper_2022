@@ -139,7 +139,7 @@ p4E <- ggplot(p4E_dat) +
   geom_bar(aes(x = rollback, y = mean / 516, fill = rollback), stat = "identity") +
   geom_errorbar(aes(x = rollback, ymin = q5 / 516, ymax = q95 / 516), width = 0) +
   geom_hline(aes(yintercept = 1), col = capacitycolor, linetype = 'dashed') +
-  scale_fill_manual(values = c("darkgrey", mitigation_colors)) +
+  scale_fill_manual(values = c("darkgrey", mitigation_cols)) +
   scale_y_continuous(breaks = seq(0, 5, 1)) +
   theme(legend.position = "none")
 
@@ -165,7 +165,7 @@ p4B_dat$rollback_fct <- factor(p4B_dat$rollback,
 
 p4B <- ggplot(data = p4B_dat) +
   geom_jitter(aes(x = time_since_trigger, y = rollback_fct, col = rollback_fct), width = 0, height = 0.1) +
-  scale_color_manual(values = c("darkgrey", mitigation_colors)) +
+  scale_color_manual(values = c("darkgrey", mitigation_cols)) +
   scale_x_continuous(breaks = seq(-14, 90, 14), labels = seq(-14, 90, 14) / 7, lim = c(-14, 90)) +
   theme_minimal() +
   customTheme +
@@ -180,7 +180,7 @@ p4A <- ggplot(data = triggerDat) +
   geom_line(aes(x = time_since_trigger, y = rel_occupancy,
                 group = interaction(reopen, exp_name, sample_num, scen_num, rollback, capacity_multiplier),
                 col = as.factor(rollback)), alpha = 0.6, size = 0.9) +
-  scale_color_manual(values = mitigation_colors) +
+  scale_color_manual(values = mitigation_cols) +
   geom_hline(aes(yintercept = 1), col = capacitycolor, linetype = 'dashed') +
   theme_minimal() +
   customTheme +
@@ -194,7 +194,7 @@ p4C <- dat_sub %>%
   ggplot() +
   geom_line(aes(x = time_since_trigger, y = Ki_t, group = interaction(group_id, rollback, capacity_multiplier),
                 col = as.factor(rollback)), alpha = 1, size = 1.2) +
-  scale_color_manual(values = mitigation_colors) +
+  scale_color_manual(values = mitigation_cols) +
   theme_minimal() +
   customTheme +
   theme(legend.position = "none") +
@@ -228,8 +228,8 @@ p4D <- ggplot(data = subset(p4D_dat, time_since_trigger_wks > -2 & time_since_tr
                   fill = as.factor(rollback)), alpha = 0.3) +
   geom_line(aes(x = time_since_trigger_wks, y = mean,
                 group = interaction(rollback, capacity_multiplier), col = as.factor(rollback)), alpha = 0.6, size = 0.9) +
-  scale_fill_manual(values = mitigation_colors) +
-  scale_color_manual(values = mitigation_colors) +
+  scale_fill_manual(values = mitigation_cols) +
+  scale_color_manual(values = mitigation_cols) +
   geom_hline(aes(yintercept = 1), col = "black", linetype = 'dashed') +
   theme_minimal() +
   customTheme +

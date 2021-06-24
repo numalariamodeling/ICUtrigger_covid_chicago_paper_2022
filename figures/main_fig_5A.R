@@ -38,8 +38,8 @@ p5A <- ggplot(data = p5Adat) +
                 group = interaction(scen_num, group_id, exp_name, capacity_multiplier),
                 col = as.factor(reopen)),
             alpha = 0.5, size = 0.5) +
-  scale_color_manual(values = c('deepskyblue4', 'deepskyblue')) +
-  scale_fill_manual(values = c('deepskyblue4', 'deepskyblue')) +
+  scale_color_manual(values = transm_scen_cols) +
+  scale_fill_manual(values = transm_scen_cols) +
   geom_hline(yintercept = 1, col = capacitycolor, linetype = 'dashed') +
   geom_hline(data = unique(p5Adat[, c("capacity_multiplier", "reopen", "delay")]),
              aes(yintercept = capacity_multiplier), col = 'grey', linetype = 'dashed') +

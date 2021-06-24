@@ -115,8 +115,8 @@ p6Abar <- ggplot(data = subset(above_thresholdAggr, delay == "1daysdelay")) +
   facet_grid(~rollback) +
   theme_minimal() +
   customTheme +
-  scale_color_manual(values = c('deepskyblue4', 'deepskyblue')) +
-  scale_fill_manual(values = c('deepskyblue4', 'deepskyblue')) +
+  scale_color_manual(values = transm_scen_cols) +
+  scale_fill_manual(values = transm_scen_cols) +
   labs(x = "ICU occupancy threshold to trigger mitigation (%)",
        y = "number of trajectories\nabove capacity") +
   theme(legend.position = "none")
@@ -148,10 +148,10 @@ p6A <- ggplot(data = subset(above_threshold, delay == "1daysdelay")) +
                       group = interaction(rollback, reopen)), stat = 'identity',
                   position = position_dodge(1), shape = 21, color = "black", size = 0.6) +
   theme_minimal() +
-  scale_color_manual(values = c('deepskyblue4', 'deepskyblue')) +
-  scale_fill_manual(values = c('deepskyblue4', 'deepskyblue')) +
-  geom_hline(yintercept = c(nomitigation_50perc), color = "deepskyblue") +
-  geom_hline(yintercept = c(nomitigation_100perc), color = "deepskyblue4") +
+  scale_color_manual(values = transm_scen_cols) +
+  scale_fill_manual(values = transm_scen_cols) +
+  geom_hline(yintercept = c(nomitigation_50perc), color = transm_scen_cols[2]) +
+  geom_hline(yintercept = c(nomitigation_100perc), color = transm_scen_cols[1]) +
   scale_shape_manual(values = c(21, 21)) +
   scale_alpha_manual(values = c(0.5, 0.5)) +
   scale_y_continuous(breaks = seq(0, 110, 30), labels = seq(0, 110, 30)) +

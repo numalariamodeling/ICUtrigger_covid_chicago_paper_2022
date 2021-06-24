@@ -103,7 +103,7 @@ p3A <- ggplot(data = subset(dat, date >= first_plot_date & date <= last_plot_dat
   geom_line(data = subset(ccdat, date <= baseline_date), aes(x = date, y = icu_availforcovid_7avrg), col = capacitycolor, alpha = 1, size = 1.2) +
   geom_line(data = subset(ccdat, date >= baseline_date & date <= last_plot_date), aes(x = date, y = assumed_capacity), linetype = 'dashed', col = capacitycolor, alpha = 1, size = 1.2) +
   geom_line(data = subset(ccdat, date >= baseline_date & date <= last_plot_date), aes(x = date, y = icu_availforcovid_7avrg), col = capacitycolor, alpha = 0.5, size = 1.2) +
-  scale_color_manual(values = transm_scen_colors) +
+  scale_color_manual(values = transm_scen_cols) +
   geom_vline(xintercept = c(baseline_date)) +
   geom_vline(xintercept = c(last_plot_date), linetype = 'dashed') +
   scale_x_date(date_breaks = "1 month", date_labels = "%b") +
@@ -128,7 +128,7 @@ p3B_dat %>%
 
 p3B <- ggplot(p3B_dat) +
   geom_line(aes(x = date, y = Ki_t, group = interaction(reopen), col = reopen), alpha = 0.5) +
-  scale_color_manual(values = transm_scen_colors) +
+  scale_color_manual(values = transm_scen_cols) +
   geom_vline(xintercept = c(baseline_date)) +
   scale_x_date(date_breaks = "1 month", date_labels = "%m") +
   theme_minimal() +
@@ -145,7 +145,7 @@ p3C_dat <- subset(dat, date >= first_plot_date & date <= last_plot_date) %>%
 p3C <- ggplot(data = p3C_dat) +
   #geom_rect(xmin=as.Date("2020-03-22"), xmax=as.Date("2020-06-27"), ymin=-Inf, ymax=Inf, alpha=0.03, col='lightgrey') +
   geom_line(aes(x = date + 14, y = rt_median, group = interaction(scen_num, reopen), col = reopen), alpha = 0.5) +
-  scale_color_manual(values = transm_scen_colors) +
+  scale_color_manual(values = transm_scen_cols) +
   geom_vline(xintercept = c(baseline_date)) +
   scale_x_date(date_breaks = "1 month", date_labels = "%m") +
   geom_hline(yintercept = 1, linetype = "dashed") +

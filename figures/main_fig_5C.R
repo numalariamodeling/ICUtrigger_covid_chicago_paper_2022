@@ -61,8 +61,8 @@ p5C <- ggplot(data = p5C_dat) +
   scale_y_continuous(lim = c(0, 4), breaks = seq(0, 4, 0.5), labels = seq(0, 4, 0.5)) +
   scale_x_continuous(breaks = seq(0, 1, 0.2), labels = seq(0, 100, 20)) +
   geom_hline(yintercept = 1, col = capacitycolor, linetype = 'dashed') +
-  scale_fill_manual(values = mitigation_colors) +
-  scale_color_manual(values = mitigation_colors) +
+  scale_fill_manual(values = mitigation_cols) +
+  scale_color_manual(values = mitigation_cols) +
   labs(title = "",
        subtitle = subtitle,
        x = 'ICU occupancy threshold\nto trigger mitigation',
