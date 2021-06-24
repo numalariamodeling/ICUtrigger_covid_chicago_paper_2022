@@ -1,5 +1,5 @@
 # Title     : COVID-19 ICU overflow analysis
-# Objective : Figure comparison to data, MAE
+# Objective : S1 Figure 6 and 7
 
 require(Metrics)
 source(file.path('setup/settings.R'))

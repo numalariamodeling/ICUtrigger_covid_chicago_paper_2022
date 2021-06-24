@@ -1,5 +1,5 @@
 # Title     : COVID-19 Chicago: ICU thresholds for action to prevent overflow
-# Objective : Scenario ICU predictions
+# Objective : S1 Figure 8
 
 source(file.path('setup/settings.R'))
 source(file.path('setup/helper_functions.R'))

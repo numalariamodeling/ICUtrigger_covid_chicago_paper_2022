@@ -1,5 +1,5 @@
 # Title     : COVID-19 ICU overflow analysis
-# Objective : Fraction dead | admitted
+# Objective : S1 Figure 5
 
 library(tidyverse)
 library(data.table)

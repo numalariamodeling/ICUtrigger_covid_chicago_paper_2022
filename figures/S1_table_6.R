@@ -1,74 +1,105 @@
 # Title     : COVID-19 Chicago: ICU thresholds for action to prevent overflow
-# Objective : Scenario ICU predictions
+# Objective : S1 Table 6
 
 source(file.path('setup/settings.R'))
 source(file.path('setup/helper_functions.R'))
 customTheme <- f_getCustomTheme()
 
-trace_selection <- TRUE
-capacity_multipliers <- c(0.4, 0.6, 0.8, 1)
+
 exp_names <- list.dirs(sim_dir, full.names = FALSE)
 exp_names <- exp_names[grep("triggeredrollback_reopen", exp_names)]
-exp_names <- exp_names[!grepl("14daysdelay", exp_names)]
+exp_names <- exp_names[!(grepl("14daysdelay", exp_names))]
+column_names <- c("n_trajectories", "n_trajectories_success", "n_trajectories_trigger", "n_trajectories_peakBeforeDec",
+                  "n_traces", "n_traces_trigger", "n_traces_peakBeforeDec")
+scen_table <- matrix(NA, length(exp_names), length(column_names) + 1)
+capacity_multipliers <- seq(0, 1, 0.1)
 
-column_names <- c("ICU_peak", "ICU_peak_date", "trigger_to_peak",
-                  "ICUoverflow", "ICUoverflow_date", "trigger_to_overflow")
-scen_table <- matrix(NA, length(exp_names) * length(capacity_multipliers), length(column_names) + 2)
-colnames(scen_table) <- c("exp_name", "capacity_multiplier", column_names)
-scen_table <- as.data.frame(scen_table)
+column_names1 <- c("n_trajectories_success", "n_trajectories_trigger", "n_traces", "n_traces_trigger")
+scen_table1 <- matrix(NA, length(exp_names) * length(capacity_multipliers), length(column_names1) + 2)
 
-dat_list <- list()
+colnames(scen_table) <- c("exp_name", column_names)
+colnames(scen_table1) <- c("exp_name", "threshold", column_names1)
+
+traces <- fread(file.path(sim_dir, "sample_num_traces_all.csv"))
+
+iter = 0
 for (exp_name in exp_names) {
   print(exp_name)
-  dat_list[[length(dat_list) + 1]] <- f_load_sim_data(
-    exp_name, fname = "trajectoriesDat_region_11_trimfut.csv", sim_dir,
-    add_peak_cols = TRUE, add_trigger_cols = TRUE, addRt = FALSE, trace_selection = trace_selection) %>%
-    filter(date <= sim_end_date &
-             date_peak <= last_plot_date &
-             capacity_multiplier %in% capacity_multipliers) %>%
-    dplyr::group_by(exp_name, group_id) %>%
-    dplyr::mutate(rel_occupancy = crit_det / 516,
-                  rel_occupancy_peak = crit_det_peak / 516,
-                  time_since_reopen = as.numeric(date - baseline_date),
-                  time_to_peak_after_reopen = as.numeric(date_peak - baseline_date),
-                  time_to_trigger_after_reopen = as.numeric(triggerDate - baseline_date),
-                  time_since_trigger = round(as.numeric(date - triggerDate), 0),
-                  time_to_peak_after_trigger = round(as.numeric(date_peak - triggerDate), 0)) %>%
-    dplyr::filter(trigger_activated == 1) %>%
-    ungroup() %>%
-    dplyr::select(exp_name, capacity_multiplier, rel_occupancy_peak, time_to_peak_after_reopen,
-                  time_to_trigger_after_reopen, time_to_peak_after_trigger) %>%
-    pivot_longer(cols = -c(exp_name, capacity_multiplier), names_to = "outcome") %>%
-    dplyr::group_by(exp_name, capacity_multiplier, outcome) %>%
-    dplyr::summarise(n = n(),
-                     median = median(value),
-                     lower = quantile(value, probs = 0.05, na.rm = TRUE),
-                     upper = quantile(value, probs = 0.95, na.rm = TRUE))
+  iter = iter + 1
+  dat <- fread(file.path(sim_dir, exp_name, 'trajectoriesDat_region_11_trimfut.csv'),
+               select = c("crit_det_EMS-11", "capacity_multiplier", "sample_num", "scen_num", "time")) %>%
+    mutate(date = as.Date("2020-01-01") + time) %>%
+    filter(date >= baseline_date & date <= sim_end_date) %>%
+    rename(crit_det = `crit_det_EMS-11`)
+
+  dat_trigger <- dat %>%
+    filter(date > trigger_min_date) %>%
+    group_by(scen_num, sample_num, capacity_multiplier) %>%
+    filter(crit_det >= 516 * capacity_multiplier) %>%
+    filter(date == min(date))
+
+  dat_peakDec <- dat %>%
+    filter(date > trigger_min_date) %>%
+    group_by(scen_num, sample_num, capacity_multiplier) %>%
+    filter(crit_det == max(crit_det)) %>%
+    filter(date == min(date)) %>%
+    filter(date <= as.Date("2020-12-31"))
+
+  dat_traces <- dat %>% filter(sample_num %in% traces$traces)
+
+  dat_traces_trigger <- dat_traces %>%
+    filter(date > trigger_min_date) %>%
+    group_by(scen_num, sample_num, capacity_multiplier) %>%
+    filter(crit_det >= 516 * capacity_multiplier) %>%
+    filter(date == min(date))
+
+  dat_traces_peakDec <- dat_traces %>%
+    filter(date > trigger_min_date) %>%
+    group_by(scen_num, sample_num, capacity_multiplier) %>%
+    filter(crit_det == max(crit_det)) %>%
+    filter(date == min(date)) %>%
+    filter(date <= as.Date("2020-12-31"))
+
+  scen_table[iter, 1] <- exp_name
+  scen_table[iter, 2] <- 400 * 11
+  scen_table[iter, 3] <- length(unique(dat$scen_num))
+  scen_table[iter, 4] <- length(unique(dat_trigger$scen_num))
+  scen_table[iter, 5] <- length(unique(dat_peakDec$scen_num))
+  scen_table[iter, 6] <- length(unique(dat_traces$scen_num))
+  scen_table[iter, 7] <- length(unique(dat_traces_trigger$scen_num))
+  scen_table[iter, 8] <- length(unique(dat_traces_peakDec$scen_num))
+  
 }
 
-dat <- dat_list %>%
-  bind_rows() %>%
-  filter(outcome != "group_id") %>%
+scen_dat <- scen_table %>%
+  as.data.frame() %>%
   mutate(exp_name = exp_name) %>%
-  separate(exp_name, into = c("reopen", "delay", "mitigation"), sep = "_")
+  separate(exp_name, into = c("reopen", "delay", "mitigation"), sep = "_") %>%
+  mutate(n_trajectories_success = as.numeric(n_trajectories_success),
+         n_trajectories = as.numeric(n_trajectories),
+         n_trajectories_trigger = as.numeric(n_trajectories_trigger),
+         n_trajectories_peakBeforeDec = as.numeric(n_trajectories_peakBeforeDec),
+         n_traces = as.numeric(n_traces),
+         n_traces_trigger = as.numeric(n_traces_trigger),
+         n_traces_peakBeforeDec = as.numeric(n_traces_peakBeforeDec)) %>%
+  mutate(success = round(n_trajectories_success / n_trajectories, 3),
+         trigger = round(n_trajectories_trigger / n_trajectories_success, 3),
+         peakBeforeDec = round(n_trajectories_peakBeforeDec / n_trajectories_success, 3),
+         traces = round(n_traces / n_trajectories_success, 3),
+         traces_trigger = round(n_traces_trigger / n_traces, 3),
+         traces_peakBeforeDec = round(n_traces_peakBeforeDec / n_traces, 3))
 
-dat$mitigation <- factor(dat$mitigation,
-                         levels = c("pr2", "pr4", "pr6", "pr8"),
-                         labels = c("weak (20%)", "moderate (40%)", "strong (60%)", "very strong (80%)"))
+scen_dat$mitigation <- factor(scen_dat$mitigation,
+                              levels = c("pr2", "pr4", "pr6", "pr8"),
+                              labels = c("weak (20%)", "moderate (40%)", "strong (60%)", "very strong (80%)"))
+scen_dat$delay <- factor(scen_dat$delay,
+                         levels = c("1daysdelay", "7daysdelay"),
+                         labels = c("1 day", "7 days"))
+scen_dat$reopen <- factor(scen_dat$reopen,
+                          levels = c("100perc", "50perc"),
+                          labels = c("High", "Low"))
 
-dat$delay <- factor(dat$delay,
-                    levels = c("1daysdelay", "7daysdelay"),
-                    labels = c("1 day", "7 days"))
+fwrite(scen_dat, file.path(git_dir, "out", "S1_table_6.csv"))
 
-dat$reopen <- factor(dat$reopen,
-                     levels = c("100perc", "50perc"),
-                     labels = c("High", "Low"))
 
-dat <- dat %>%
-  pivot_wider(names_from = outcome,
-              values_from = c('median', 'lower', 'upper'),
-              names_glue = "{outcome}_{.value}") %>%
-  select(order(colnames(.))) %>%
-  select(reopen, mitigation, delay, capacity_multiplier, everything())
 
-fwrite(dat, file.path(git_dir, "out", "S1_table_6.csv"))

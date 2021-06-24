@@ -1,5 +1,5 @@
 # Title     : COVID-19 ICU overflow analysis
-# Objective : Detection rate for mild and severe symptomatic
+# Objective : S1 Figure 2 and 3
 
 library(tidyverse)
 library(data.table)
