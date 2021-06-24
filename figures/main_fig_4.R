@@ -308,10 +308,7 @@ p4D_dat %>%
 
 ## Unaggregated dataset
 triggerDat %>%
-  filter(date >= as.Date("2020-10-01")) %>%
-  filter(time_since_trigger < 0) %>%
-  group_by(reopen, delay, rollback, scen_num) %>%
-  filter(rt_median == max(rt_median, na.rm = TRUE)) %>%
+  filter(time_since_trigger == -14) %>%
   dplyr::group_by(reopen, delay) %>%
   dplyr::summarize(rt_median_mean = mean(rt_median, na.rm = TRUE),
                    rt_median_q5 = quantile(rt_median, probs = 0.05, na.rm = TRUE),
@@ -330,10 +327,7 @@ triggerDat %>%
 
 ### Reductions in Rt
 Rt_before <- triggerDat %>%
-  filter(date >= as.Date("2020-10-01")) %>%
-  filter(time_since_trigger < 0) %>%
-  group_by(reopen, delay, rollback, capacity_multiplier, scen_num) %>%
-  filter(rt_median == max(rt_median, na.rm = TRUE)) %>%
+  filter(time_since_trigger == -14) %>%
   select(reopen, delay, rollback, scen_num, capacity_multiplier, rt_median) %>%
   rename(rt_median_before = rt_median)
 
@@ -355,7 +349,11 @@ Rt_diff %>%
                    rt_before_q95 = quantile(rt_median_before, probs = 0.95, na.rm = TRUE),
                    rt_after_mean = mean(rt_median_after, na.rm = TRUE),
                    rt_after_q5 = quantile(rt_median_after, probs = 0.05, na.rm = TRUE),
-                   rt_after_q95 = quantile(rt_median_after, probs = 0.95, na.rm = TRUE))
+                   rt_after_q95 = quantile(rt_median_after, probs = 0.95, na.rm = TRUE),
+                   rt_relred_mean = mean(rt_relred, na.rm = TRUE),
+                   rt_relred_q5 = quantile(rt_relred, probs = 0.05, na.rm = TRUE),
+                   rt_relred_q95 = quantile(rt_relred, probs = 0.95, na.rm = TRUE)) %>%
+  fwrite(file.path(fig_dir, paste0("Rt_diff", reopen,".csv")))
 
 Rt_diff %>%
   dplyr::group_by(reopen, delay, rollback, capacity_multiplier) %>%

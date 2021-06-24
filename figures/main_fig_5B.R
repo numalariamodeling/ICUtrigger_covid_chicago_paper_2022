@@ -71,6 +71,9 @@ f_save_plot(
 )
 
 ### For text
+p5Bdat <- fread(file.path(fig_dir, "csv", "p5Bdat.csv"))
+
+
 p5Bdat %>%
   filter(delay == "immediate mitigation:\n1 day after threshold reached") %>%
   ungroup() %>%

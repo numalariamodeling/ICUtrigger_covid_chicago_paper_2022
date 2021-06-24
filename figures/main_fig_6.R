@@ -194,8 +194,13 @@ fwrite(above_thresholdAggr, file.path(fig_dir, "csv", "p6dat_aggr.csv"))
 
 
 #### For text
+above_threshold_counter <- fread(file.path(fig_dir, "csv", "p6dat_counter.csv"))
 above_threshold <- fread(file.path(fig_dir, "csv", "p6dat.csv"))
 above_thresholdAggr <- fread(file.path(fig_dir, "csv", "p6dat_aggr.csv"))
+
+above_threshold_counter %>%
+  group_by(reopen) %>%
+  summarize(mean = mean(days_above,na.rm=TRUE))
 
 above_thresholdAggr %>%
   filter(delay == "1daysdelay") %>%

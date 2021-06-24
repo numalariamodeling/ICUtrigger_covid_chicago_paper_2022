@@ -57,7 +57,7 @@ pplot <- ggplot(data = subset(dat, delay == "1daysdelay")) +
   scale_color_manual(values = transm_scen_cols) +
   scale_fill_manual(values = transm_scen_cols) +
   labs(x = "ICU occupancy threshold to trigger mitigation (%)",
-       y = "number of trajectories\nabove capacity") +
+       y = "number of trajectories reaching\nICU occupancy threshold") +
   theme(legend.position = "none", axis.ticks = element_line(),
         panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank())
 
