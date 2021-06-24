@@ -194,22 +194,17 @@ f_load_trajectories <- function(exp_name, sim_dir, fname, region_nr = 11, trace_
     f_get_scenVars() %>%
     unique()
 
-
   if (trace_selection) {
-    # traces <- fread(file.path(sim_dir, exp_name,"traces_ranked_region_11.csv"))
-    #  dat <- dat %>% filter(sample_num %in% traces$sample_num[1:ntraces_to_keep])
-    #traces <- fread(file.path(sim_dir,"sample_num_traces_sub.csv"))
     traces <- fread(file.path(sim_dir, "sample_num_traces_all.csv"))
     dat <- dat %>% filter(sample_num %in% traces$traces)
   }
-  #dat$date <- as.Date(dat$date)
   return(dat)
 }
 
 f_get_triggerDat <- function(dat) {
   dat_trigger <- dat %>%
     ungroup() %>%
-    filter(date >= as.Date("2020-09-30") & date <= as.Date("2020-12-31")) %>%
+    filter(date >= as.Date("2020-09-30") & date <= as.Date(last_plot_date)) %>%
     dplyr::group_by(exp_name, group_id) %>%
     dplyr::mutate(Ki_t_min = min(Ki_t), Ki_t_max = max(Ki_t),
                   delay_days = as.numeric(gsub("daysdelay", "", delay))) %>%
@@ -358,25 +353,6 @@ f_prob_capacity <- function(dat, keep_reopen = FALSE) {
   return(probs)
 }
 
-f_prob_capacity_old <- function(dat, groupvars = c('group_id', 'exp_name', 'capacity_multiplier', 'rollback', 'delay')) {
-
-  dat_prob <- dat %>%
-    dplyr::group_by(group_id, exp_name, capacity_multiplier, rollback, delay) %>%
-    dplyr::filter(date == max(date)) %>%
-    dplyr::group_by(rollback, delay, capacity_multiplier, scen_num, sample_num) %>%
-    mutate(above_yn = ifelse(crit_det_peak >= 516, 1, 0)) %>%
-    add_tally(name = "n_all") %>%
-    dplyr::group_by(rollback, delay, capacity_multiplier) %>%
-    dplyr::summarize(
-      n_all = sum(n_all),
-      n_above = sum(above_yn)
-    ) %>%
-    dplyr::mutate(prob = n_above / n_all) %>%
-    ungroup() %>%
-    arrange(capacity_multiplier, rollback)
-
-  return(dat_prob)
-}
 
 f_add_popvars <- function(dat) {
   ### add seconday variables
@@ -432,19 +408,6 @@ f_load_sim_data <- function(exp_name, fname, sim_dir, add_peak_cols = TRUE, add_
   return(dat)
 }
 
-
-f_trigger_dat <- function(dat) {
-
-  dat <- dat %>%
-    dplyr::group_by(exp_name, rollback, delay, reopen, group_id) %>%
-    dplyr::filter(trigger_activated == 1) %>%
-    dplyr::group_by(date, capacity_multiplier, rollback, delay, reopen) %>%
-    mutate(scen_id = row_number())
-
-  #dat <- dat %>% filter(scen_id<=50)
-
-  return(dat)
-}
 
 
 f_sample_trajectories <- function(dat, groupVars = c('rollback', 'delay', 'capacity_multiplier')) {

@@ -70,4 +70,4 @@ dat <- dat %>%
   select(order(colnames(.))) %>%
   select(reopen, mitigation, delay, capacity_multiplier, everything())
 
-fwrite(dat, file.path(git_dir, "out", "S1_table_7.csv"))
+fwrite(dat, file.path(fig_dir,"csv", "S1_table_7.csv"))

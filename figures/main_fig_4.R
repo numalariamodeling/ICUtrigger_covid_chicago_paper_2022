@@ -46,29 +46,23 @@ f_combineData <- function(exp_names, sim_end_date, trace_selection) {
 
 ### Counterfactual dat
 counterfactualDat <- f_load_sim_data(exp_name = counterfactual_exp, sim_dir = sim_dir, fname = "trajectoriesDat.csv",
-                                     add_peak_cols = TRUE, add_trigger_cols = FALSE, addRt = TRUE, trace_selection = trace_selection) %>%
-  mutate(capacity_multiplier = 0.6,
-         rel_occupancy = crit_det / 516,
-         rel_occupancy_peak = crit_det_peak / 516)
+                                     add_peak_cols = TRUE, add_trigger_cols = FALSE,
+                                     addRt = TRUE, trace_selection = trace_selection) %>%
+  mutate(capacity_multiplier = 0.6, rel_occupancy = crit_det / 516, rel_occupancy_peak = crit_det_peak / 516)
 
 #### Mitigation dat
 print(exp_names)
 dat <- f_combineData(exp_names = exp_names, sim_end_date = sim_end_date, trace_selection = trace_selection)
 
+### Descriptives for checking
+setDT(dat)
+summary(dat$date)
 length(unique(dat$date))
 table(dat$sample_num, dat$date)
-#load(file.path(sim_dir,"mitigation_dat_100perc1delay.Rdata"))
-setDT(dat)
 table(dat$rollback, dat$sample_num)
-summary(dat$date)
 tapply(dat$date, dat$rollback, summary)
 
-triggerDat <- dat %>%
-  f_trigger_dat() %>%
-  dplyr::mutate(time_since_trigger = date - triggerDate,
-                time_since_trigger = round(time_since_trigger, 0)) %>%
-  filter(trigger_activated == 1)
-
+triggerDat <- dat
 ### Subset for example plots
 dat_selected_scens <- triggerDat %>%
   ungroup() %>%

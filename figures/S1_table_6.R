@@ -8,7 +8,7 @@ customTheme <- f_getCustomTheme()
 
 exp_names <- list.dirs(sim_dir, full.names = FALSE)
 exp_names <- exp_names[grep("triggeredrollback_reopen", exp_names)]
-exp_names <- exp_names[!(grepl("14daysdelay", exp_names))]
+
 column_names <- c("n_trajectories", "n_trajectories_success", "n_trajectories_trigger", "n_trajectories_peakBeforeDec",
                   "n_traces", "n_traces_trigger", "n_traces_peakBeforeDec")
 scen_table <- matrix(NA, length(exp_names), length(column_names) + 1)
@@ -43,7 +43,7 @@ for (exp_name in exp_names) {
     group_by(scen_num, sample_num, capacity_multiplier) %>%
     filter(crit_det == max(crit_det)) %>%
     filter(date == min(date)) %>%
-    filter(date <= as.Date("2020-12-31"))
+    filter(date <= as.Date(last_plot_date))
 
   dat_traces <- dat %>% filter(sample_num %in% traces$traces)
 
@@ -58,7 +58,7 @@ for (exp_name in exp_names) {
     group_by(scen_num, sample_num, capacity_multiplier) %>%
     filter(crit_det == max(crit_det)) %>%
     filter(date == min(date)) %>%
-    filter(date <= as.Date("2020-12-31"))
+    filter(date <= as.Date(last_plot_date))
 
   scen_table[iter, 1] <- exp_name
   scen_table[iter, 2] <- 400 * 11
@@ -99,7 +99,7 @@ scen_dat$reopen <- factor(scen_dat$reopen,
                           levels = c("100perc", "50perc"),
                           labels = c("High", "Low"))
 
-fwrite(scen_dat, file.path(git_dir, "out", "S1_table_6.csv"))
+fwrite(scen_dat, file.path(fig_dir,"csv", "S1_table_6.csv"))
 
 
 

@@ -21,10 +21,7 @@ f_combineData <- function(exp_names, trace_selection) {
       dplyr::select(exp_name, group_id, sample_num, scen_num, capacity_multiplier, reopen, rollback, delay,
                     date, date_peak, trigger_activated, triggerDate, crit_det, crit_det_peak)
 
-    dat_list[[length(dat_list) + 1]] <- tempdat %>%
-      f_trigger_dat() %>%
-      dplyr::mutate(time_since_trigger = date - triggerDate,
-                    time_since_trigger = round(time_since_trigger, 0))
+    dat_list[[length(dat_list) + 1]] <- tempdat 
 
     rm(tempdat)
   }
