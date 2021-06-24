@@ -6,6 +6,10 @@ library(zoo)
 library(cowplot)
 library(data.table)
 library(RColorBrewer)
+library(viridis)
+library(Metrics)
+library(scales)
+library(gg.gap)
 
 theme_set(theme_minimal())
 

@@ -1,14 +1,10 @@
 # Title     : COVID-19 ICU overflow analysis
 # Objective : S1 Figure 5
 
-library(tidyverse)
-library(data.table)
-library(cowplot)
-library(zoo)
-theme_set(theme_cowplot())
 
 source(file.path('setup/settings.R'))
 source(file.path('setup/helper_functions.R'))
+theme_set(theme_cowplot())
 customTheme <- f_getCustomTheme(fontscl = 0.75)
 PrevMed_dir <- "R:/PrevMed/Covid-19-Modeling/IDPH line list/"
 dat <- fread(file.path(PrevMed_dir, "LL_210111_JGcleaned_no_race.csv"))

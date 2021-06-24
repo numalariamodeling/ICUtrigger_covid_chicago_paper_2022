@@ -75,7 +75,8 @@ pplot <- ggplot(data = subset(plotdat, time_since_trigger_wks > -2 & time_since_
                   group = interaction(rollback, capacity_multiplier),
                   fill = as.factor(rollback)), alpha = 0.3) +
   geom_line(aes(x = time_since_trigger_wks, y = mean,
-                group = interaction(rollback, capacity_multiplier), col = as.factor(rollback)), alpha = 0.6, size = 0.9) +
+                group = interaction(rollback, capacity_multiplier),
+                col = as.factor(rollback)), alpha = 0.6, size = 0.9) +
   scale_fill_manual(values = mitigation_cols) +
   scale_color_manual(values = mitigation_cols) +
   geom_hline(aes(yintercept = 0), col = "black", linetype = 'dashed') +

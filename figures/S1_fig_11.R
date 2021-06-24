@@ -46,7 +46,6 @@ dat$reopen_fct <- factor(dat$reopen,
                          labels = c("Low transmission increase", "High transmission increase"))
 
 
-## For supplement
 pplot <- ggplot(data = subset(dat, delay == "1daysdelay")) +
   geom_bar(aes(x = as.factor(capacity_multiplier * 100), y = n.val, fill = reopen,
                group = interaction(rollback, reopen)),
@@ -59,9 +58,11 @@ pplot <- ggplot(data = subset(dat, delay == "1daysdelay")) +
   scale_fill_manual(values = transm_scen_cols) +
   labs(x = "ICU occupancy threshold to trigger mitigation (%)",
        y = "number of trajectories\nabove capacity") +
-  theme(legend.position = "none", axis.ticks = element_line(), panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank())
+  theme(legend.position = "none", axis.ticks = element_line(),
+        panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank())
 
 
 f_save_plot(
   plot_name = paste0("S1_fig_11"), pplot = pplot,
-  plot_dir = file.path(fig_dir), width = 10, height = 6, scale = 0.8)
+  plot_dir = file.path(fig_dir), width = 10, height = 6, scale = 0.8
+)

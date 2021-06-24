@@ -1,11 +1,6 @@
 # Title     : COVID-19 ICU overflow analysis
 # Objective : S1 Figure 4
 
-library(tidyverse)
-library(data.table)
-library(cowplot)
-library(zoo)
-
 source(file.path('setup/settings.R'))
 source(file.path('setup/helper_functions.R'))
 customTheme <- f_getCustomTheme(fontscl = 0.75)
@@ -76,8 +71,6 @@ p1 <- ggplot(data = datAggr) +
 
 
 p2 <- ggplot(data = datAggr) +
-  #geom_line( aes(x=specimen_collection, y =fraction_critical ),col="grey",size=0.3)+
-  #geom_line( aes(x=specimen_collection, y =fraction_critical_avrg ),col="black")+
   geom_line(aes(x = specimen_collection, y = fraction_critical_avrgmth), col = "dodgerblue4") +
   geom_ribbon(data = param, aes(x = dates, ymin = fraction_critical_lo, ymax = fraction_critical_up), alpha = 1, fill = "dodgerblue4") +
   scale_y_continuous(breaks = seq(0, 1, 0.1), minor_breaks = seq(0, 1, 0.05), lim = c(0, 1)) +
@@ -88,8 +81,8 @@ p2 <- ggplot(data = datAggr) +
   theme_minimal() +
   customTheme
 
-pSI5 <- plot_grid(p1, p2, nrow = 1, labels = c("A", "B"))
+pplot <- plot_grid(p1, p2, nrow = 1, labels = c("A", "B"))
 f_save_plot(
-  plot_name = paste0("S1_fig_4"), pplot = pSI5,
+  plot_name = paste0("S1_fig_4"), pplot = pplot,
   plot_dir = file.path(fig_dir), width = 12, height = 6, scale = 0.8
 )

@@ -1,20 +1,13 @@
 # Title     : COVID-19 ICU overflow analysis
 # Objective : S1 Figure 2 and 3
 
-library(tidyverse)
-library(data.table)
-library(cowplot)
-library(zoo)
-
 source(file.path('setup/settings.R'))
 source(file.path('setup/helper_functions.R'))
 customTheme <- f_getCustomTheme(fontscl = 0.75)
-project_path <- file.path(user_path, "Box", "NU-malaria-team", "projects", "covid_chicago")
-filedir <- file.path(project_path, "Plots + Graphs", "detection_estimation")
 
 ###========================================================================
 ### dSys
-dat_dSys <- fread(file.path(filedir, "underreporting_skellam_20201123.csv"))
+dat_dSys <- fread(file.path(data_path,"detection_estimation", "underreporting_skellam_20201123.csv"))
 dat_dSys$date <- as.Date(dat_dSys$date)
 dat_dSys <- dat_dSys %>%
   mutate(p975 = ifelse(p975 > 1, 1, p975),
@@ -78,7 +71,7 @@ f_save_plot(
 
 ###========================================================================
 ### dSym
-dat_Sym <- fread(file.path(filedir, "f_inf_det_Illinois_201124_excessdeaths_and_nonstationary.csv"))
+dat_Sym <- fread(file.path(data_path,"detection_estimation", "f_inf_det_Illinois_201124_excessdeaths_and_nonstationary.csv"))
 dat_Sym$date <- as.Date(dat_Sym$date)
 dat_Sym <- dat_Sym %>%
   mutate(p975_f_inf_det = ifelse(p975_f_inf_det > 1, 1, p975_f_inf_det),
@@ -135,10 +128,3 @@ f_save_plot(
   plot_name = paste0("S1_fig_2"), pplot = pplot,
   plot_dir = file.path(fig_dir), width = 12, height = 6, scale = 0.8
 )
-
-
-
-
-
-
-

@@ -143,7 +143,6 @@ p3C_dat <- subset(dat, date >= first_plot_date & date <= last_plot_date) %>%
   select(date, rt_median, scen_num, reopen)
 
 p3C <- ggplot(data = p3C_dat) +
-  #geom_rect(xmin=as.Date("2020-03-22"), xmax=as.Date("2020-06-27"), ymin=-Inf, ymax=Inf, alpha=0.03, col='lightgrey') +
   geom_line(aes(x = date + 14, y = rt_median, group = interaction(scen_num, reopen), col = reopen), alpha = 0.5) +
   scale_color_manual(values = transm_scen_cols) +
   geom_vline(xintercept = c(baseline_date)) +
@@ -154,7 +153,7 @@ p3C <- ggplot(data = p3C_dat) +
   theme(legend.position = "none", panel.grid.minor = element_blank()) +
   labs(x = "", y = "Rt", color = "")
 
-require(gg.gap)
+
 p3C_split <- gg.gap(plot = p3C, segments = list(c(1.5, 1.6)), ylim = c(0.5, 6), rel_heights = c(3, 0.2, 1.5),
                     tick_width = c(0.25, 2), margin = c(top = 2, right = 1, bottom = 1, left = 1))
 
@@ -218,7 +217,7 @@ p3B_dat %>%
 
 ### reduction in Ki
 p3B_dat %>%
-  dplyr::filter(date <= as.Date("2020-05-01")) %>%
+  dplyr::filter(date <= as.Date(sim_end_date)) %>%
   dplyr::group_by(date) %>%
   dplyr::summarize(Ki_t = mean(Ki_t)) %>%
   dplyr::group_by(Ki_t) %>%
@@ -230,7 +229,7 @@ p3B_dat %>%
 p3C_dat %>%
   dplyr::filter(!is.na(rt_median)) %>%
   dplyr::group_by(reopen, scen_num) %>%
-  dplyr::filter(date == min(date) | (date <= as.Date("2020-05-01") & rt_median == min(rt_median))) %>%
+  dplyr::filter(date == min(date) | (date <= as.Date(sim_end_date) & rt_median == min(rt_median))) %>%
   dplyr::group_by(date) %>%
   dplyr::summarize(rt_median_mean = mean(rt_median, na.rm = TRUE),
                    rt_median_q5 = quantile(rt_median, probs = 0.05, na.rm = TRUE),
@@ -247,10 +246,10 @@ p3C_dat %>%
 
 ### baseline in Rt after reopening
 p3C_dat %>%
-  dplyr::filter(as.character(date) == as.character("2020-10-01") ) %>%
+  dplyr::filter(as.character(date) == as.character("2020-10-01")) %>%
   dplyr::group_by(reopen, date, scen_num) %>%
   filter(rt_median == max(rt_median, na.rm = TRUE)) %>%
-  dplyr::group_by(reopen,date) %>%
+  dplyr::group_by(reopen, date) %>%
   dplyr::summarize(rt_median_mean = mean(rt_median, na.rm = TRUE),
                    rt_median_q5 = quantile(rt_median, probs = 0.05, na.rm = TRUE),
                    rt_median_q95 = quantile(rt_median, probs = 0.95, na.rm = TRUE))

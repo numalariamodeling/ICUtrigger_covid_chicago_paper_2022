@@ -1,13 +1,11 @@
 # Title     : COVID-19 ICU overflow analysis
 # Objective : S1 Figure 6 and 7
 
-require(Metrics)
+
 source(file.path('setup/settings.R'))
 source(file.path('setup/helper_functions.R'))
 customTheme <- f_getCustomTheme()
 
-exp_name_counterfactual_1 <- "20201212_IL_regreopen50perc_counterfactual"
-exp_name_counterfactual_2 <- "20201212_IL_regreopen100perc_counterfactual"
 channels <- c('admissions', 'med_surg_census', 'ICU_census', 'deaths')
 
 f_combineData <- function(exp_name) {
@@ -37,7 +35,7 @@ f_combineData <- function(exp_name) {
   return(dat)
 }
 
-dat <- f_combineData(exp_name = counterfactual_exps[1]) %>% filter(outcome %in% channels)
+dat <- f_combineData(exp_name = counterfactual_exps[2]) %>% filter(outcome %in% channels)
 head(dat)
 
 datAggr <- dat %>%
@@ -142,11 +140,6 @@ pplot <- ggplot() +
   labs(x = "", y = "Total number", color = "", fill = "") +
   scale_color_brewer(palette = "Dark2") +
   scale_fill_brewer(palette = "Dark2")
-
-#f_save_plot(
-#  plot_name = paste0("data_comparison_scatter"), pplot = pplot,
-#  plot_dir = file.path(fig_dir), width =14, height = 4
-#)
 
 
 ### MAE

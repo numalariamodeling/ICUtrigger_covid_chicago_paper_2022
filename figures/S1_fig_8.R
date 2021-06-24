@@ -4,7 +4,6 @@
 source(file.path('setup/settings.R'))
 source(file.path('setup/helper_functions.R'))
 customTheme <- f_getCustomTheme()
-require(scales)
 
 trace_selection <- TRUE
 if (trace_selection) fig_dir = fig_dir_traces
