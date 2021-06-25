@@ -23,12 +23,27 @@ ccdat <- fread(file.path(data_path, "/covid_IDPH/Corona virus reports/capacity_b
                 icu_availforcovid_7avrg = rollmean(icu_availforcovid, 7, align = 'right', fill = NA),
                 icu_total_7avrg = rollmean(icu_total, 7, align = 'right', fill = NA))
 
+ccdat <- ccdat %>% mutate(icu_noncovid_frac = icu_noncovid / icu_total,
+                          icu_availforcovid_frac = 1 - (icu_availforcovid / icu_total))
+mean(ccdat$icu_noncovid_frac, na.rm = TRUE)
+
+pplot <- ggplot(data = ccdat) +
+  geom_line(aes(x = date, y = icu_noncovid_frac)) +
+  geom_hline(yintercept = mean(ccdat$noncov, na.rm = TRUE)) +
+  labs(y = "Fraction occupied by non-COVID patients") +
+  customTheme
+
+f_save_plot(
+  plot_name = paste0("S1_fig_16_supp"), pplot = pplot,
+  plot_dir = file.path(fig_dir), width = 10, height = 6
+)
+
 pplot <- ggplot(data = ccdat) +
   geom_ribbon(aes(x = date, ymin = 0, ymax = icu_total), fill = "grey", alpha = 0.7) +
-  geom_ribbon(aes(x = date, ymin = 0, ymax = icu_availforcovid), fill = "dodgerblue2", alpha = 0.9) +
-  geom_line(aes(x = date, y = icu_availforcovid), col = "dodgerblue3") +
+  geom_ribbon(aes(x = date, ymin = 0, ymax = icu_covid + icu_noncovid), fill = "dodgerblue2", alpha = 0.9) +
+  geom_ribbon(aes(x = date, ymin = 0, ymax = icu_covid), fill = "darkorange", alpha = 0.9) +
   geom_line(aes(x = date, y = icu_availforcovid_7avrg), col = capacitycolor, size = 0.5) +
-  geom_line(aes(x = date, y = icu_covid), col = "black") +
+  geom_line(aes(x = date, y = icu_covid), col = "darkorange") +
   geom_hline(yintercept = 516, col = capacitycolor, linetype = "dashed") +
   scale_y_continuous(expand = c(0, 0), lim = c(0, 1250)) +
   scale_x_date(date_breaks = "1 month", date_labels = "%b") +
