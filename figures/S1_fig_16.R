@@ -23,6 +23,7 @@ ccdat <- fread(file.path(data_path, "/covid_IDPH/Corona virus reports/capacity_b
                 icu_availforcovid_7avrg = rollmean(icu_availforcovid, 7, align = 'right', fill = NA),
                 icu_total_7avrg = rollmean(icu_total, 7, align = 'right', fill = NA))
 
+
 ccdat <- ccdat %>% mutate(icu_noncovid_frac = icu_noncovid / icu_total,
                           icu_availforcovid_frac = 1 - (icu_availforcovid / icu_total))
 mean(ccdat$icu_noncovid_frac, na.rm = TRUE)
@@ -114,3 +115,19 @@ f_save_plot(
   plot_name = paste0("S1_fig_16_supp"), pplot = pplot,
   plot_dir = file.path(fig_dir), width = 10, height = 6
 )
+
+ccdat <- ccdat %>% mutate(icu_noncovid_frac = icu_noncovid / icu_total,
+                          icu_availforcovid_frac = 1 - (icu_availforcovid / icu_total))
+mean(ccdat$icu_noncovid_frac, na.rm = TRUE)
+
+pplot <- ggplot(data = ccdat) +
+  geom_line(aes(x = date, y = icu_noncovid_frac)) +
+  geom_hline(yintercept = mean(ccdat$noncov, na.rm = TRUE)) +
+  labs(y = "Fraction occupied by non-COVID patients") +
+  customTheme
+
+f_save_plot(
+  plot_name = paste0("S1_fig_16_supp2"), pplot = pplot,
+  plot_dir = file.path(fig_dir), width = 10, height = 6
+)
+
