@@ -11,14 +11,14 @@ f_save_plot <- function(pplot, plot_name, plot_dir, width = 14, height = 8, scal
 
 f_load_ref_df <- function(data_path, LL_file_date = NULL) {
 
-    #' Load reference data and merge files
-    #'
-    #' Load reference data, EMResource and Line list data
-    #' Per default adds the restore regions and selects specified variables.
-    #' Output a merged dataframe in wide format.
-    #' @param data_path directory path to uppr level that includes covid_IDPH , covid_chicago..
-    #' @param LL_file_date date of the lates line list data
-    #'
+      #' Load reference data and merge files
+      #'
+      #' Load reference data, EMResource and Line list data
+      #' Per default adds the restore regions and selects specified variables.
+      #' Output a merged dataframe in wide format.
+      #' @param data_path directory path to uppr level that includes covid_IDPH , covid_chicago..
+      #' @param LL_file_date date of the lates line list data
+      #'
 
   emresource <- read.csv(file.path(data_path, "covid_IDPH/Corona virus reports/emresource_by_region.csv")) %>%
     dplyr::mutate(
@@ -61,12 +61,12 @@ f_load_ref_df <- function(data_path, LL_file_date = NULL) {
 }
 
 load_new_capacity <- function(selected_ems = NULL, filedate = NULL) {
-    #' Load ICU and non ICU capacity estimates
-    #'
-    #' The csv file is weekly updated and provided by CIVIS
-    #' @param selected_ems if specified, the dataframe is filtered for that region
-    #' @param filedate date of csv file to use, if not specified latest file is selected
-    #'
+      #' Load ICU and non ICU capacity estimates
+      #'
+      #' The csv file is weekly updated and provided by CIVIS
+      #' @param selected_ems if specified, the dataframe is filtered for that region
+      #' @param filedate date of csv file to use, if not specified latest file is selected
+      #'
   library(dplyr)
   capacity_dir <- file.path(data_path, "covid_IDPH/Corona virus reports/hospital_capacity_thresholds")
 
@@ -354,6 +354,45 @@ f_prob_capacity <- function(dat, keep_reopen = FALSE) {
 }
 
 
+f_prob_capacity_wt <- function(dat, keep_reopen = FALSE) {
+
+  if (keep_reopen) {
+    scenarioVARS <- c('rollback', 'delay', 'reopen')
+  }else {
+    scenarioVARS <- c('rollback', 'delay')
+  }
+
+  groupVARS = c('group_id', 'exp_name', 'capacity_multiplier', scenarioVARS)
+  groupVARS_tally = c('capacity_multiplier', scenarioVARS)
+  groupVARS_sum = c('n', groupVARS_tally)
+  keepVARS <- c(groupVARS, 'scen_num', 'crit_det_peak', 'll_wt')
+
+  probs <- dat %>%
+    dplyr::group_by_at(.vars = groupVARS) %>%
+    dplyr::filter(date == max(date)) %>%
+    dplyr::select_at(all_of(keepVARS)) %>%
+    ungroup() %>%
+    dplyr::group_by_at(.vars = groupVARS_tally) %>%
+    dplyr::add_tally() %>%
+    ungroup() %>%
+    dplyr::group_by_at(.vars = groupVARS_sum) %>%
+    mutate(above_yn = ifelse(crit_det_peak >= 516, 1, 0),
+           above_yn_wt = above_yn * ll_wt) %>%
+    dplyr::summarize(above_y = sum(above_yn),
+                     above_y_wt = sum(above_yn_wt)) %>%
+    dplyr::rename(n_scenarios = n) %>%
+    dplyr::mutate(
+      perc_above = above_y / n_scenarios,
+      perc_above_wt = above_y_wt / n_scenarios) %>%
+    as.data.frame() %>%
+    arrange(capacity_multiplier, rollback)
+
+  return(probs)
+}
+
+
+
+
 f_add_popvars <- function(dat) {
   ### add seconday variables
   dat$pop = 2456274
@@ -394,7 +433,7 @@ f_load_sim_data <- function(exp_name, fname, sim_dir, add_peak_cols = TRUE, add_
     rtdat = fread(file.path(sim_dir, exp_name, 'rt_trajectoriescovidregion_11.csv')) %>%
       select(date, scen_num, rt_lower, rt_median, rt_upper)
     rtdat$date <- as.Date(rtdat$date)
-    ### add 7 day lag  FIXME
+    ### add 7 day lag
     #rtdat$date = rtdat$date + 7
 
     rtdat$date = as.character(rtdat$date)
@@ -409,8 +448,7 @@ f_load_sim_data <- function(exp_name, fname, sim_dir, add_peak_cols = TRUE, add_
 }
 
 
-
-f_sample_trajectories <- function(dat, groupVars = c('rollback', 'delay', 'capacity_multiplier')) {
+f_sample_trajectories <- function(dat, groupVars = c('rollback', 'delay', 'capacity_multiplier'),weighted=FALSE) {
 
   dat_sub_50_list <- list()
   for (i in c(1:100)) {
@@ -433,8 +471,11 @@ f_sample_trajectories <- function(dat, groupVars = c('rollback', 'delay', 'capac
       dplyr::left_join(nsubsample_50, by = c(groupVars, "scen_num")) %>%
       dplyr::filter(scen_num == scen_num_sel)
 
-    dat_sub_50_list[[length(dat_sub_50_list) + 1]] <- f_prob_capacity(dat_subsample_50, keep_reopen = TRUE) %>% mutate(resample_n = i)
-
+    if(weighted){
+      dat_sub_50_list[[length(dat_sub_50_list) + 1]] <- f_prob_capacity_wt(dat_subsample_50, keep_reopen = TRUE) %>% mutate(resample_n = i)
+    }else{
+      dat_sub_50_list[[length(dat_sub_50_list) + 1]] <- f_prob_capacity(dat_subsample_50, keep_reopen = TRUE) %>% mutate(resample_n = i)
+    }
     rm(dat_subsample_50)
   }
   dat_prob <- dat_sub_50_list %>%

@@ -137,13 +137,13 @@ p3B <- ggplot(p3B_dat) +
   theme(legend.position = "none", panel.grid.minor = element_blank()) +
   scale_y_continuous(lim = c(0, 1.15), breaks = c(0, 0.170, 0.225, 1.14))
 
-dat$rtlim = 1
-dat$rtlim[dat$rt_median > 2] = 0
-p3C_dat <- subset(dat, date >= first_plot_date & date <= last_plot_date) %>%
-  select(date, rt_median, scen_num, reopen)
+
+p3C_dat <- dat %>%
+  filter(date >= first_plot_date & date <= last_plot_date) %>%
+  dplyr::select(date, rt_median,rt_lower, scen_num,rt_upper, reopen)
 
 p3C <- ggplot(data = p3C_dat) +
-  geom_line(aes(x = date + 14, y = rt_median, group = interaction(scen_num, reopen), col = reopen), alpha = 0.5) +
+  geom_line(aes(x = date, y = rt_median, group = interaction(scen_num, reopen), col = reopen), alpha = 0.5) +
   scale_color_manual(values = transm_scen_cols) +
   geom_vline(xintercept = c(baseline_date)) +
   scale_x_date(date_breaks = "1 month", date_labels = "%m") +

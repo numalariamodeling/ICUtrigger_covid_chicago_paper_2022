@@ -49,7 +49,6 @@ summary(datAggr$n)
 tapply(datAggr$n, datAggr$trace_selection, summary)
 table(dat$trace_selection, dat$outcome)
 
-capacityDat <- load_new_capacity(11, filedate = "20200915")
 ref_dat <- f_load_ref_df(data_path) %>%
   mutate(date = as.Date(Date)) %>%
   filter(region == 11 & date <= baseline_date) %>%

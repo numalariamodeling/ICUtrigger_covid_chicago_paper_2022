@@ -409,15 +409,15 @@ f_run_fitting <- function(i, sim_ems_emresource, sim_ems_LL, scens, useSmoothedD
     if (useSmoothedData == FALSE) {
       nll1 <- -1 * sum(dpois(emresource_sub$confirmed_covid_icu, emresource_sub$crit_det + 1e-10, log = T), na.rm = TRUE)
       nll2 <- -1 * sum(dpois(emresource_sub$covid_non_icu, emresource_sub$hosp_det + 1e-10, log = T))
-      nll3 <- -1 * sum(dpois(LL_sub$deaths, LL_sub$new_detected_deaths + 1e-10, log = T), na.rm = TRUE)
-      nll4 <- -1 * sum(dpois(LL_sub$admissions, LL_sub$new_detected_hospitalized + 1e-10, log = T), na.rm = TRUE)
+      nll3 <- -1 * sum(dpois(LL_sub$deaths, emresource_sub$new_detected_deaths + 1e-10, log = T), na.rm = TRUE)
+      nll4 <- -1 * sum(dpois(LL_sub$admissions, emresource_sub$new_detected_hospitalized + 1e-10, log = T), na.rm = TRUE)
     }
 
     if (useSmoothedData) {
       nll1 <- -1 * sum(dpois(emresource_sub$confirmed_covid_icu_avrg, emresource_sub$crit_det + 1e-10, log = T), na.rm = TRUE)
       nll2 <- -1 * sum(dpois(emresource_sub$covid_non_icu_avrg, emresource_sub$hosp_det + 1e-10, log = T), na.rm = TRUE)
-      nll3 <- -1 * sum(dpois(LL_sub$deaths_avrg, LL_sub$new_detected_deaths + 1e-10, log = T), na.rm = TRUE)
-      nll4 <- -1 * sum(dpois(LL_sub$admissions, LL_sub$new_detected_hospitalized + 1e-10, log = T), na.rm = TRUE)
+      nll3 <- -1 * sum(dpois(LL_sub$deaths_avrg, emresource_sub$new_detected_deaths + 1e-10, log = T), na.rm = TRUE)
+      nll4 <- -1 * sum(dpois(LL_sub$admissions, emresource_sub$new_detected_hospitalized + 1e-10, log = T), na.rm = TRUE)
     }
 
     # Sum all Likelihood
