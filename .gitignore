@@ -7,5 +7,5 @@ venv
 .Rhistory
 *.zip
 *.html
-out/*
-simulation_output/*
+_scratch/*
+
