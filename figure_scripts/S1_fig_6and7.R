@@ -195,3 +195,4 @@ fitdat %>%
                    lower = quantile(mae, probs = 0.05, na.rm = TRUE),
                    upper = quantile(mae, probs = 0.95, na.rm = TRUE))
 
+if(cleanEnv)rm(list = ls())

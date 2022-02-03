@@ -96,3 +96,4 @@ f_save_plot(
 )
 
 fwrite(pred_dat, file.path(fig_dir, "csv", "S1_fig_15.csv"))
+if (cleanEnv)rm(list = ls())

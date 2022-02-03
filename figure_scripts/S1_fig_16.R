@@ -106,3 +106,4 @@ f_save_plot(
 
 fwrite(above_threshold, file.path(fig_dir, "csv", "S1_fig_16.csv"))
 fwrite(above_thresholdAggr, file.path(fig_dir, "csv", "S1_fig_16_aggr.csv"))
+if (cleanEnv)rm(list = ls())

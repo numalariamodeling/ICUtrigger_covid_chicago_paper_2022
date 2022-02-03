@@ -41,3 +41,4 @@ f_save_plot(
   plot_name = paste0("S1_fig_18"), pplot = pplot,
   plot_dir = file.path(fig_dir), width = 8, height = 8
 )
+if (cleanEnv)rm(list = ls())

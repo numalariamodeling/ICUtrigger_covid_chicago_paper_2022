@@ -45,7 +45,7 @@ f_combineData <- function(exp_names, sim_end_date, trace_selection) {
 #### Mitigation dat
 print(exp_names)
 dat <- f_combineData(exp_names = exp_names, sim_end_date = sim_end_date, trace_selection = trace_selection)
-triggerDat <- dat %>%  filter(trigger_activated == 1)
+triggerDat <- dat %>% filter(trigger_activated == 1)
 
 plotdat <- triggerDat %>%
   ungroup() %>%
@@ -88,3 +88,5 @@ f_save_plot(
 )
 
 fwrite(plotdat, file.path(fig_dir, "csv", "S1_fig_14.csv"))
+
+if (cleanEnv)rm(list = ls())

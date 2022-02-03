@@ -12,13 +12,23 @@ library(scales)
 library(gg.gap)
 
 theme_set(theme_minimal())
+cleanEnv <- TRUE
 
-wdir = getwd()
+wdir <- getwd()
 data_path <- file.path(wdir, "data")
-simulation_output <- file.path(wdir, 'simulation_output')
-fig_dir <- file.path(wdir, "out", "figures", "raw")
-fig_dir_traces <- file.path(wdir, "out", "figures/raw_traces")
+simulation_output <- file.path(wdir, 'simulation_output','20210517')
+fig_dir <- file.path(wdir, "figures", "raw")
+fig_dir_traces <- file.path(wdir, "figures", "raw_traces")
 sim_dir <- file.path(simulation_output)
+
+if (!dir.exists(fig_dir)) {
+  dir.create(fig_dir)
+  dir.create(file.path(fig_dir, 'csv'))
+}
+if (!dir.exists(fig_dir_traces)) {
+  dir.create(fig_dir_traces)
+  dir.create(file.path(fig_dir_traces, 'csv'))
+}
 
 startdate <- as.Date("2020-01-01")
 sim_end_date <- as.Date("2021-05-01")

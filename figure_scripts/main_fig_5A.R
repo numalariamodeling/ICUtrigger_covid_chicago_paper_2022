@@ -92,3 +92,5 @@ f_save_plot(
   plot_name = paste0("Fig5A_addon_explore_trigger_to_capacity"), pplot = pplot,
   plot_dir = file.path(fig_dir), width = 6, height = 3
 )
+
+if(cleanEnv)rm(list = ls())

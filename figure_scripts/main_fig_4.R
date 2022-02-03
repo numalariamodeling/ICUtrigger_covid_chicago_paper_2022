@@ -366,7 +366,7 @@ Rt_diff %>%
                    rt_relred_mean = mean(rt_relred, na.rm = TRUE),
                    rt_relred_q5 = quantile(rt_relred, probs = 0.05, na.rm = TRUE),
                    rt_relred_q95 = quantile(rt_relred, probs = 0.95, na.rm = TRUE)) %>%
-  fwrite(file.path(fig_dir, paste0("Rt_diff", reopen,".csv")))
+  fwrite(file.path(fig_dir,"csv", paste0("Rt_diff", reopen,".csv")))
 
 Rt_diff %>%
   dplyr::group_by(reopen, delay, rollback, capacity_multiplier) %>%
@@ -374,3 +374,4 @@ Rt_diff %>%
                    rt_relred_q5 = quantile(rt_relred, probs = 0.05, na.rm = TRUE),
                    rt_relred_q95 = quantile(rt_relred, probs = 0.95, na.rm = TRUE))
 
+if(cleanEnv)rm(list = ls())

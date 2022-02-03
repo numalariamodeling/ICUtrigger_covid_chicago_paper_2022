@@ -60,7 +60,7 @@ dat <- dat_list2 %>%
   as.data.table()
 
 table(dat$exp_name)
-dat$trigger_activated <- factor(dat$trigger_activated, levels=c(0,1), labels=c('no','yes'))
+dat$trigger_activated <- factor(dat$trigger_activated, levels = c(0, 1), labels = c('no', 'yes'))
 
 
 ### add samples
@@ -81,19 +81,20 @@ dat <- f_get_scenVars(dat)
 
 textdat <- dat %>%
   filter(capacity_multiplier >= 0.5 &
-  trace_selection == 'TRUE' &
-  rollback_fct =='60' &
-  outcome %in% channels) %>%
-  dplyr::select(rollback_fct,capacity_multiplier_fct,capacity_multiplier) %>% unique()
+           trace_selection == 'TRUE' &
+           rollback_fct == '60' &
+           outcome %in% channels) %>%
+  dplyr::select(rollback_fct, capacity_multiplier_fct, capacity_multiplier) %>%
+  unique()
 
 pplotA <- ggplot(data = subset(dat, capacity_multiplier >= 0.5 &
   trace_selection == 'TRUE' &
-  rollback_fct =='60' &
+  rollback_fct == '60' &
   outcome %in% channels)) +
   geom_line(aes(x = date, y = value, col = trigger_activated, group = scen_num), size = 0.6, alpha = 0.7) +
   facet_grid(capacity_multiplier_fct ~ rollback_fct) +
   scale_x_date(date_breaks = "2 month", date_labels = "%b") +
-  scale_y_continuous(lim = c(0, 1000),sec.axis = sec_axis(~.*0 ,name='trigger at % occupancy')) +
+  scale_y_continuous(lim = c(0, 1000), sec.axis = sec_axis(~. * 0, name = 'trigger at % occupancy')) +
   geom_hline(yintercept = 516, color = 'darkred', linetype = 'dashed') +
   geom_hline(aes(yintercept = 516 * capacity_multiplier), color = 'black', linetype = 'dashed') +
   #geom_text(label='ICU capacity', y=525, x=as.Date('2020-10-01'), color = 'darkred') +
@@ -107,8 +108,8 @@ pplotA <- ggplot(data = subset(dat, capacity_multiplier >= 0.5 &
         axis.text.y = element_blank(),
         axis.ticks.y = element_blank(),
         axis.text.y.right = element_blank(),
-        axis.ticks.y.right = element_blank())+
-  theme(panel.spacing = unit(1, "lines") )
+        axis.ticks.y.right = element_blank()) +
+  theme(panel.spacing = unit(1, "lines"))
 
 # f_save_plot(
 #   plot_name = paste0("S1_fig_12_traj"), pplot = pplot,
@@ -119,7 +120,7 @@ colnames(dat) <- gsub("_EMS_11", "", colnames(dat))
 pdat <- dat %>%
   filter(as.character(date) == baseline_date) %>%
   dplyr::select(-c(date, exp_name, reopen, rollback, delay, N_no_trigger, capacity_multiplier_fct2, capacity_multiplier_fct,
-                   N_trigger, outcome, value, trace_selection, reopen_fct, reopen_fct2, rollback_fct,time_to_detection_As)) %>%
+                   N_trigger, outcome, value, trace_selection, reopen_fct, reopen_fct2, rollback_fct, time_to_detection_As)) %>%
   pivot_longer(cols = -c(sample_num, scen_num, capacity_multiplier, trigger_activated)) %>%
   mutate(value = round(value, 2))
 
@@ -150,7 +151,7 @@ pdat$name[pdat$name == 'fraction_critical_incr2'] <- 'italic("f")[italic("C_2")]
 pdat$name[pdat$name == 'fraction_critical_incr3'] <- 'italic("f")[italic("C_3")]'
 
 pdat$name[pdat$name == 'fraction_dead'] <- 'italic("f")[italic("D")]'
-pdat$name[pdat$name == 'fraction_hospitalized'] <-'italic("f")[italic("H")]'
+pdat$name[pdat$name == 'fraction_hospitalized'] <- 'italic("f")[italic("H")]'
 pdat$name[pdat$name == 'fraction_severe'] <- 'italic("f")[italic("Ss")]'
 pdat$name[pdat$name == 'fraction_symptomatic'] <- 'italic("f")[italic("S")]'
 
@@ -165,7 +166,7 @@ pdat$name[pdat$name == 'time_to_infectious'] <- 'italic("t")[italic("ASP")]'
 pdat$name[pdat$name == 'time_to_symptoms'] <- 'italic("t")[italic("S")]'
 pdat$name[pdat$name == 'reduced_inf_of_det_cases'] <- 'delta[0]'
 
-pdat$value <- round(pdat$value,2)
+pdat$value <- round(pdat$value, 2)
 
 pplotB <- ggplot(data = pdat) +
   geom_density(aes(x = value, fill = trigger_activated, col = trigger_activated), alpha = 0.4) +
@@ -176,18 +177,19 @@ pplotB <- ggplot(data = pdat) +
   labs(x = "value", y = "Density",
        color = "trigger\nactivated", fill = "trigger\nactivated") +
   scale_color_brewer(palette = "Dark2") +
-  scale_fill_brewer(palette = "Dark2")+
-  theme(panel.spacing = unit(1, "lines") )
+  scale_fill_brewer(palette = "Dark2") +
+  theme(panel.spacing = unit(1, "lines"))
 
 
 plegend <- get_legend(pplotB)
 pplotA <- pplotA + theme(legend.position = 'None')
 pplotB <- pplotB + theme(legend.position = 'None')
-pplot <- plot_grid(pplotB,pplotA, ncol=2 ,rel_widths =c(1,0.4), labels=c('A','B'), align = 'hv')
-pplot <- plot_grid(pplot,plegend, ncol=2 ,rel_widths =c(1, 0.1) )
+pplot <- plot_grid(pplotB, pplotA, ncol = 2, rel_widths = c(1, 0.4), labels = c('A', 'B'), align = 'hv')
+pplot <- plot_grid(pplot, plegend, ncol = 2, rel_widths = c(1, 0.1))
 
 f_save_plot(
   plot_name = paste0("S1_fig_12"), pplot = pplot,
   plot_dir = file.path(fig_dir), width = 20, height = 14
 )
 
+if(cleanEnv)rm(list = ls())

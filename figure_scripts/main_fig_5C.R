@@ -77,3 +77,5 @@ f_save_plot(
   plot_name = paste0("Fig5C_", delay), pplot = p5C,
   plot_dir = file.path(fig_dir), width = 7, height = 8
 )
+
+if(cleanEnv)rm(list = ls())

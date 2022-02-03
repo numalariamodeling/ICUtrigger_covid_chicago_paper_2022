@@ -263,7 +263,10 @@ ccdat <- as.data.frame(ccdat)
 summary(ccdat[ccdat$date <= as.Date("2020-12-31"), "icu_availforcovid"])
 summary(ccdat[ccdat$date <= as.Date("2020-12-31"), "icu_availforcovid_7avrg"])
 summary(ccdat$date)
+
 ccdat %>%
   filter(date <= as.Date("2020-12-31")) %>%
   arrange(icu_availforcovid) %>%
   head()
+
+if(cleanEnv)rm(list = ls())
