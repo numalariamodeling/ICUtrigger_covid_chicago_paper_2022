@@ -10,9 +10,7 @@ dat <- fread(file.path(sim_dir, "baseline_20210113", "nu_20210113.csv")) %>%
   mutate(date = as.Date(date)) %>%
   filter(date >= as.Date("2020-09-01") & date <= as.Date("2020-12-31"))
 
-ref_dat <- f_load_ref_df(data_path) %>%
-  filter(region == 11) %>%
-  mutate(Date = as.Date(Date))
+ref_dat <- fread(file.path('emresource_chicago_2020.csv'))
 
 p1 <- ggplot(data = dat) +
   geom_ribbon(aes(x = date, ymin = icu_det_lower, ymax = icu_det_upper), alpha = 0.5, fill = "deepskyblue4") +

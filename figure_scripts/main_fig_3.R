@@ -8,20 +8,8 @@ customTheme <- f_getCustomTheme()
 trace_selection <- TRUE
 if (trace_selection) fig_dir <- fig_dir_traces
 
-capacityDat <- load_new_capacity(11, filedate = "20200915")
-ref_dat <- f_load_ref_df(data_path) %>%
-  filter(region == 11) %>%
-  mutate(Date = as.Date(Date))
-
-ccdat <- read.csv(file.path(data_path, "capacity_by_covid_region.csv")) %>%
-  dplyr::mutate(date = as.Date(date)) %>%
-  dplyr::filter(geography_level == "covid region" & geography_name == 11) %>%
-  dplyr::select(date, icu_total, icu_noncovid, icu_availforcovid) %>%
-  arrange(date) %>%
-  mutate(icu_availforcovid_7avrg = rollmean(icu_availforcovid, 7, align = 'right', fill = NA))
-
-ccdat$assumed_capacity <- capacityDat$icu_available
-ccdat$assumed_capacity[ccdat$date <= as.Date("2020-09-01")] = ccdat$icu_availforcovid[ccdat$date <= as.Date("2020-09-01")]
+ref_dat <- fread(file.path('emresource_chicago_2020.csv'))
+ccdat <- fread(file.path(data_path, "icu_capacity_chicago_2020.csv")) 
 
 f_combineData <- function(exp_names, sim_end_date, trace_selection) {
   dat_list <- list()

@@ -7,16 +7,8 @@ source(file.path('setup/helper_functions.R'))
 customTheme <- f_getCustomTheme()
 
 Chicago_pop <- 2716921 #as used in experiment config yamls
-capacityDat <- load_new_capacity(11, filedate = "20200915")
-ref_dat <- f_load_ref_df(data_path) %>%
-  filter(region == 11) %>%
-  mutate(Date = as.Date(Date))
-
-ccdat <- fread(file.path(data_path, "capacity_by_covid_region.csv")) %>%
-  dplyr::mutate(date = as.Date(date)) %>%
-  dplyr::filter(date <= as.Date("2020-12-31") &
-                  geography_level == "covid region" &
-                  geography_name == 11) %>%
+ref_dat <- fread(file.path('emresource_chicago_2020.csv'))
+ccdat <- fread(file.path(data_path, "icu_capacity_chicago_2020.csv")) %>%
   dplyr::select(date, icu_used, icu_covid, icu_total, icu_noncovid, icu_availforcovid) %>%
   arrange(date) %>%
   dplyr::mutate(icu_covid_7avrg = rollmean(icu_covid, 7, align = 'right', fill = NA),
@@ -62,7 +54,7 @@ f_save_plot(
   filter(date <= as.Date("2020-09-01")) %>%
   filter(icu_covid_7avrg == max(icu_covid_7avrg, na.rm = TRUE)))
 
-ccdat_1st_wave_peak$icu_availforcovid_7avrg - capacityDat$icu_available
+ccdat_1st_wave_peak$icu_availforcovid_7avrg - 516
 
 ### Average beds per pop
 ccdat <- ccdat %>%
