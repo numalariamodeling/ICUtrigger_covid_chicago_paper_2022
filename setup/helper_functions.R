@@ -20,7 +20,7 @@ f_load_ref_df <- function(data_path, LL_file_date = NULL) {
       #' @param LL_file_date date of the lates line list data
       #'
 
-  emresource <- read.csv(file.path(data_path, "covid_IDPH/Corona virus reports/emresource_by_region.csv")) %>%
+  emresource <- read.csv(file.path(data_path, "emresource_by_region.csv")) %>%
     dplyr::mutate(
       date_of_extract = as.Date(date_of_extract),
       suspected_and_confirmed_covid_icu = suspected_covid_icu + confirmed_covid_icu

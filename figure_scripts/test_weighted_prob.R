@@ -22,8 +22,6 @@ tempdat <- f_load_sim_data(exp_name = exp_name, sim_dir = sim_dir,
 traces <- fread(file.path(sim_dir, "sample_num_traces_all.csv"))
 
 traces_dat <- fread(file.path(sim_dir, "traces_dat_all.csv"))
-#traces_dat$norm_rank <- 1 - traces_dat$norm_rank
-#races_dat$ll_wt <- traces_dat$norm_rank / mean(traces_dat$norm_rank)
 traces_dat$nll <- 1 / traces_dat$nll
 traces_dat$ll_wt <- traces_dat$nll / mean(traces_dat$nll)
 sum(traces_dat$ll_wt)

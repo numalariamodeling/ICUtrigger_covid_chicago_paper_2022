@@ -13,7 +13,6 @@ ref_dat <- f_load_ref_df(data_path) %>%
   filter(region == 11) %>%
   mutate(Date = as.Date(Date))
 
-#/covid_IDPH/Corona virus reports/capacity_by_covid_region.csv
 ccdat <- read.csv(file.path(data_path, "capacity_by_covid_region.csv")) %>%
   dplyr::mutate(date = as.Date(date)) %>%
   dplyr::filter(geography_level == "covid region" & geography_name == 11) %>%
