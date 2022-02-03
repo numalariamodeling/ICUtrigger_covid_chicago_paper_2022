@@ -7,102 +7,92 @@ customTheme <- f_getCustomTheme()
 trace_selection <- TRUE
 if (trace_selection) fig_dir = fig_dir_traces
 
+pal = colorRampPalette(brewer.pal(8, "Spectral"))(100)
 
-f_combineData <- function(exp_names, trace_selection) {
-  dat_list <- list()
-  for (exp_name in exp_names) {
-    print(exp_name)
-    tempdat <- f_load_sim_data(exp_name = exp_name, sim_dir = sim_dir,
-                               fname = "trajectoriesDat_region_11_trimfut.csv",
-                               add_peak_cols = TRUE, addRt = FALSE, trace_selection = trace_selection) %>%
-      filter(date >= baseline_date & date <= sim_end_date) %>%
-      dplyr::group_by(exp_name, group_id) %>%
-      filter(trigger_activated == 1 & capacity_multiplier %in% c(0.2, 0.4, 0.6, 0.8, 1)) %>%
-      dplyr::select(exp_name, group_id, sample_num, scen_num, capacity_multiplier, reopen, rollback, delay,
-                    date, date_peak, trigger_activated, triggerDate, crit_det, crit_det_peak)
+### Load saved probability dataframe from Fig 5B
+p5Bdat <- fread(file.path(fig_dir, "csv", "p5Bdat.csv"))
 
-    dat_list[[length(dat_list) + 1]] <- tempdat %>%
-      f_trigger_dat() %>%
-      dplyr::mutate(time_since_trigger = date - triggerDate,
-                    time_since_trigger = round(time_since_trigger, 0))
+### Define regression model per group
+dfGLM <- p5Bdat %>%
+  dplyr::rename(
+    x = capacity_multiplier,
+    y = prob,
+  ) %>%
+  dplyr::group_by(reopen, delay, rollback) %>%
+  do(fitglm = glm(y ~ x, family = binomial(link = logit), data = .))
 
-    rm(tempdat)
-  }
-
-  dat <- dat_list %>% bind_rows()
-  rm(dat_list)
-  return(dat)
+### Make predictions
+pred_list <- list()
+for (i in c(1:nrow(dfGLM))) {
+  pred_dat <- data.frame('x' = seq(0, 1, 0.01), 'y_pred' = NA)
+  glmmodel <- dfGLM[i, 'fitglm'][[1]]
+  pred_dat$y_pred <- predict(glmmodel[[1]], newdata = pred_dat, type = "response")
+  pred_dat$reopen <- dfGLM[i, 'reopen'][[1]]
+  pred_dat$delay <- dfGLM[i, 'delay'][[1]]
+  pred_dat$rollback <- dfGLM[i, 'rollback'][[1]]
+  pred_list[[length(pred_list) + 1]] <- pred_dat
 }
 
-p15dat <- f_combineData(exp_names = c(exp_names_50_delay1, exp_names_100_delay1,
-                                      exp_names_50_delay7, exp_names_100_delay7),
-                        trace_selection = trace_selection)
+### Combine data-list
+pred_dat <- pred_list %>%
+  bind_rows() %>%
+  dplyr::rename(capacity_multiplier = x, prob = y_pred) %>%
+  dplyr::mutate(rollback_num = readr::parse_number(rollback))
 
+### Re-define factor labels
+pred_dat$rollback <- factor(pred_dat$rollback,
+                            levels = c("weak (20%)", "moderate (40%)", "strong (60%)", "very strong (80%)"),
+                            labels = c("weak\n(20%)", "moderate\n(40%)", "strong\n(60%)", "very strong\n(80%)"))
 
-above_threshold <- p15dat %>%
-  mutate(date = as.Date(date)) %>%
-  dplyr::select(scen_num, sample_num, capacity_multiplier, exp_name, date,
-                group_id, reopen, delay, rollback, crit_det) %>%
-  ungroup() %>%
-  group_by(scen_num, exp_name, group_id, reopen, delay, capacity_multiplier, rollback) %>%
-  filter(crit_det >= 516) %>%
-  mutate(date_min = min(date, na.rm = TRUE),
-         date_max = max(date, na.rm = TRUE),
-         type = 'threshold',
-         subtype = 'above_threshold') %>%
-  filter(date == min(date))
-above_threshold$days_above = as.numeric(as.Date(above_threshold$date_max) - as.Date(above_threshold$date_min))
+pred_dat$delay <- factor(pred_dat$delay,
+                         levels = c("immediate mitigation:\n1 day after threshold reached",
+                                    "delayed mitigation:\n7 days after threshold reached"),
+                         labels = c("immediate mitigation:\n1 day after threshold reached",
+                                    "delayed mitigation:\n7 days after threshold reached"))
 
-above_thresholdAggr <- above_threshold %>%
-  filter(capacity_multiplier %in% c(0.2, 0.4, 0.6, 0.8, 1)) %>%
-  group_by(exp_name, reopen, delay, capacity_multiplier, rollback) %>%
-  dplyr::summarize(
-    n.val = n(),
-    mean = mean(days_above),
-    median = median(days_above),
-    q5 = quantile(days_above, probs = 0.05, na.rm = TRUE),
-    q95 = quantile(days_above, probs = 0.95, na.rm = TRUE)
-  )
+pred_dat$reopen <- factor(pred_dat$reopen,
+                          levels = c("High increase in transmission:\nRt approx. 1.28",
+                                     "Low increase in transmission:\nRt approx. 1.16"),
+                          labels = c("High increase in transmission:\nRt approx. 1.28",
+                                     "Low increase in transmission:\nRt approx. 1.16"))
 
+p5Bdat$rollback <- factor(p5Bdat$rollback,
+                          levels = c("weak (20%)", "moderate (40%)", "strong (60%)", "very strong (80%)"),
+                          labels = c("weak\n(20%)", "moderate\n(40%)", "strong\n(60%)", "very strong\n(80%)"))
 
-above_threshold$rollback <- factor(above_threshold$rollback,
-                                   levels = c("pr2", "pr4", "pr6", "pr8"),
-                                   labels = c("weak (20%)", "moderate (40%)", "strong (60%)", "very strong (80%)"))
+p5Bdat$delay <- factor(p5Bdat$delay,
+                       levels = c("immediate mitigation:\n1 day after threshold reached",
+                                  "delayed mitigation:\n7 days after threshold reached"),
+                       labels = c("immediate mitigation:\n1 day after threshold reached",
+                                  "delayed mitigation:\n7 days after threshold reached"))
 
-above_thresholdAggr$rollback <- factor(above_thresholdAggr$rollback,
-                                       levels = c("pr2", "pr4", "pr6", "pr8"),
-                                       labels = c("weak (20%)", "moderate (40%)", "strong (60%)", "very strong (80%)"))
+p5Bdat$reopen <- factor(p5Bdat$reopen,
+                        levels = c("High increase in transmission:\nRt approx. 1.28",
+                                   "Low increase in transmission:\nRt approx. 1.16"),
+                        labels = c("High increase in transmission:\nRt approx. 1.28",
+                                   "Low increase in transmission:\nRt approx. 1.16"))
 
+pplot <- ggplot(data = pred_dat) +
+  geom_tile(aes(x = capacity_multiplier, y = rollback, fill = prob), col = NA) +
+  facet_grid(reopen ~ delay) +
+  geom_vline(xintercept = c(0.25, 0.5, 0.75), col = 'black', size = 0.2) +
+  geom_hline(yintercept = c(1.5, 2.5, 3.5), col = 'white', size = 0.2) +
+  scale_fill_gradientn(colours = rev(pal), limits = c(0, 1),
+                       breaks = seq(0, 1, 0.25),
+                       labels = seq(0, 1, 0.25) * 100) +
+  scale_y_discrete(expand = c(0, 0)) +
+  scale_x_continuous(breaks = seq(0, 1, 0.1),
+                     labels = seq(0, 1, 0.1) * 100,
+                     expand = c(0, 0)) +
+  labs(y = "Mitigation strength",
+       x = "ICU occupancy relative to capacity",
+       fill = "Probability of\nICU overflow (%)") +
+  theme(panel.spacing = unit(1.2, "lines")) +
+  customTheme
 
-p15Abar <- ggplot(data = subset(above_thresholdAggr, delay == "1daysdelay")) +
-  geom_bar(aes(x = as.factor(capacity_multiplier * 100), y = n.val, fill = reopen,
-               group = interaction(rollback, reopen)),
-           position = position_dodge2(width = 0.9, preserve = "single"),
-           stat = "identity") +
-  facet_grid(~rollback) +
-  scale_color_manual(values = transm_scen_cols) +
-  scale_fill_manual(values = transm_scen_cols) +
-  labs(x = "ICU occupancy threshold to trigger mitigation (%)",
-       y = "number of trajectories\nabove capacity") +
-  theme(legend.position = "none")
-
-p15Bbar <- ggplot(data = subset(above_thresholdAggr, reopen == "100perc")) +
-  geom_bar(aes(x = as.factor(capacity_multiplier * 100), y = n.val, fill = delay,
-               group = interaction(rollback, delay)),
-           position = position_dodge2(width = 0.9, preserve = "single"),
-           stat = "identity") +
-  facet_grid(~rollback) +
-  scale_color_manual(values = delay_scen_cols ) +
-  scale_fill_manual(values = delay_scen_cols ) +
-  labs(x = "ICU occupancy threshold to trigger mitigation (%)",
-       y = "number of trajectories\nabove capacity") +
-  theme(legend.position = "none")
-
-p15bar <- plot_grid(p15Abar, p15Bbar, ncol = 1, labels = c("A", "B"))
 f_save_plot(
-  plot_name = paste0("S1_fig_15"), pplot = p15bar,
-  plot_dir = file.path(fig_dir), width = 10, height = 6, scale = 0.8
+  plot_name = paste0("S1_fig_15"), pplot = pplot,
+  plot_dir = file.path(fig_dir), width = 12, height = 8
 )
 
-fwrite(above_threshold, file.path(fig_dir, "csv", "S1_fig_15.csv"))
-fwrite(above_thresholdAggr, file.path(fig_dir, "csv", "S1_fig_15_aggr.csv"))
+fwrite(pred_dat, file.path(fig_dir, "csv", "S1_fig_15.csv"))

@@ -4,94 +4,87 @@
 source(file.path('setup/settings.R'))
 source(file.path('setup/helper_functions.R'))
 customTheme <- f_getCustomTheme()
+
 trace_selection <- TRUE
-if (trace_selection) fig_dir = fig_dir_traces
+reopen <- "100perc"
 
-pal = colorRampPalette(brewer.pal(8, "Spectral"))(100)
-
-### Load saved probability dataframe from Fig 5B
-p5Bdat <- fread(file.path(fig_dir, "csv", "p5Bdat.csv"))
-
-### Define regression model per group
-dfGLM <- p5Bdat %>%
-  dplyr::rename(
-    x = capacity_multiplier,
-    y = prob,
-  ) %>%
-  dplyr::group_by(reopen, delay, rollback) %>%
-  do(fitglm = glm(y ~ x, family = binomial(link = logit), data = .))
-
-### Make predictions
-pred_list <- list()
-for (i in c(1:nrow(dfGLM))) {
-  pred_dat <- data.frame('x' = seq(0, 1, 0.01), 'y_pred' = NA)
-  glmmodel <- dfGLM[i, 'fitglm'][[1]]
-  pred_dat$y_pred <- predict(glmmodel[[1]], newdata = pred_dat, type = "response")
-  pred_dat$reopen <- dfGLM[i, 'reopen'][[1]]
-  pred_dat$delay <- dfGLM[i, 'delay'][[1]]
-  pred_dat$rollback <- dfGLM[i, 'rollback'][[1]]
-  pred_list[[length(pred_list) + 1]] <- pred_dat
+if (trace_selection) fig_dir <- fig_dir_traces
+if (reopen == "100perc") {
+  exp_names <- c(exp_names_100_delay1, exp_names_100_delay7)
+}
+if (reopen == "50perc") {
+  exp_names <- c(exp_names_50_delay1, exp_names_50_delay7)
 }
 
-### Combine data-list
-pred_dat <- pred_list %>%
-  bind_rows() %>%
-  dplyr::rename(capacity_multiplier = x, prob = y_pred) %>%
-  dplyr::mutate(rollback_num = readr::parse_number(rollback))
+f_combineData <- function(exp_names, sim_end_date, trace_selection) {
+  dat_list <- list()
+  for (exp_name in exp_names) {
+    print(exp_name)
+    dat_list[[length(dat_list) + 1]] <- f_load_sim_data(
+      exp_name, fname = "trajectoriesDat_region_11_trimfut.csv", sim_dir,
+      add_peak_cols = TRUE, add_trigger_cols = TRUE, addRt = TRUE, trace_selection = trace_selection) %>%
+      filter(date <= sim_end_date &
+               date_peak <= last_plot_date &
+               capacity_multiplier == 0.6) %>%
+      f_add_popvars() %>%
+      dplyr::group_by(exp_name, group_id) %>%
+      dplyr::mutate(rel_occupancy = crit_det / 516,
+                    rel_occupancy_peak = crit_det_peak / 516,
+                    time_since_reopen = as.numeric(date - as.Date("2020-09-01")),
+                    time_to_peak_after_reopen = as.numeric(date_peak - as.Date("2020-09-01")),
+                    time_to_trigger_after_reopen = as.numeric(triggerDate - as.Date("2020-09-01")),
+                    time_since_trigger = round(as.numeric(date - triggerDate), 0),
+                    time_to_peak_after_trigger = round(as.numeric(date_peak - triggerDate), 0)) %>%
+      filter(trigger_activated == 1)
+  }
+  dat <- dat_list %>% bind_rows() %>% as.data.table()
+  rm(dat_list)
+  return(dat)
+}
 
-### Re-define factor labels
-pred_dat$rollback <- factor(pred_dat$rollback,
-                            levels = c("weak (20%)", "moderate (40%)", "strong (60%)", "very strong (80%)"),
-                            labels = c("weak\n(20%)", "moderate\n(40%)", "strong\n(60%)", "very strong\n(80%)"))
+#### Mitigation dat
+print(exp_names)
+dat <- f_combineData(exp_names = exp_names, sim_end_date = sim_end_date, trace_selection = trace_selection)
+triggerDat <- dat %>%  filter(trigger_activated == 1)
 
-pred_dat$delay <- factor(pred_dat$delay,
-                         levels = c("immediate mitigation:\n1 day after threshold reached",
-                                    "delayed mitigation:\n7 days after threshold reached"),
-                         labels = c("immediate mitigation:\n1 day after threshold reached",
-                                    "delayed mitigation:\n7 days after threshold reached"))
+plotdat <- triggerDat %>%
+  ungroup() %>%
+  mutate(time_since_trigger = round(time_since_trigger, 0)) %>%
+  filter(time_since_trigger > -14 & !is.na(new_infected)) %>%
+  dplyr::select(time_since_trigger, rollback, group_id, reopen, delay, capacity_multiplier, new_infected) %>%
+  unique() %>%
+  dplyr::group_by(time_since_trigger, rollback, reopen, delay, capacity_multiplier) %>%
+  dplyr::summarize(
+    n.val = n(),
+    mean = mean(new_infected),
+    median = median(new_infected),
+    q5 = quantile(new_infected, probs = 0.05, na.rm = TRUE),
+    q95 = quantile(new_infected, probs = 0.95, na.rm = TRUE)
+  ) %>%
+  mutate(time_since_trigger_wks = time_since_trigger / 7)
 
-pred_dat$reopen <- factor(pred_dat$reopen,
-                          levels = c("High increase in transmission:\nRt approx. 1.28",
-                                     "Low increase in transmission:\nRt approx. 1.16"),
-                          labels = c("High increase in transmission:\nRt approx. 1.28",
-                                     "Low increase in transmission:\nRt approx. 1.16"))
 
-p5Bdat$rollback <- factor(p5Bdat$rollback,
-                          levels = c("weak (20%)", "moderate (40%)", "strong (60%)", "very strong (80%)"),
-                          labels = c("weak\n(20%)", "moderate\n(40%)", "strong\n(60%)", "very strong\n(80%)"))
-
-p5Bdat$delay <- factor(p5Bdat$delay,
-                       levels = c("immediate mitigation:\n1 day after threshold reached",
-                                  "delayed mitigation:\n7 days after threshold reached"),
-                       labels = c("immediate mitigation:\n1 day after threshold reached",
-                                  "delayed mitigation:\n7 days after threshold reached"))
-
-p5Bdat$reopen <- factor(p5Bdat$reopen,
-                        levels = c("High increase in transmission:\nRt approx. 1.28",
-                                   "Low increase in transmission:\nRt approx. 1.16"),
-                        labels = c("High increase in transmission:\nRt approx. 1.28",
-                                   "Low increase in transmission:\nRt approx. 1.16"))
-
-pplot <- ggplot(data = pred_dat) +
-  geom_tile(aes(x = capacity_multiplier, y = rollback, fill = prob), col = NA) +
-  facet_grid(reopen ~ delay) +
-  geom_vline(xintercept = c(0.25, 0.5, 0.75), col = 'black', size = 0.2) +
-  geom_hline(yintercept = c(1.5, 2.5, 3.5), col = 'white', size = 0.2) +
-  scale_fill_gradientn(colours = rev(pal), limits = c(0, 1),
-                       breaks = seq(0, 1, 0.25),
-                       labels = seq(0, 1, 0.25) * 100) +
-  scale_y_discrete(expand = c(0, 0)) +
-  scale_x_continuous(breaks = seq(0, 1, 0.1),
-                     labels = seq(0, 1, 0.1) * 100,
-                     expand = c(0, 0)) +
-  labs(y = "Mitigation strength",
-       x = "ICU occupancy relative to capacity",
-       fill = "Probability of\nICU overflow (%)") +
-  theme(panel.spacing = unit(1.2, "lines")) +
-  customTheme
+pplot <- ggplot(data = subset(plotdat, time_since_trigger_wks > -2 & time_since_trigger_wks <= 12)) +
+  geom_ribbon(aes(x = time_since_trigger_wks, ymin = q5, ymax = q95,
+                  group = interaction(rollback, capacity_multiplier),
+                  fill = as.factor(rollback)), alpha = 0.3) +
+  geom_line(aes(x = time_since_trigger_wks, y = mean,
+                group = interaction(rollback, capacity_multiplier),
+                col = as.factor(rollback)), alpha = 0.6, size = 0.9) +
+  scale_fill_manual(values = mitigation_cols) +
+  scale_color_manual(values = mitigation_cols) +
+  geom_hline(aes(yintercept = 0), col = "black", linetype = 'dashed') +
+  theme_minimal() +
+  customTheme +
+  theme(legend.position = "none") +
+  labs(x = "weeks since ICU occupancy\nthreshold for action reached",
+       y = "New infections", color = "", fill = "") +
+  scale_x_continuous(breaks = seq(-2, 12, 1), labels = seq(-2, 12, 1), lim = c(-2, 12)) +
+  facet_wrap(~delay, nrow = 1)
 
 f_save_plot(
-  plot_name = paste0("S1_fig_14"), pplot = pplot,
-  plot_dir = file.path(fig_dir), width = 12, height = 8
+  plot_name = paste0("S1_fig_14", reopen), pplot = pplot,
+  plot_dir = file.path(fig_dir), width = 8, height = 4
 )
 
+fwrite(plotdat, file.path(fig_dir, "csv", "S1_fig_14.csv"))

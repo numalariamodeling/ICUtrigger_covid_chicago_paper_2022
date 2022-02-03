@@ -68,7 +68,8 @@ load_new_capacity <- function(selected_ems = NULL, filedate = NULL) {
       #' @param filedate date of csv file to use, if not specified latest file is selected
       #'
   library(dplyr)
-  capacity_dir <- file.path(data_path, "covid_IDPH/Corona virus reports/hospital_capacity_thresholds")
+  #"covid_IDPH/Corona virus reports/hospital_capacity_thresholds"
+  capacity_dir <- file.path(data_path)
 
   if (is.null(filedate)) {
     files <- list.files(capacity_dir)[grep("capacity_weekday_average", list.files(capacity_dir))]

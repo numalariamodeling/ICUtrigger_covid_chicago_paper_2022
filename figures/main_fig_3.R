@@ -1,25 +1,27 @@
 # Title     : COVID-19 Chicago: ICU thresholds for action to prevent overflow
 # Objective : Figure 3
+# Data files: capacity_by_covid_region.csv, capacity_weekday_average_20200915.csv
 
 source(file.path('setup/settings.R'))
 source(file.path('setup/helper_functions.R'))
 customTheme <- f_getCustomTheme()
-trace_selection = TRUE
-if (trace_selection) fig_dir = fig_dir_traces
+trace_selection <- TRUE
+if (trace_selection) fig_dir <- fig_dir_traces
 
 capacityDat <- load_new_capacity(11, filedate = "20200915")
 ref_dat <- f_load_ref_df(data_path) %>%
   filter(region == 11) %>%
   mutate(Date = as.Date(Date))
 
-ccdat <- read.csv(file.path(data_path, "/covid_IDPH/Corona virus reports/capacity_by_covid_region.csv")) %>%
+#/covid_IDPH/Corona virus reports/capacity_by_covid_region.csv
+ccdat <- read.csv(file.path(data_path, "capacity_by_covid_region.csv")) %>%
   dplyr::mutate(date = as.Date(date)) %>%
   dplyr::filter(geography_level == "covid region" & geography_name == 11) %>%
   dplyr::select(date, icu_total, icu_noncovid, icu_availforcovid) %>%
   arrange(date) %>%
   mutate(icu_availforcovid_7avrg = rollmean(icu_availforcovid, 7, align = 'right', fill = NA))
 
-ccdat$assumed_capacity = capacityDat$icu_available
+ccdat$assumed_capacity <- capacityDat$icu_available
 ccdat$assumed_capacity[ccdat$date <= as.Date("2020-09-01")] = ccdat$icu_availforcovid[ccdat$date <= as.Date("2020-09-01")]
 
 f_combineData <- function(exp_names, sim_end_date, trace_selection) {
@@ -140,9 +142,11 @@ p3B <- ggplot(p3B_dat) +
 
 p3C_dat <- dat %>%
   filter(date >= first_plot_date & date <= last_plot_date) %>%
-  dplyr::select(date, rt_median,rt_lower, scen_num,rt_upper, reopen)
+  dplyr::select(date, rt_median, rt_lower, scen_num, rt_upper, reopen)
 
 p3C <- ggplot(data = p3C_dat) +
+  geom_ribbon(aes(x = date, ymin = rt_lower, ymax = rt_upper, group = interaction(scen_num, reopen),
+                  fill = reopen), alpha = 0.3) +
   geom_line(aes(x = date, y = rt_median, group = interaction(scen_num, reopen), col = reopen), alpha = 0.5) +
   scale_color_manual(values = transm_scen_cols) +
   geom_vline(xintercept = c(baseline_date)) +

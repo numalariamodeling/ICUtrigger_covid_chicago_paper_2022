@@ -1,5 +1,5 @@
 # Title     : COVID-19 Chicago: ICU thresholds for action to prevent overflow
-# Objective : S1 Figure 19
+# Objective : S1 Figure 20
 
 source(file.path('setup/settings.R'))
 source(file.path('setup/helper_functions.R'))
@@ -33,8 +33,9 @@ f_combineData <- function(exp_names, sim_end_date, trace_selection) {
 }
 
 # c(exp_names_50_delay1, exp_names_100_delay1, exp_names_50_delay7, exp_names_100_delay7)
-dat <- f_combineData(exp_names = c(exp_names_50_delay1, exp_names_100_delay1), sim_end_date = sim_end_date, trace_selection = trace_selection)
-fwrite(dat, file.path(fig_dir, "csv", "S1_fig_18dat.csv"))
+dat <- f_combineData(exp_names = c(exp_names_50_delay1, exp_names_100_delay1),
+                     sim_end_date = sim_end_date, trace_selection = trace_selection)
+
 
 datAggr <- dat %>%
   group_by(date, triggerDate, time_since_trigger, reopen, delay, rollback, capacity_multiplier) %>%
@@ -77,7 +78,7 @@ Rt_diff %>%
                    rt_relred_mean = mean(rt_relred, na.rm = TRUE),
                    rt_relred_q5 = quantile(rt_relred, probs = 0.05, na.rm = TRUE),
                    rt_relred_q95 = quantile(rt_relred, probs = 0.95, na.rm = TRUE)) %>%
-  fwrite(file.path(fig_dir, "csv", "S1_fig_18_Rt_diff_prv14wks.csv"))
+  fwrite(file.path(fig_dir, "csv", "S1_fig_20_Rt_diff_prv14wks.csv"))
 
 Rt_diff %>%
   dplyr::group_by(reopen, delay, rollback, capacity_multiplier) %>%
@@ -106,6 +107,7 @@ plotdat_aggr_100$rt_relred_mean <- 100
 plotdat_aggr_100$rt_relred_q5 <- 100
 plotdat_aggr_100$rt_relred_q95 <- 100
 plotdat_aggr <- plotdat_aggr %>% rbind(plotdat_aggr_0, plotdat_aggr_100)
+fwrite(plotdat_aggr, file.path(fig_dir, "csv", "S1_fig_20dat.csv"))
 
 plotdat_aggr$reopen <- factor(plotdat_aggr$reopen,
                               levels = c("100perc", "50perc"),
@@ -118,7 +120,6 @@ pplot <- ggplot(data = plotdat_aggr,
                     col = capacity_multiplier * 100,
                     fill = capacity_multiplier * 100,
                     group = capacity_multiplier)) +
-  #geom_smooth(method = "lm", formula = y ~ x + I(x^5), size = 1, se = F) +
   geom_smooth(size = 1, se = F) +
   scale_y_continuous(lim = c(0, 100), expand = c(0, 0)) +
   scale_x_continuous(lim = c(0, 100), breaks = seq(0, 100, 20),
@@ -142,7 +143,7 @@ plotdat %>%
 
 
 f_save_plot(
-  plot_name = paste0("S1_Fig_19"), pplot = pplot,
+  plot_name = paste0("S1_Fig_20"), pplot = pplot,
   plot_dir = file.path(fig_dir), width = 10, height = 6
 )
 
