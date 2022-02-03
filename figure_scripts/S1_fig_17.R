@@ -1,28 +1,35 @@
 # Title     : COVID-19 Chicago: ICU thresholds for action to prevent overflow
-# Objective : S1 Figure 16
+# Objective : S1 Figure 17
+# Data files: capacity_by_covid_region.csv, emresource_by_region.csv, capacity_weekday_average_20200915.csv
 
 source(file.path('setup/settings.R'))
 source(file.path('setup/helper_functions.R'))
-
 customTheme <- f_getCustomTheme()
 
-Chicago_pop = 2716921 #as used in experiment config yamls
-capacityDat <- load_new_capacity(11, filedate = "20200915")
-ref_dat <- f_load_ref_df(data_path) %>%
-  filter(region == 11) %>%
-  mutate(Date = as.Date(Date))
-
-ccdat <- fread(file.path(data_path, "/covid_IDPH/Corona virus reports/capacity_by_covid_region.csv")) %>%
-  dplyr::mutate(date = as.Date(date)) %>%
-  dplyr::filter(date <= as.Date("2020-12-31") &
-                  geography_level == "covid region" &
-                  geography_name == 11) %>%
+Chicago_pop <- 2716921 #as used in experiment config yamls
+ref_dat <- fread(file.path('emresource_chicago_2020.csv'))
+ccdat <- fread(file.path(data_path, "icu_capacity_chicago_2020.csv")) %>%
   dplyr::select(date, icu_used, icu_covid, icu_total, icu_noncovid, icu_availforcovid) %>%
   arrange(date) %>%
   dplyr::mutate(icu_covid_7avrg = rollmean(icu_covid, 7, align = 'right', fill = NA),
                 icu_availforcovid_7avrg = rollmean(icu_availforcovid, 7, align = 'right', fill = NA),
                 icu_total_7avrg = rollmean(icu_total, 7, align = 'right', fill = NA))
 
+
+ccdat <- ccdat %>% mutate(icu_noncovid_frac = icu_noncovid / icu_total,
+                          icu_availforcovid_frac = 1 - (icu_availforcovid / icu_total))
+mean(ccdat$icu_noncovid_frac, na.rm = TRUE)
+
+pplot <- ggplot(data = ccdat) +
+  geom_line(aes(x = date, y = icu_noncovid_frac)) +
+  geom_hline(yintercept = mean(ccdat$noncov, na.rm = TRUE)) +
+  labs(y = "Fraction occupied by non-COVID patients") +
+  customTheme
+
+f_save_plot(
+  plot_name = paste0("S1_fig_17_supp"), pplot = pplot,
+  plot_dir = file.path(fig_dir), width = 10, height = 6
+)
 
 pplot <- ggplot(data = ccdat) +
   geom_ribbon(aes(x = date, ymin = 0, ymax = icu_total), fill = "grey", alpha = 0.7) +
@@ -38,7 +45,7 @@ pplot <- ggplot(data = ccdat) +
   labs(x = "", y = "Number of ICU beds")
 
 f_save_plot(
-  plot_name = paste0("S1_fig_16"), pplot = pplot,
+  plot_name = paste0("S1_fig_17"), pplot = pplot,
   plot_dir = file.path(fig_dir), width = 10, height = 6
 )
 
@@ -47,7 +54,7 @@ f_save_plot(
   filter(date <= as.Date("2020-09-01")) %>%
   filter(icu_covid_7avrg == max(icu_covid_7avrg, na.rm = TRUE)))
 
-ccdat_1st_wave_peak$icu_availforcovid_7avrg - capacityDat$icu_available
+ccdat_1st_wave_peak$icu_availforcovid_7avrg - 516
 
 ### Average beds per pop
 ccdat <- ccdat %>%
@@ -63,12 +70,12 @@ tapply(ccdat$icu_beds_covid_capacity_per10000, ccdat$first_wave, summary)
 tapply(ccdat$icu_beds_total_capacity_per10000, ccdat$first_wave, summary)
 
 #### Additional descriptives
-dat <- fread(file.path(data_path, "/covid_IDPH/Corona virus reports/emresource_by_region.csv"))
+dat <- fread(file.path(data_path, "emresource_by_region.csv"))
 table(dat$covid_region)
 tapply(dat$n_hospitals, dat$covid_region, summary)
 dat <- dat %>% filter(covid_region == 11)
 
-dat <- fread(file.path(data_path, "/covid_IDPH/Corona virus reports/capacity_by_covid_region.csv")) %>%
+dat <- fread(file.path(data_path, "capacity_by_covid_region.csv")) %>%
   dplyr::mutate(date = as.Date(date)) %>%
   dplyr::filter(geography_level == "covid region" &
                   geography_name == 11) %>%
@@ -97,7 +104,7 @@ pplot <- ggplot(data = subset(ccdat)) +
   labs(x = "", y = "% of ICU beds available\nfor COVID-19 filled")
 
 f_save_plot(
-  plot_name = paste0("S1_fig_16_supp"), pplot = pplot,
+  plot_name = paste0("S1_fig_17_supp1"), pplot = pplot,
   plot_dir = file.path(fig_dir), width = 10, height = 6
 )
 
@@ -112,6 +119,7 @@ pplot <- ggplot(data = ccdat) +
   customTheme
 
 f_save_plot(
-  plot_name = paste0("S1_fig_16_supp2"), pplot = pplot,
+  plot_name = paste0("S1_fig_17_supp2"), pplot = pplot,
   plot_dir = file.path(fig_dir), width = 10, height = 6
 )
+if (cleanEnv)rm(list = ls())

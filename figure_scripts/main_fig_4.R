@@ -216,12 +216,25 @@ p4D_dat <- triggerDat %>%
   ) %>%
   mutate(time_since_trigger_wks = time_since_trigger / 7)
 
+p4D_dat_raw <- triggerDat %>%
+  ungroup() %>%
+  mutate(time_since_trigger = round(time_since_trigger, 0)) %>%
+  filter(time_since_trigger > -14 & !is.na(rt_median)) %>%
+  dplyr::select(scen_num, sample_num,time_since_trigger, rollback, group_id, capacity_multiplier, rt_median, rt_lower, rt_upper) %>%
+  unique() %>%
+  mutate(time_since_trigger_wks = time_since_trigger / 7)
+
 p4D <- ggplot(data = subset(p4D_dat, time_since_trigger_wks > -2 & time_since_trigger_wks <= 12)) +
+  geom_ribbon(data = subset(p4D_dat_raw, time_since_trigger_wks > -2 & time_since_trigger_wks <= 12),
+              aes(x = time_since_trigger_wks, ymin = rt_lower, ymax = rt_upper,
+                 fill = as.factor(rollback),
+                  group = interaction(scen_num, sample_num, rollback, capacity_multiplier)), alpha = 0.01) +
   geom_ribbon(aes(x = time_since_trigger_wks, ymin = q5, ymax = q95,
                   group = interaction(rollback, capacity_multiplier),
                   fill = as.factor(rollback)), alpha = 0.3) +
   geom_line(aes(x = time_since_trigger_wks, y = mean,
-                group = interaction(rollback, capacity_multiplier), col = as.factor(rollback)), alpha = 0.6, size = 0.9) +
+                group = interaction(rollback, capacity_multiplier),
+                col = as.factor(rollback)), alpha = 0.6, size = 0.9) +
   scale_fill_manual(values = mitigation_cols) +
   scale_color_manual(values = mitigation_cols) +
   geom_hline(aes(yintercept = 1), col = "black", linetype = 'dashed') +
@@ -353,7 +366,7 @@ Rt_diff %>%
                    rt_relred_mean = mean(rt_relred, na.rm = TRUE),
                    rt_relred_q5 = quantile(rt_relred, probs = 0.05, na.rm = TRUE),
                    rt_relred_q95 = quantile(rt_relred, probs = 0.95, na.rm = TRUE)) %>%
-  fwrite(file.path(fig_dir, paste0("Rt_diff", reopen,".csv")))
+  fwrite(file.path(fig_dir,"csv", paste0("Rt_diff", reopen,".csv")))
 
 Rt_diff %>%
   dplyr::group_by(reopen, delay, rollback, capacity_multiplier) %>%
@@ -361,3 +374,4 @@ Rt_diff %>%
                    rt_relred_q5 = quantile(rt_relred, probs = 0.05, na.rm = TRUE),
                    rt_relred_q95 = quantile(rt_relred, probs = 0.95, na.rm = TRUE))
 
+if(cleanEnv)rm(list = ls())

@@ -1,14 +1,14 @@
 # Title     : COVID-19 Chicago: ICU thresholds for action to prevent overflow
-# Objective : S1 Figure 13
+# Objective : S1 Figure 14
 
 source(file.path('setup/settings.R'))
 source(file.path('setup/helper_functions.R'))
 customTheme <- f_getCustomTheme()
 
-trace_selection = TRUE
-reopen = "100perc"
+trace_selection <- TRUE
+reopen <- "100perc"
 
-if (trace_selection) fig_dir = fig_dir_traces
+if (trace_selection) fig_dir <- fig_dir_traces
 if (reopen == "100perc") {
   exp_names <- c(exp_names_100_delay1, exp_names_100_delay7)
 }
@@ -45,13 +45,7 @@ f_combineData <- function(exp_names, sim_end_date, trace_selection) {
 #### Mitigation dat
 print(exp_names)
 dat <- f_combineData(exp_names = exp_names, sim_end_date = sim_end_date, trace_selection = trace_selection)
-
-
-triggerDat <- dat %>%
-  f_trigger_dat() %>%
-  dplyr::mutate(time_since_trigger = date - triggerDate,
-                time_since_trigger = round(time_since_trigger, 0)) %>%
-  filter(trigger_activated == 1)
+triggerDat <- dat %>% filter(trigger_activated == 1)
 
 plotdat <- triggerDat %>%
   ungroup() %>%
@@ -89,7 +83,10 @@ pplot <- ggplot(data = subset(plotdat, time_since_trigger_wks > -2 & time_since_
   facet_wrap(~delay, nrow = 1)
 
 f_save_plot(
-  plot_name = paste0("S1_fig_13", reopen), pplot = pplot,
+  plot_name = paste0("S1_fig_14", reopen), pplot = pplot,
   plot_dir = file.path(fig_dir), width = 8, height = 4
 )
 
+fwrite(plotdat, file.path(fig_dir, "csv", "S1_fig_14.csv"))
+
+if (cleanEnv)rm(list = ls())

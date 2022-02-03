@@ -1,6 +1,5 @@
 # Title     : COVID-19 Chicago: ICU thresholds for action to prevent overflow
-# Objective : S1 Figure 17
-
+# Objective : S1 Figure 18
 
 source(file.path('setup/settings.R'))
 source(file.path('setup/helper_functions.R'))
@@ -11,9 +10,7 @@ dat <- fread(file.path(sim_dir, "baseline_20210113", "nu_20210113.csv")) %>%
   mutate(date = as.Date(date)) %>%
   filter(date >= as.Date("2020-09-01") & date <= as.Date("2020-12-31"))
 
-ref_dat <- f_load_ref_df(data_path) %>%
-  filter(region == 11) %>%
-  mutate(Date = as.Date(Date))
+ref_dat <- fread(file.path('emresource_chicago_2020.csv'))
 
 p1 <- ggplot(data = dat) +
   geom_ribbon(aes(x = date, ymin = icu_det_lower, ymax = icu_det_upper), alpha = 0.5, fill = "deepskyblue4") +
@@ -35,9 +32,11 @@ p2 <- ggplot(data = dat) +
   labs(title = "", y = "Estimated Rt", x = "") +
   customTheme
 
+fwrite(dat,file.path(fig_dir, "csv", "S1_fig_18.csv"))
 pplot <- plot_grid(p1, p2, nrow = 2, labels = c("A", "B"))
 
 f_save_plot(
-  plot_name = paste0("S1_fig_17"), pplot = pplot,
+  plot_name = paste0("S1_fig_18"), pplot = pplot,
   plot_dir = file.path(fig_dir), width = 8, height = 8
 )
+if (cleanEnv)rm(list = ls())

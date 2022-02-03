@@ -110,3 +110,4 @@ f_save_plot(
   plot_dir = file.path(fig_dir), width = 12, height = 8
 )
 
+if(cleanEnv)rm(list = ls())

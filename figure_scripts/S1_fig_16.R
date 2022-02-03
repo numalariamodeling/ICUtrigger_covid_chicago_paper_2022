@@ -1,5 +1,5 @@
 # Title     : COVID-19 Chicago: ICU thresholds for action to prevent overflow
-# Objective : S1 Figure 15
+# Objective : S1 Figure 16
 
 source(file.path('setup/settings.R'))
 source(file.path('setup/helper_functions.R'))
@@ -22,7 +22,7 @@ f_combineData <- function(exp_names, trace_selection) {
                     date, date_peak, trigger_activated, triggerDate, crit_det, crit_det_peak)
 
     dat_list[[length(dat_list) + 1]] <- tempdat %>%
-      f_trigger_dat() %>%
+      f_get_triggerDat() %>%
       dplyr::mutate(time_since_trigger = date - triggerDate,
                     time_since_trigger = round(time_since_trigger, 0))
 
@@ -34,12 +34,12 @@ f_combineData <- function(exp_names, trace_selection) {
   return(dat)
 }
 
-p15dat <- f_combineData(exp_names = c(exp_names_50_delay1, exp_names_100_delay1,
+p16dat <- f_combineData(exp_names = c(exp_names_50_delay1, exp_names_100_delay1,
                                       exp_names_50_delay7, exp_names_100_delay7),
                         trace_selection = trace_selection)
 
 
-above_threshold <- p15dat %>%
+above_threshold <- p16dat %>%
   mutate(date = as.Date(date)) %>%
   dplyr::select(scen_num, sample_num, capacity_multiplier, exp_name, date,
                 group_id, reopen, delay, rollback, crit_det) %>%
@@ -74,7 +74,7 @@ above_thresholdAggr$rollback <- factor(above_thresholdAggr$rollback,
                                        labels = c("weak (20%)", "moderate (40%)", "strong (60%)", "very strong (80%)"))
 
 
-p15Abar <- ggplot(data = subset(above_thresholdAggr, delay == "1daysdelay")) +
+p16Abar <- ggplot(data = subset(above_thresholdAggr, delay == "1daysdelay")) +
   geom_bar(aes(x = as.factor(capacity_multiplier * 100), y = n.val, fill = reopen,
                group = interaction(rollback, reopen)),
            position = position_dodge2(width = 0.9, preserve = "single"),
@@ -86,23 +86,24 @@ p15Abar <- ggplot(data = subset(above_thresholdAggr, delay == "1daysdelay")) +
        y = "number of trajectories\nabove capacity") +
   theme(legend.position = "none")
 
-p15Bbar <- ggplot(data = subset(above_thresholdAggr, reopen == "100perc")) +
+p16Bbar <- ggplot(data = subset(above_thresholdAggr, reopen == "100perc")) +
   geom_bar(aes(x = as.factor(capacity_multiplier * 100), y = n.val, fill = delay,
                group = interaction(rollback, delay)),
            position = position_dodge2(width = 0.9, preserve = "single"),
            stat = "identity") +
   facet_grid(~rollback) +
-  scale_color_manual(values = delay_scen_cols ) +
-  scale_fill_manual(values = delay_scen_cols ) +
+  scale_color_manual(values = delay_scen_cols) +
+  scale_fill_manual(values = delay_scen_cols) +
   labs(x = "ICU occupancy threshold to trigger mitigation (%)",
        y = "number of trajectories\nabove capacity") +
   theme(legend.position = "none")
 
-p15bar <- plot_grid(p15Abar, p15Bbar, ncol = 1, labels = c("A", "B"))
+p16bar <- plot_grid(p16Abar, p16Bbar, ncol = 1, labels = c("A", "B"))
 f_save_plot(
-  plot_name = paste0("S1_fig_15"), pplot = p15bar,
+  plot_name = paste0("S1_fig_16"), pplot = p16bar,
   plot_dir = file.path(fig_dir), width = 10, height = 6, scale = 0.8
 )
 
-fwrite(above_threshold, file.path(fig_dir, "csv", "S1_fig_15.csv"))
-fwrite(above_thresholdAggr, file.path(fig_dir, "csv", "S1_fig_15_aggr.csv"))
+fwrite(above_threshold, file.path(fig_dir, "csv", "S1_fig_16.csv"))
+fwrite(above_thresholdAggr, file.path(fig_dir, "csv", "S1_fig_16_aggr.csv"))
+if (cleanEnv)rm(list = ls())

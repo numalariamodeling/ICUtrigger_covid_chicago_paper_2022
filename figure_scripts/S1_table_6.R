@@ -100,6 +100,4 @@ scen_dat$reopen <- factor(scen_dat$reopen,
                           labels = c("High", "Low"))
 
 fwrite(scen_dat, file.path(fig_dir,"csv", "S1_table_6.csv"))
-
-
-
+if (cleanEnv)rm(list = ls())

@@ -49,23 +49,7 @@ summary(datAggr$n)
 tapply(datAggr$n, datAggr$trace_selection, summary)
 table(dat$trace_selection, dat$outcome)
 
-capacityDat <- load_new_capacity(11, filedate = "20200915")
-ref_dat <- f_load_ref_df(data_path) %>%
-  mutate(date = as.Date(Date)) %>%
-  filter(region == 11 & date <= baseline_date) %>%
-  rename(deaths = LL_deaths,
-         admissions = LL_admissions) %>%
-  select(date, confirmed_covid_icu, suspected_and_confirmed_covid_icu, covid_non_icu, deaths, admissions) %>%
-  rename(ICU_census = confirmed_covid_icu,
-         suspected_and_confirmed_covid_icu = suspected_and_confirmed_covid_icu,
-         med_surg_census = covid_non_icu,
-         deaths = deaths) %>%
-  pivot_longer(cols = -c(date), names_to = "outcome", values_to = "data_val") %>%
-  group_by(outcome) %>%
-  filter(!is.na(data_val)) %>%
-  arrange(date) %>%
-  mutate(value_7avrg = rollmean(data_val, 7, align = 'right', fill = NA)) %>%
-  filter(outcome %in% channels & !is.na(value_7avrg))
+ref_dat <- fread(file.path('emresource_chicago_2020.csv'))
 
 ref_dat$date <- as.character(ref_dat$date)
 datAggr$date <- as.character(datAggr$date)
@@ -196,3 +180,4 @@ fitdat %>%
                    lower = quantile(mae, probs = 0.05, na.rm = TRUE),
                    upper = quantile(mae, probs = 0.95, na.rm = TRUE))
 
+if(cleanEnv)rm(list = ls())

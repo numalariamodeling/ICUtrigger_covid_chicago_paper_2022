@@ -1,5 +1,5 @@
 # Title     : COVID-19 Chicago: ICU thresholds for action to prevent overflow
-# Objective : S1 Figure 14
+# Objective : S1 Figure 15
 
 source(file.path('setup/settings.R'))
 source(file.path('setup/helper_functions.R'))
@@ -91,7 +91,9 @@ pplot <- ggplot(data = pred_dat) +
   customTheme
 
 f_save_plot(
-  plot_name = paste0("S1_fig_14"), pplot = pplot,
+  plot_name = paste0("S1_fig_15"), pplot = pplot,
   plot_dir = file.path(fig_dir), width = 12, height = 8
 )
 
+fwrite(pred_dat, file.path(fig_dir, "csv", "S1_fig_15.csv"))
+if (cleanEnv)rm(list = ls())

@@ -207,10 +207,11 @@ above_thresholdAggr %>%
   group_by(reopen, rollback) %>%
   summarize(mean = mean(mean))
 
-
 above_thresholdAggr %>%
   select(rollback, capacity_multiplier, reopen, delay, mean) %>%
   group_by(rollback, reopen, delay) %>%
   summarize(mean = mean(mean)) %>%
   pivot_wider(names_from = delay, values_from = mean) %>%
   mutate(delay_diff = `1daysdelay` - `7daysdelay`)
+
+if(cleanEnv)rm(list = ls())

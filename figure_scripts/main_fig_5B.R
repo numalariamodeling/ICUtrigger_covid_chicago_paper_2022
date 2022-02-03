@@ -132,3 +132,5 @@ p5Bdat %>%
   filter(reopen == "High increase in transmission:\nRt approx. 1.28" &
            rollback == "very strong (80%)" &
            capacity_multiplier == 0.6)
+
+if(cleanEnv)rm(list = ls())

@@ -58,3 +58,39 @@ f_save_plot(
   plot_name = paste0("Fig5A"), pplot = p5A,
   plot_dir = file.path(fig_dir), width = 14, height = 4
 )
+
+
+### Addition --- 5A time between trigger and capacity exploration
+p5Adat <- fread(file.path(fig_dir, "csv", "p5Adat.csv"))
+
+capacityDates_dat <- p5Adat %>%
+  filter(time_since_trigger >= 0 & crit_det >= 516) %>%
+  group_by(exp_name, group_id, sample_num, scen_num, capacity_multiplier, reopen, rollback, delay, triggerDate) %>%
+  summarize(date_capacity = min(date),
+            time_since_trigger = min(time_since_trigger))
+
+plodat <- p5Adat %>%
+  left_join(capacityDates_dat) %>%
+  mutate(time_to_capacity_after_trigger = round(as.numeric(date_capacity - triggerDate), 0))
+
+plodatAggr <- plodat %>%
+  group_by(capacity_multiplier, reopen, rollback, delay) %>%
+  summarize(min = min(time_to_capacity_after_trigger, na.rm = TRUE),
+            mean = mean(time_to_capacity_after_trigger, na.rm = TRUE),
+            max = max(time_to_capacity_after_trigger, na.rm = TRUE))
+
+print(plodatAggr)
+
+pplot <- ggplot(data = plodat) +
+  geom_jitter(aes(x = time_to_capacity_after_trigger, y = reopen, col = reopen), width = 0, height = 0.05) +
+  geom_pointrange(data = plodatAggr, aes(y = reopen, x = mean, xmin = min, xmax = max)) +
+  facet_wrap(~capacity_multiplier, nrow = 1) +
+  scale_color_manual(values = transm_scen_cols) +
+  scale_fill_manual(values = transm_scen_cols)
+
+f_save_plot(
+  plot_name = paste0("Fig5A_addon_explore_trigger_to_capacity"), pplot = pplot,
+  plot_dir = file.path(fig_dir), width = 6, height = 3
+)
+
+if(cleanEnv)rm(list = ls())
