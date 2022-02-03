@@ -4,6 +4,8 @@ Simulating COVID-19 transmission and hospital burden to assess at which intensiv
 exceeding ICU capacity limits, using the city of Chicago, Illinois as an example.
 
 Simulation data files are stored on Zenodo (DOI:10.5281/zenodo.5018779).
+Raw data can be requested using the [Office of IDPH Patient Safety and Quality Discharge Data Request Form](https://dph.illinois.gov/content/dam/soi/en/web/idph/files/forms/formsoppsdischarge-data-request-form.pdf) 
+
 Manuscript has been submitted in PLOS Global Health, a [see preprint](https://www.medrxiv.org/content/10.1101/2021.06.27.21259530v1.
 ) posted on medRxiv. 
 
