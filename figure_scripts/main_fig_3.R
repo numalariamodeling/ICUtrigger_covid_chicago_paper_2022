@@ -5,11 +5,9 @@
 source(file.path('setup/settings.R'))
 source(file.path('setup/helper_functions.R'))
 customTheme <- f_getCustomTheme()
-trace_selection <- TRUE
-if (trace_selection) fig_dir <- fig_dir_traces
 
-ref_dat <- fread(file.path('emresource_chicago_2020.csv'))
-ccdat <- fread(file.path(data_path, "icu_capacity_chicago_2020.csv")) 
+ref_dat <- fread(file.path(data_path, 'COVID-19_ICU_Chicago_2020.csv')) %>%
+  mutate(assumed_capacity = assumed_capacity)
 
 f_combineData <- function(exp_names, sim_end_date, trace_selection) {
   dat_list <- list()
@@ -29,55 +27,60 @@ f_combineData <- function(exp_names, sim_end_date, trace_selection) {
 }
 
 print(counterfactual_exps)
-dat <- f_combineData(exp_names = counterfactual_exps, sim_end_date = sim_end_date, trace_selection = trace_selection)
 
-dim(dat)
-table(dat$capacity_multiplier)
-table(dat$reopen)
-tapply(dat$date_peak, dat$reopen, summary)
+run_data_from_sim <- F
+if (run_data_from_sim) {
+  dat <- f_combineData(exp_names = counterfactual_exps, sim_end_date = sim_end_date, trace_selection = trace_selection)
 
-f_n_scenarios(dat)
+  dim(dat)
+  table(dat$capacity_multiplier)
+  table(dat$reopen)
+  tapply(dat$date_peak, dat$reopen, summary)
 
-### Ki
-dat %>%
-  filter(date >= baseline_date & date <= as.Date("2020-10-15")) %>%
-  group_by(reopen) %>%
-  summarize(ki_min = min(Ki_t),
-            ki_max = max(Ki_t)) %>%
-  mutate(incr = (ki_max / ki_min))
+  f_n_scenarios(dat)
 
-### Reach peak before Dec 2020
-dat %>%
-  filter(date >= baseline_date) %>%
-  dplyr::filter(crit_det == max(crit_det)) %>%
-  dplyr::filter(date == min(date)) %>%
-  dplyr::group_by(reopen) %>%
-  dplyr::mutate(peak_before_2021 = ifelse(date <= last_plot_date, 1, 0)) %>%
-  dplyr::group_by(group_id, reopen, peak_before_2021) %>%
-  add_tally() %>%
-  dplyr::group_by(reopen, peak_before_2021) %>%
-  dplyr::summarize(n = sum(n),
-                   date = mean(date),
-                   crit_det = mean(crit_det)) %>%
-  dplyr::mutate(rel_occupancy = crit_det / 516) %>%
-  arrange(peak_before_2021)
+  ### Ki
+  dat %>%
+    filter(date >= baseline_date & date <= as.Date("2020-10-15")) %>%
+    group_by(reopen) %>%
+    summarize(ki_min = min(Ki_t),
+              ki_max = max(Ki_t)) %>%
+    mutate(incr = (ki_max / ki_min))
+
+  ### Reach peak before Dec 2020
+  dat %>%
+    filter(date >= baseline_date) %>%
+    dplyr::filter(crit_det == max(crit_det)) %>%
+    dplyr::filter(date == min(date)) %>%
+    dplyr::group_by(reopen) %>%
+    dplyr::mutate(peak_before_2021 = ifelse(date <= last_plot_date, 1, 0)) %>%
+    dplyr::group_by(group_id, reopen, peak_before_2021) %>%
+    add_tally() %>%
+    dplyr::group_by(reopen, peak_before_2021) %>%
+    dplyr::summarize(n = sum(n),
+                     date = mean(date),
+                     crit_det = mean(crit_det)) %>%
+    dplyr::mutate(rel_occupancy = crit_det / 516) %>%
+    arrange(peak_before_2021)
 
 
-### Reach capacity
-dat %>%
-  filter(date >= baseline_date) %>%
-  dplyr::group_by(reopen) %>%
-  dplyr::mutate(peak_above_capacity = ifelse(crit_det_peak >= 516, 1, 0)) %>%
-  dplyr::group_by(group_id, reopen, peak_above_capacity) %>%
-  add_tally() %>%
-  dplyr::group_by(reopen, peak_above_capacity) %>%
-  dplyr::summarize(n = sum(n),
-                   date = mean(date),
-                   crit_det = mean(crit_det)) %>%
-  dplyr::mutate(rel_occupancy = crit_det / 516) %>%
-  arrange(peak_above_capacity)
+  ### Reach capacity
+  dat %>%
+    filter(date >= baseline_date) %>%
+    dplyr::group_by(reopen) %>%
+    dplyr::mutate(peak_above_capacity = ifelse(crit_det_peak >= 516, 1, 0)) %>%
+    dplyr::group_by(group_id, reopen, peak_above_capacity) %>%
+    add_tally() %>%
+    dplyr::group_by(reopen, peak_above_capacity) %>%
+    dplyr::summarize(n = sum(n),
+                     date = mean(date),
+                     crit_det = mean(crit_det)) %>%
+    dplyr::mutate(rel_occupancy = crit_det / 516) %>%
+    arrange(peak_above_capacity)
 
-dat <- dat %>% mutate(peak_beforeDec = ifelse(date_peak <= last_plot_date, 1, 0))
+  dat <- dat %>% mutate(peak_beforeDec = ifelse(date_peak <= last_plot_date, 1, 0))
+}
+dat <- fread(file.path(fig_dir, "csv", "p3A_dat.csv"))
 
 dat %>%
   dplyr::select(group_id, scen_num, exp_name, reopen, peak_beforeDec) %>%
@@ -85,13 +88,14 @@ dat %>%
   group_by(peak_beforeDec) %>%
   tally()
 
+
 p3A <- ggplot(data = subset(dat, date >= first_plot_date & date <= last_plot_date)) +
   geom_line(aes(x = date, y = crit_det, group = interaction(scen_num, reopen), col = reopen), alpha = 0.5) +
-  geom_point(data = subset(ref_dat, Date <= baseline_date), aes(x = Date, y = confirmed_covid_icu), shape = 21, fill = 'black', size = 1) +
-  geom_point(data = subset(ref_dat, Date >= baseline_date & Date <= last_plot_date), aes(x = Date, y = confirmed_covid_icu), shape = 21, fill = 'lightgrey', size = 1) +
-  geom_line(data = subset(ccdat, date <= baseline_date), aes(x = date, y = icu_availforcovid_7avrg), col = capacitycolor, alpha = 1, size = 1.2) +
-  geom_line(data = subset(ccdat, date >= baseline_date & date <= last_plot_date), aes(x = date, y = assumed_capacity), linetype = 'dashed', col = capacitycolor, alpha = 1, size = 1.2) +
-  geom_line(data = subset(ccdat, date >= baseline_date & date <= last_plot_date), aes(x = date, y = icu_availforcovid_7avrg), col = capacitycolor, alpha = 0.5, size = 1.2) +
+  geom_point(data = subset(ref_dat, date <= baseline_date), aes(x = date, y = confirmed_covid_icu), shape = 21, fill = 'black', size = 1) +
+  geom_point(data = subset(ref_dat, date >= baseline_date & date <= last_plot_date), aes(x = date, y = confirmed_covid_icu), shape = 21, fill = 'lightgrey', size = 1) +
+  geom_line(data = subset(ref_dat, date <= baseline_date), aes(x = date, y = icu_availforcovid_7avrg), col = capacitycolor, alpha = 1, size = 1.2) +
+  geom_line(data = subset(ref_dat, date >= baseline_date & date <= last_plot_date), aes(x = date, y = assumed_capacity), linetype = 'dashed', col = capacitycolor, alpha = 1, size = 1.2) +
+  geom_line(data = subset(ref_dat, date >= baseline_date & date <= last_plot_date), aes(x = date, y = icu_availforcovid_7avrg), col = capacitycolor, alpha = 0.5, size = 1.2) +
   scale_color_manual(values = transm_scen_cols) +
   geom_vline(xintercept = c(baseline_date)) +
   geom_vline(xintercept = c(last_plot_date), linetype = 'dashed') +
@@ -246,14 +250,13 @@ p3C_dat %>%
                    rt_median_q95 = quantile(rt_median, probs = 0.95, na.rm = TRUE))
 
 ### icu_availforcovid
-ccdat <- as.data.frame(ccdat)
-summary(ccdat[ccdat$date <= as.Date("2020-12-31"), "icu_availforcovid"])
-summary(ccdat[ccdat$date <= as.Date("2020-12-31"), "icu_availforcovid_7avrg"])
-summary(ccdat$date)
+summary(ref_dat[ref_dat$date <= as.Date("2020-12-31"), "icu_availforcovid"])
+summary(ref_dat[ref_dat$date <= as.Date("2020-12-31"), "icu_availforcovid_7avrg"])
+summary(ref_dat$date)
 
-ccdat %>%
+ref_dat %>%
   filter(date <= as.Date("2020-12-31")) %>%
   arrange(icu_availforcovid) %>%
   head()
 
-if(cleanEnv)rm(list = ls())
+if (cleanEnv)rm(list = ls())

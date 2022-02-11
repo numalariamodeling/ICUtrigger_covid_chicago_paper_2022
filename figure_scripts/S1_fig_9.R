@@ -5,9 +5,6 @@ source(file.path('setup/settings.R'))
 source(file.path('setup/helper_functions.R'))
 customTheme <- f_getCustomTheme()
 
-trace_selection <- TRUE
-if (trace_selection) fig_dir = fig_dir_traces
-
 exp_name = "baseline"
 traces <- fread(file.path(sim_dir, "sample_num_traces_all.csv"))
 

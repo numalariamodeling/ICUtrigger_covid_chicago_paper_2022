@@ -4,8 +4,6 @@
 source(file.path('setup/settings.R'))
 source(file.path('setup/helper_functions.R'))
 customTheme <- f_getCustomTheme()
-trace_selection <- TRUE
-if (trace_selection) fig_dir <- fig_dir_traces
 
 exp_name <- '50perc_1daysdelay_pr8_triggeredrollback_reopen'  # selected test experiment
 tempdat <- f_load_sim_data(exp_name = exp_name, sim_dir = sim_dir,

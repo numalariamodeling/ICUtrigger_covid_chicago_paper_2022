@@ -4,8 +4,6 @@
 source(file.path('setup/settings.R'))
 source(file.path('setup/helper_functions.R'))
 customTheme <- f_getCustomTheme()
-trace_selection <- TRUE
-if (trace_selection) fig_dir = fig_dir_traces
 
 f_combineData <- function(exp_names, sim_end_date, trace_selection) {
   dat_list <- list()
