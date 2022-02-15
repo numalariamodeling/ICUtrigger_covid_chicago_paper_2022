@@ -1,14 +1,8 @@
 # Title     : COVID-19 Chicago: ICU thresholds for action to prevent overflow
 # Objective : Fit simulations to hospital census data
-# - reference data to fit to:
-#   - EMResource data "emresource_by_region.csv" located in data\covid_IDPH\Corona virus reports
-#   - Line List data "200928_jg_aggregated_covidregion.csv" located in data\covid_IDPH\Cleaned Data
 
-library(ggplot2)
-library(data.table)
-library(tidyverse)
-library(zoo)
-library(cowplot)
+pckg <- c("tidyverse", "zoo", "cowplot", "data.table")
+lapply(pckg, require, character.only = TRUE)
 theme_set(theme_cowplot())
 
 
@@ -25,7 +19,7 @@ if (runInBatchMode) {
   if (tolower(useSmoothedData) == "false") useSmoothedData <- FALSE
   if (tolower(useSmoothedData) == "true") useSmoothedData <- TRUE
 } else {
-  exp_name <- "20201020_IL_mr_quest_fitki9"
+  exp_name <- "100perc_counterfactual_reopen"
   Location <- "Local"
   workingDir <- getwd()
   useSmoothedData <- TRUE

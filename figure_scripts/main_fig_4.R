@@ -8,7 +8,6 @@ customTheme <- f_getCustomTheme()
 trace_selection = TRUE
 reopen = "100perc"
 
-if (trace_selection) fig_dir = fig_dir_traces
 if (reopen == "100perc") {
   exp_names <- exp_names_100_delay1
   counterfactual_exp <- counterfactual_exps[1]

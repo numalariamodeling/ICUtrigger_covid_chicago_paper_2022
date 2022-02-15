@@ -6,8 +6,8 @@ source(file.path('setup/settings.R'))
 source(file.path('setup/helper_functions.R'))
 theme_set(theme_cowplot())
 customTheme <- f_getCustomTheme(fontscl = 0.75)
-PrevMed_dir <- "R:/PrevMed/Covid-19-Modeling/IDPH line list/"
-dat <- fread(file.path(PrevMed_dir, "LL_210111_JGcleaned_no_race.csv"))
+dat <- fread(file.path(data_path, "LL_data.csv")) ## requires access from IDPH
+
 
 dat$count = 1
 dat$crit = NA

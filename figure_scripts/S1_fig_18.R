@@ -5,18 +5,18 @@ source(file.path('setup/settings.R'))
 source(file.path('setup/helper_functions.R'))
 customTheme <- f_getCustomTheme()
 
-dat <- fread(file.path(sim_dir, "baseline_20210113", "nu_20210113.csv")) %>%
+dat <- fread(file.path(wdir, 'simulation_output', "baseline_20210113", "nu_20210113.csv")) %>%
   filter(geography_modeled == "covidregion_11") %>%
   mutate(date = as.Date(date)) %>%
   filter(date >= as.Date("2020-09-01") & date <= as.Date("2020-12-31"))
 
-ref_dat <- fread(file.path('emresource_chicago_2020.csv'))
+ref_dat <- fread(file.path(data_path,'COVID-19_ICU_Chicago_2020.csv'))
 
 p1 <- ggplot(data = dat) +
   geom_ribbon(aes(x = date, ymin = icu_det_lower, ymax = icu_det_upper), alpha = 0.5, fill = "deepskyblue4") +
   geom_line(aes(x = date, y = icu_det_median), col = "deepskyblue4") +
-  geom_point(data = subset(ref_dat, Date >= baseline_date & Date <= as.Date("2020-12-31")),
-             aes(x = Date, y = confirmed_covid_icu), shape = 21, fill = 'black', size = 1) +
+  geom_point(data = subset(ref_dat, date >= baseline_date & date <= as.Date("2020-12-31")),
+             aes(x = date, y = confirmed_covid_icu), shape = 21, fill = 'black', size = 1) +
   geom_vline(xintercept = as.Date("2020-11-20")) +
   geom_hline(yintercept = 516, col = capacitycolor, linetype = "dashed") +
   scale_x_date(date_breaks = c("1 month"), date_labels = "%b") +

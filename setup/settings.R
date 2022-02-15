@@ -1,19 +1,14 @@
 # Title     : COVID-19 Chicago: ICU thresholds for action to prevent overflow
-# Objective : Settings
+# Objective : Settings, configurations, and user defined objects
 
-library(tidyverse)
-library(zoo)
-library(cowplot)
-library(data.table)
-library(RColorBrewer)
-library(viridis)
-library(Metrics)
-library(scales)
-library(gg.gap)
-
+pckg <- c("tidyverse", "zoo", "cowplot", "data.table", "RColorBrewer", "viridis", "Metrics", "scales", "gg.gap")
+lapply(pckg, require, character.only = TRUE)
 theme_set(theme_minimal())
 cleanEnv <- TRUE
 
+##---------------------------------------------
+## Directories
+##---------------------------------------------
 wdir <- getwd()
 data_path <- file.path(wdir, "data")
 simulation_output <- file.path(wdir, 'simulation_output','20210517')
@@ -29,6 +24,15 @@ if (!dir.exists(fig_dir_traces)) {
   dir.create(fig_dir_traces)
   dir.create(file.path(fig_dir_traces, 'csv'))
 }
+
+##---------------------------------------------
+## Settings for analysis
+##---------------------------------------------
+Chicago_pop <- 2716921 # As used in experiment config yamls
+assumed_capacity <- 516  # Extracted for mid September 2020 for Chicago
+
+trace_selection <- TRUE
+if (trace_selection) fig_dir <- fig_dir_traces
 
 startdate <- as.Date("2020-01-01")
 sim_end_date <- as.Date("2021-05-01")

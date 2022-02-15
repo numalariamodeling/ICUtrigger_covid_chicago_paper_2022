@@ -4,10 +4,8 @@
 source(file.path('setup/settings.R'))
 source(file.path('setup/helper_functions.R'))
 customTheme <- f_getCustomTheme()
-trace_selection <- TRUE
 delay = "1daysdelay"
 
-if (trace_selection) fig_dir = fig_dir_traces
 if (delay == "7daysdelay") {
   exp_names <- c(exp_names_50_delay7, exp_names_100_delay7)
   subtitle = "immediate mitigation:\n7 days after threshold reached"

@@ -4,9 +4,6 @@
 source(file.path('setup/settings.R'))
 source(file.path('setup/helper_functions.R'))
 customTheme <- f_getCustomTheme()
-trace_selection <- TRUE
-if (trace_selection) fig_dir = fig_dir_traces
-
 pal = colorRampPalette(brewer.pal(8, "Spectral"))(100)
 
 ### Load saved probability dataframe from Fig 5B
